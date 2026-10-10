@@ -1,0 +1,53 @@
+{
+  "slug": "stoke",
+  "name": "Stoke Space",
+  "url": "https://www.stokespace.com",
+  "category": "Space & hardware",
+  "oneLine": "Reusable-rocket startup: black canvas, ultra-wide display caps, and test-stand footage presented like a launch broadcast.",
+  "moodWords": ["kinetic", "heavy", "nocturnal"],
+  "palette": [
+    {"hex": "#000000", "role": "background", "note": "Pure black page ground behind all footage and sections"},
+    {"hex": "#F2F2F2", "role": "text", "note": "Off-white for display headline, nav and body copy"},
+    {"hex": "#0D0D0D", "role": "surface", "note": "Nav capsule fill (white at ~5% over black), turns translucent over imagery"},
+    {"hex": "#8C8C8C", "role": "muted", "note": "Accordion row titles at ~30% white alpha until active"},
+    {"hex": "#FF5907", "role": "accent", "note": "Glowing orange plus-sign menu button on mobile, echoes engine flame"},
+    {"hex": "#B15481", "role": "accent", "note": "Magenta-to-blue dusk gradient under the X-ray rocket illustration"}
+  ],
+  "type": [
+    {"family": "Druk Wide", "role": "display", "note": "78px bold extended all-caps, very tight leading (~0.95), set bottom-left over video; 56px for section heads"},
+    {"family": "Inter Display", "role": "body", "note": "16-19px weight 300 sentence case, airy, used for nav, accordion titles and paragraphs"},
+    {"family": "Inter Display", "role": "label", "note": "11px weight 500 for small captions and legal text"}
+  ],
+  "layout": [
+    "Hero video inset below a 140px black header band, headline overlapping the lower-left of the footage.",
+    "Two-column component section: 700px photo on the left, hairline-divided accordion (Stage 1 Engine, Reentry Heat Shield...) with thin plus icons on the right.",
+    "Full-width horizontal X-ray rocket illustration spanning edge to edge on a dusk gradient, with text in the right half column above it."
+  ],
+  "motion": [
+    "Hero is an autoplay video of an engine hot-fire test with steam venting.",
+    "A thin progress bar runs along the top-left edge (visible ~190px line at top) tracking scroll or video progress.",
+    "(inferred) The X-ray rocket diagram is scroll-driven, highlighting components as the accordion items open.",
+    "(inferred) Nav capsule shifts from solid to translucent blur as it passes over imagery, as seen over the sky photo."
+  ],
+  "interactions": [
+    "Accordion of vehicle subsystems with thin crosshair plus icons that rotate/expand.",
+    "Text link CTA 'Let's Launch →' instead of a filled button.",
+    "Mobile menu as an orange glowing crosshair plus."
+  ],
+  "steal": [
+    "Hairline accordion with crosshair plus icons for our pipeline stages (preprocessing, encoder, detector, evaluation) beside a static diagram on the methods page.",
+    "A horizontal 'X-ray' cutaway of the satellite/ESA mission with subsystems lit as the user selects telemetry channels, for the dataset section.",
+    "Thin top-edge scroll-progress hairline across the long research write-up page."
+  ],
+  "leave": [
+    "Druk Wide all-caps headlines: so heavy it reads as aerospace marketing bravado and is a common space-site cliche; our research tone should be quieter.",
+    "A cookie banner that covers a quarter of the hero on desktop and the headline on mobile."
+  ],
+  "relevance": 4,
+  "screenshots": [
+    {"src": "/research/stoke/desktop-hero.jpg", "caption": "Engine hot-fire hero; cookie banner covers bottom-right"},
+    {"src": "/research/stoke/desktop-scroll-1.jpg", "caption": "Sky hover photo, then subsystem accordion; cookie banner persists"},
+    {"src": "/research/stoke/desktop-scroll-2.jpg", "caption": "X-ray rocket illustration on dusk gradient; cookie banner visible"},
+    {"src": "/research/stoke/mobile-hero.jpg", "caption": "Mobile hero; cookie banner hides headline end"}
+  ]
+}

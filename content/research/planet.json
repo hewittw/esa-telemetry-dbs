@@ -1,0 +1,54 @@
+{
+  "slug": "planet",
+  "name": "Planet",
+  "url": "https://www.planet.com",
+  "category": "Space & hardware",
+  "oneLine": "Earth-imaging constellation company; near-black canvas, geometric Gotham, imagery and teal-outlined data doing the talking.",
+  "moodWords": ["observational", "cinematic", "corporate"],
+  "palette": [
+    {"hex": "#07090A", "role": "background", "note": "Hero and 3D-terrain section canvas, near-pure black so imagery glows"},
+    {"hex": "#161822", "role": "surface", "note": "Blue-black band behind the 'Don't just capture change.' statement"},
+    {"hex": "#2C2F38", "role": "surface", "note": "Slate testimonial section holding the customer video cards"},
+    {"hex": "#FFFFFF", "role": "text", "note": "Nearly all type (121 nodes) is white on dark; also the light news-card band under the hero"},
+    {"hex": "#009DA5", "role": "accent", "note": "Teal ring in the logo, 1px outline on 'Contact Sales' / 'Learn More', hairline under the nav"},
+    {"hex": "#4BCFE0", "role": "accent", "note": "Brighter cyan for chart lines, AOI boxes on the terrain, and 'NEW' tag fills"}
+  ],
+  "type": [
+    {"family": "Gotham SSm", "role": "display", "note": "93px bold all-caps 'UNDETECTED' hero word with tight tracking; 64px+ bold sentence-case statements ('Don't just capture change.')"},
+    {"family": "Montserrat", "role": "body", "note": "Light ~36px sentence-case subhead under the hero; Gotham fallback, same geometric skeleton"},
+    {"family": "Gotham SSm", "role": "label", "note": "12px/500 is the dominant size: captions like 'Hood Canal, WA - 3 m PlanetScope', uppercase industry tags ('CIVIL GOVERNMENT') with wide tracking"},
+    {"family": "Monospace (in video)", "role": "mono", "note": "Green HUD readout burned into the mobile hero video (ID / LOA / BEAM / HDG / CLASS), terminal-style"}
+  ],
+  "layout": [
+    "Left-aligned hero on a 114px inset: one giant word, two-line subhead, single outlined CTA; right two-thirds left empty for the background video.",
+    "Sections alternate as full-bleed colour bands (black, white card row, blue-black, slate) rather than dividers, each with one idea.",
+    "Centrepiece is an isometric 3D slab of Washington State imagery with teal AOI rectangles, flanked above by rounded image/chart cards with 2px teal borders."
+  ],
+  "motion": [
+    "Hero word animates focus: 'UN' is rendered blurred and fading while 'DETECTED' is sharp, a blur-to-focus reveal that literalises change detection.",
+    "Hero is a single background video (videoCount 1) of satellite imagery with an overlaid HUD; desktop capture shows black before it loads.",
+    "(inferred) The 3D terrain slab and the flanking cards are scroll-driven, tilting into the isometric view as you scroll past.",
+    "(inferred) 'Don't just capture change. / Act on it.' reveals line by line on scroll."
+  ],
+  "interactions": [
+    "Mega-menu nav with chevron dropdowns (Constellations, Products, Industries...).",
+    "Customer testimonial cards with play overlays open video; tag dots filter by industry.",
+    "Outlined pill buttons that likely fill teal on hover."
+  ],
+  "steal": [
+    "Blur-to-focus word reveal for our hero: render 'ANOMALY' with the letters out of focus, snapping sharp to show detection.",
+    "Isometric 'data slab' with outlined regions: tilt a long telemetry channel strip in 3D on the Results section and box the detected anomaly windows in a single accent outline.",
+    "Small 12px captions under every figure stating source and resolution (e.g. 'ESA Mission 1 - channel 41 - 30 s sampling') across all charts."
+  ],
+  "leave": [
+    "The marketing card row of webinars/TED talks right under the hero breaks the cinematic mood; our research page should keep the hero followed directly by the method.",
+    "Generic talking-head testimonial videos; they look stock and add nothing for ML reviewers."
+  ],
+  "relevance": 4,
+  "screenshots": [
+    {"src": "/research/planet/desktop-hero.jpg", "caption": "Blurred 'UN' + sharp 'DETECTED'; cookie banner covers top"},
+    {"src": "/research/planet/desktop-scroll-1.jpg", "caption": "Isometric Washington imagery slab with teal AOI boxes; cookie banner"},
+    {"src": "/research/planet/desktop-scroll-2.jpg", "caption": "Slate testimonial video cards; cookie banner over heading"},
+    {"src": "/research/planet/mobile-hero.jpg", "caption": "Mobile hero video with green HUD readout; cookie banner"}
+  ]
+}

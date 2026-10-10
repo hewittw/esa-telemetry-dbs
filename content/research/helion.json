@@ -1,0 +1,52 @@
+{
+  "slug": "helion",
+  "name": "Helion",
+  "url": "https://www.helionenergy.com",
+  "category": "Space & hardware",
+  "oneLine": "Fusion-energy company pairing raw lab footage with a cool, mono-labelled, scroll-pinned technology story.",
+  "moodWords": ["clinical", "nocturnal", "assured"],
+  "palette": [
+    {"hex": "#0F0F15", "role": "background", "note": "Near-black behind the full-bleed lab video hero"},
+    {"hex": "#EEF2F5", "role": "surface", "note": "Cool pale blue-grey page background; also the light text color over video"},
+    {"hex": "#1C2B44", "role": "text", "note": "Deep navy body text and the solid nav-bar fill"},
+    {"hex": "#192738", "role": "surface", "note": "Slightly darker navy for secondary panels"},
+    {"hex": "#5C6874", "role": "muted", "note": "Grey for small 'Skip' affordance and secondary labels"},
+    {"hex": "#FFFFFF", "role": "accent", "note": "White 'CAREERS' button, the only filled control, detached from the nav bar"}
+  ],
+  "type": [
+    {"family": "Inter", "role": "display", "note": "55px light (~300) all-caps headline 'FUSION BUILT TO POWER OUR WORLD', tight leading, first line indented as a ragged step"},
+    {"family": "Inter", "role": "body", "note": "14-19px regular sentence case, e.g. 'Discover our technology'"},
+    {"family": "Geist Mono", "role": "label", "note": "13-14px uppercase nav items with generous letter-spacing; most frequent family on the page"}
+  ],
+  "layout": [
+    "Hero is a full-viewport video with the headline bottom-left and nothing else: no subhead, no CTA in the hero body.",
+    "Centered navy nav capsule (~640px) with the primary CTA split off as a separate white pill to its right.",
+    "Technology section is a pinned, viewport-height stage on pale #EEF2F5 with a single centered caption flanked by two tiny square bullets, plus a 'Skip' link below."
+  ],
+  "motion": [
+    "Hero background is looping video (2 videos on page) of the machine with a technician, slow handheld drift.",
+    "Technology section is a scroll-pinned sequence: both scroll captures show the same empty stage with 'Discover our technology' because content is scrubbed by scroll on a canvas (1 canvas detected).",
+    "(inferred) The step-indented two-line headline animates in line-by-line, suggesting a staggered mask reveal.",
+    "(inferred) A 'Skip' control lets users bypass the long scroll-jacked animation, acknowledging its length."
+  ],
+  "interactions": [
+    "'Skip' link under a pinned scroll story to jump past the animation.",
+    "Mono uppercase nav with machine names (POLARIS, ORION) as top-level items."
+  ],
+  "steal": [
+    "A 'Skip' link under any pinned scroll-scrubbed sequence, for our model-architecture walkthrough so recruiters can jump to results.",
+    "Mono uppercase nav labels with a separated, inverted primary pill for our top bar (e.g. 'READ PAPER' detached from section links).",
+    "Cool blue-grey #EEF2F5 page ground with navy ink as the light-mode base of our methods/results pages instead of pure white."
+  ],
+  "leave": [
+    "Scroll-jacked stages that render as an empty screen until JS paints; screenshots and slow devices see a blank page, and our figures must be readable without scrubbing.",
+    "Hero with no explanatory subhead: fine for a famous brand, but our visitors need one line saying what the model does."
+  ],
+  "relevance": 4,
+  "screenshots": [
+    {"src": "/research/helion/desktop-hero.jpg", "caption": "Lab video hero with light all-caps Inter headline"},
+    {"src": "/research/helion/desktop-scroll-1.jpg", "caption": "Pinned scroll stage, mostly blank before animation paints"},
+    {"src": "/research/helion/desktop-scroll-2.jpg", "caption": "Same pinned stage further down; still blank, Skip link visible"},
+    {"src": "/research/helion/mobile-hero.jpg", "caption": "Mobile crops video to the reactor ring, headline at bottom"}
+  ]
+}

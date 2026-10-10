@@ -1,0 +1,104 @@
+{
+  "slug": "ciechanowski",
+  "name": "Bartosz Ciechanowski — GPS",
+  "url": "https://ciechanow.ski/gps/",
+  "category": "Interactive figures",
+  "oneLine": "Long-form GPS explainer where every paragraph hands off to a draggable, hand-built WebGL figure; prose-first, zero chrome.",
+  "moodWords": [
+    "patient",
+    "tactile",
+    "exacting"
+  ],
+  "palette": [
+    {
+      "hex": "#F8F8F8",
+      "role": "background",
+      "note": "Off-white page behind the 700px text column and most figures"
+    },
+    {
+      "hex": "#444444",
+      "role": "text",
+      "note": "Body copy; headings a touch lighter at #535353"
+    },
+    {
+      "hex": "#000000",
+      "role": "surface",
+      "note": "Full-bleed black band for the opening 3D satellite-constellation canvas"
+    },
+    {
+      "hex": "#0181EB",
+      "role": "accent",
+      "note": "Inline color-keyed nouns (e.g. 'landmark') matching the figure's blue marker"
+    },
+    {
+      "hex": "#DDAC41",
+      "role": "accent",
+      "note": "Gold for the draggable figurine and orbit paths; red #E92525 and green carry other keyed objects"
+    },
+    {
+      "hex": "#1F51BE",
+      "role": "surface",
+      "note": "Saturated blue masthead band only (sampled from screenshot)"
+    }
+  ],
+  "type": [
+    {
+      "family": "IBM Plex Sans",
+      "role": "body",
+      "note": "19.2px / ~1.6 line-height, weight 400, ~65-70 char measure; keyed terms switch to weight 500 + color"
+    },
+    {
+      "family": "IBM Plex Sans",
+      "role": "display",
+      "note": "H1 44.8px and H2 28.8px, weight 500-600, gray #535353, sentence case, tight default tracking"
+    },
+    {
+      "family": "Inter",
+      "role": "label",
+      "note": "Masthead wordmark ~48px semibold white on blue; figure scale/labels small 11-14px"
+    }
+  ],
+  "layout": [
+    "Single centered ~700px column at 1440px; figures break out to ~700-1000px or go full-bleed (the black constellation band) with ~120px vertical air above and below.",
+    "Strict rhythm: 2-5 short paragraphs, then one figure, repeated across ~12 H2 sections (Simple Positioning, Time of Flight, Orbits...). 62 canvases on one page.",
+    "Paired figures: 3D isometric scene on the left, flat 2D map on the right in a thin bordered card, so one manipulation reads in two projections."
+  ],
+  "motion": [
+    "Figures are live WebGL scenes, not videos: the opening globe shows real satellite orbits rendered as thin gold ellipses around a textured Earth.",
+    "(inferred) Satellites animate continuously along orbits and many figures carry play/scrub sliders that step through time; nothing animates on scroll, motion is user-driven.",
+    "(inferred) Dragging rotates the camera with damped inertia; drag-able objects (yellow figurine) update linked circles/maps in real time at 60fps."
+  ],
+  "interactions": [
+    "Drag-to-orbit camera on 3D scenes; drag the yellow figurine to move position and watch distance circles redraw.",
+    "Color-keyed prose: the word 'landmark' in blue maps to the blue dot in the figure, acting as a legend inside the sentence.",
+    "(inferred) Inline range sliders under figures scrub time / parameters."
+  ],
+  "steal": [
+    "Hero: open the telemetry site with one full-bleed black band containing a draggable 3D orbit of the ESA spacecraft, thin gold orbit line, no UI chrome.",
+    "Method section: color-key prose to plots, e.g. 'nominal' in one color and 'anomaly' in another, with exactly those colors in the adjacent time-series chart so text doubles as legend.",
+    "Results walkthrough: the paragraph-then-figure rhythm with paired views (raw multichannel signal left, model's latent/anomaly score right) linked to one shared scrubber."
+  ],
+  "leave": [
+    "The blog masthead (saturated blue band, social icons) reads as a personal blog, not a SpaceX/Apple-grade product page.",
+    "Light #F8F8F8 body with gray headings is too soft for our dark, high-contrast space direction; keep the rhythm, not the skin."
+  ],
+  "relevance": 5,
+  "screenshots": [
+    {
+      "src": "/research/ciechanowski/desktop-hero.jpg",
+      "caption": "Blue masthead, GPS title, black band opens 3D satellite constellation"
+    },
+    {
+      "src": "/research/ciechanowski/desktop-scroll-1.jpg",
+      "caption": "Isometric draggable landscape paired with a flat 2D map"
+    },
+    {
+      "src": "/research/ciechanowski/desktop-scroll-2.jpg",
+      "caption": "Rope-and-landmark figure; color-keyed words match figure objects"
+    },
+    {
+      "src": "/research/ciechanowski/mobile-hero.jpg",
+      "caption": "Mobile: wordmark wraps, column fills width, figure band below"
+    }
+  ]
+}

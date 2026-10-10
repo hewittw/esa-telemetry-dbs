@@ -33,3 +33,15 @@ Append as decisions happen, newest at the bottom.
   Curated to 15 in `docs/references.md`.
 - Strongest recurring idea: one interaction carries the thesis, e.g. a Planet-style zoom or an iCOMAT-style
   before/after, showing subsystem-level (4–5) vs. group-level (18–29) structure.
+
+## 2026-10-09 · Research studies (`/research`)
+- The user's idea: a mood board per reference site first, then remix them into our own.
+  **Adjusted:** 15 lightweight *studies* (screenshots, palette, type, layout, motion, take/leave) rather than
+  15 full 25–30 artifact boards, so the effort goes into the 3 official boards.
+- **How:** one capture script ran 15 sites in parallel isolated headless browsers (1440 + 390 px screenshots
+  plus computed palette/type extraction), then 5 parallel agents wrote one study each for 3 sites.
+- **Bugs found in the browser check:** the client filter imported an `fs` module (split the types into
+  `research-types.ts`); Apex, Igloo, and NASA Eyes heroes were captured before their video/WebGL loaded
+  (recaptured with a 12s wait). Planet and Stoke screenshots still show cookie banners; kept, and their captions say so.
+- Playwright MCP is configured for the system Chrome channel, which isn't at the default path. Verified via a script
+  with Playwright's bundled Chromium instead (headless, logged out).

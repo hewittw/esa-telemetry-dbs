@@ -1,0 +1,104 @@
+{
+  "slug": "igloo",
+  "name": "Igloo Inc.",
+  "url": "https://igloo.inc",
+  "category": "Motion & craft",
+  "oneLine": "Web3 holding company told as a full-screen WebGL arctic scene; cinematic 3D first, text as sparse HUD.",
+  "moodWords": [
+    "glacial",
+    "cinematic",
+    "instrumented"
+  ],
+  "palette": [
+    {
+      "hex": "#A0A5B1",
+      "role": "background",
+      "note": "Body/loader fill: a cold blue-grey slate shown before the WebGL scene paints"
+    },
+    {
+      "hex": "#BCBECA",
+      "role": "surface",
+      "note": "Fogged distant snow ridges; the atmospheric haze layer behind the igloo"
+    },
+    {
+      "hex": "#7D848E",
+      "role": "muted",
+      "note": "Mid-tone snow terrain and ice-block faces in the rendered scene"
+    },
+    {
+      "hex": "#3D4558",
+      "role": "shadow",
+      "note": "Deepest ice-block shadows; the only near-dark value, kept blue not black"
+    },
+    {
+      "hex": "#DFECF4",
+      "role": "accent",
+      "note": "Glowing seams between ice blocks and the white HUD labels / wordmark"
+    },
+    {
+      "hex": "#FFFFFF",
+      "role": "text",
+      "note": "HUD text blocks and constellation line overlays drawn on top of the 3D"
+    }
+  ],
+  "type": [
+    {
+      "family": "Custom outlined techno wordmark",
+      "role": "display",
+      "note": "'IGLOO' at ~32px tall, double-stroke rounded square letterforms, white, top-left corner only"
+    },
+    {
+      "family": "Monospace HUD face (not exposed; WebGL-rendered)",
+      "role": "mono",
+      "note": "~10-11px uppercase-ish code strings in white bars, four corners of the viewport, reads like telemetry readouts"
+    },
+    {
+      "family": "Glyph loader (-, =, +)",
+      "role": "label",
+      "note": "Mobile loader is a 20px ASCII progress string '----===+++' centered on slate, glowing white"
+    }
+  ],
+  "layout": [
+    "No DOM layout in the usual sense: one fixed 100vh canvas with HUD text pinned to four corners (logo + status top-left, data block top-right, legal/sound bottom-left).",
+    "Content density is extremely low: each scroll position is a single staged 3D composition, the igloo dead-center, with ~60px corner margins for the HUD.",
+    "Sections are camera shots, not blocks: scroll-1 is a high aerial of the finished igloo, scroll-2 a ground-level view with blocks lifting apart and numbered nodes (32, 33, 47, 22) connected by thin lines."
+  ],
+  "motion": [
+    "Scroll scrubs a 3D camera and an exploding-assembly of the igloo: blocks visibly lift and rotate apart between scroll-1 and scroll-2.",
+    "Thin white constellation lines with node labels are drawn over the 3D, linking specific ice blocks like a data graph.",
+    "(inferred) HUD strings scramble/decode character-by-character as sections change; the corner text in screenshots is mid-glyph-scramble.",
+    "(inferred) Loader string '----===+++' advances as assets stream in, then the slate cross-fades into the snow scene; Awwwards Site of the Year 2024 write-ups cite its sound design and scroll-driven WebGL."
+  ],
+  "interactions": [
+    "Scroll is the only real control: it drives camera position and assembly state continuously.",
+    "(inferred) Cursor parallax on the scene and a sound toggle in the bottom-left HUD block."
+  ],
+  "steal": [
+    "Corner-pinned mono HUD (mission time, orbit, channel count, anomaly rate) framing our hero visualization, like Igloo's four-corner data blocks.",
+    "Exploded-view-on-scroll for the model architecture section: encoder/decoder blocks separate as the user scrolls, with numbered nodes joined by 1px lines.",
+    "Text scramble/decode effect on section labels and metric values in the results section, mimicking telemetry resolving from noise."
+  ],
+  "leave": [
+    "A blank slate loader gating all content: recruiters skim in seconds, so our first paint must show the headline and a real chart, not a progress string.",
+    "Fully canvas-rendered text: it is unreadable to screen readers and search; our HUD labels should be real DOM text over the canvas."
+  ],
+  "relevance": 4,
+  "screenshots": [
+    {
+      "src": "/research/igloo/desktop-hero.jpg",
+      "caption": "WebGL igloo on snowfield, wireframe shards drifting"
+    },
+    {
+      "src": "/research/igloo/desktop-scroll-1.jpg",
+      "caption": "Aerial shot of finished igloo under faint constellation lines"
+    },
+    {
+      "src": "/research/igloo/desktop-scroll-2.jpg",
+      "caption": "Blocks exploding apart, numbered nodes, four-corner HUD text"
+    },
+    {
+      "src": "/research/igloo/mobile-hero.jpg",
+      "caption": "Mobile WebGL scene after load"
+    }
+  ]
+}

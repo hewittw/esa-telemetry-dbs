@@ -1,0 +1,104 @@
+{
+  "slug": "nasa-eyes",
+  "name": "NASA's Eyes",
+  "url": "https://science.nasa.gov/eyes/",
+  "category": "Data explorers",
+  "oneLine": "Landing page for NASA's real-time 3D visualization apps; dark editorial portal, video hero, numbered entry points.",
+  "moodWords": [
+    "exploratory",
+    "institutional",
+    "spacious"
+  ],
+  "palette": [
+    {
+      "hex": "#000000",
+      "role": "background",
+      "note": "Global header and video hero"
+    },
+    {
+      "hex": "#17171B",
+      "role": "surface",
+      "note": "Off-black product carousel and long-form app description sections"
+    },
+    {
+      "hex": "#2E2E32",
+      "role": "surface",
+      "note": "Secondary sub-nav bar (Eyes Home / Applications / FAQ)"
+    },
+    {
+      "hex": "#FFFFFF",
+      "role": "text",
+      "note": "Headlines on dark; the numbered 'things to try' list sits on a white section"
+    },
+    {
+      "hex": "#959599",
+      "role": "muted",
+      "note": "Index numerals (01-05), captions, secondary copy"
+    },
+    {
+      "hex": "#E03C31",
+      "role": "accent",
+      "note": "Approx. from screenshot: small red circular arrow badge on every 'View in...' link, echoing the NASA meatball"
+    }
+  ],
+  "type": [
+    {
+      "family": "Public Sans",
+      "role": "display",
+      "note": "Bold ~80px sentence-case 'NASA's Eyes', tight tracking; 22px bold section headings"
+    },
+    {
+      "family": "Inter",
+      "role": "body",
+      "note": "16-18px regular, generous ~1.6 leading, grey-white on dark"
+    },
+    {
+      "family": "DM Mono",
+      "role": "label",
+      "note": "12px uppercase with very wide (~0.3em) letter-spacing: 'CLICK ANY OF THESE EYES PRODUCTS...'; also 28px mono numerals 01-05"
+    }
+  ],
+  "layout": [
+    "Hero: full-bleed video, left-aligned headline and 3-line paragraph at ~600px measure, pause button bottom-right.",
+    "Numbered list (01-05) with hairline rules between rows on the left 60%, a circular-cropped screenshot with fine-print caption on the right.",
+    "Alternating image/text zig-zag rows for each app (Asteroids, Earth, Exoplanets) on the off-black surface."
+  ],
+  "motion": [
+    "Background hero video of the ISS over Earth (visible on mobile; desktop captured black pre-load) with a visible pause control.",
+    "Horizontal carousel of app chips with circular thumbnails and a next-arrow button.",
+    "(inferred) The linked Eyes apps themselves are real-time WebGL scenes; this landing page has no canvas, just video and stills."
+  ],
+  "interactions": [
+    "Pause/play toggle on the hero video (accessible motion control).",
+    "'View in...' deep links with red arrow badges into specific app scenes.",
+    "Horizontally scrolling product carousel."
+  ],
+  "steal": [
+    "Pause button on any looping hero animation, bottom-right, for our animated telemetry hero (reduced-motion friendly).",
+    "Numbered 01-05 'try this' list with mono numerals and hairline rules for the 'Explore the results' section, each row deep-linking to a specific anomaly.",
+    "Ultra-wide-tracked 12px mono overline above each section of the research page."
+  ],
+  "leave": [
+    "The dense double nav (global NASA header plus sub-nav) is institutional clutter; our page needs one quiet bar.",
+    "Long unbroken paragraphs of marketing copy beside stock-style title-card images; show the real figure instead."
+  ],
+  "relevance": 3,
+  "screenshots": [
+    {
+      "src": "/research/nasa-eyes/desktop-hero.jpg",
+      "caption": "Video hero: 'NASA's Eyes' over Mars descent, pause button"
+    },
+    {
+      "src": "/research/nasa-eyes/desktop-scroll-1.jpg",
+      "caption": "Numbered 01-05 list beside circular Cassini screenshot"
+    },
+    {
+      "src": "/research/nasa-eyes/desktop-scroll-2.jpg",
+      "caption": "Zig-zag app rows with red arrow links"
+    },
+    {
+      "src": "/research/nasa-eyes/mobile-hero.jpg",
+      "caption": "Mobile hero, stacked app entry points"
+    }
+  ]
+}

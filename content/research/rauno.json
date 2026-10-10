@@ -1,0 +1,51 @@
+{
+  "slug": "rauno",
+  "name": "Rauno Freiberg: Craft",
+  "url": "https://rauno.me/craft",
+  "category": "Motion & craft",
+  "oneLine": "Vercel designer's archive of interaction experiments; a quiet masonry of looping video cards where the motion is the content.",
+  "moodWords": ["precise", "quiet", "tactile"],
+  "palette": [
+    {"hex": "#FCFCFC", "role": "background", "note": "Page body, a barely-off-white that keeps white cards readable as raised"},
+    {"hex": "#F3F3F3", "role": "surface", "note": "Card wells and full-width 'View Production' / 'Read Essay' button bars"},
+    {"hex": "#171717", "role": "text", "note": "Card titles and button labels"},
+    {"hex": "#737373", "role": "muted", "note": "Right-aligned dates (rgba(0,0,0,0.565) on #FCFCFC)"},
+    {"hex": "#0A0A0A", "role": "surface-dark", "note": "Dark demo cards (Toolbar Morph, X-Ray, Staggered Text) with #EDEDED titles"},
+    {"hex": "#FFFF02", "role": "accent", "note": "Single filled yellow bar in the top barcode-style nav; the only chrome color"}
+  ],
+  "type": [
+    {"family": "X (custom sans, Inter-like grotesk)", "role": "body", "note": "13px/400 for nearly everything: titles, dates; sentence case, neutral tracking"},
+    {"family": "X", "role": "label", "note": "14px/500 for full-width card buttons ('View Prototype'), centered"},
+    {"family": "Demo content only", "role": "display", "note": "Big type appears only inside videos (e.g. 'Start Deploying' ~40px semibold); the chrome itself never goes above 14px"}
+  ],
+  "layout": [
+    "Three-column masonry at 1440px, ~466px columns with ~10px gutters and 8px outer margin; cards are 12-16px rounded with a 1px hairline border.",
+    "Card anatomy is rigid: title top-left, date top-right, both 13px, a media well, then an optional full-width grey action bar.",
+    "Navigation is a ~200px abstract barcode of outlined rectangles and ticks centered ~70px from top, with ~75px of empty space before the grid; collapses to one column on mobile."
+  ],
+  "motion": [
+    "68 autoplaying muted video loops: each card is a live demo (morphing toolbar, gooey tooltip, minimap, graph slider) rather than a static thumbnail.",
+    "Demos show motion principles directly: staggered text reveal, spring-based tooltip, exclusion-tab pill sliding under cursor.",
+    "(inferred) Barcode nav animates its yellow segment between filter positions with a spring."
+  ],
+  "interactions": [
+    "Barcode nav acts as a filter/scrubber; the yellow segment marks the current position.",
+    "Full-width card buttons open the production site, prototype, or essay."
+  ],
+  "steal": [
+    "Rigid card anatomy (13px title left, muted date right, media, full-width action bar) for our experiments/ablation gallery of model runs.",
+    "Looping silent micro-videos or live canvases instead of static thumbnails in the results grid, e.g. reconstruction-error traces scrolling per channel.",
+    "The 'Graph Slider' pattern: a scrubbable line chart with a dot and floating time pill for exploring a telemetry series in the hero demo."
+  ],
+  "leave": [
+    "68 autoplaying videos on one page: heavy on bandwidth and attention; we should lazy-play only in-viewport cards and respect reduced-motion.",
+    "The cryptic barcode nav: charming on a personal portfolio but too opaque for recruiters who need obvious section labels."
+  ],
+  "relevance": 4,
+  "screenshots": [
+    {"src": "/research/rauno/desktop-hero.jpg", "caption": "Barcode nav with yellow segment above three-column demo masonry"},
+    {"src": "/research/rauno/desktop-scroll-1.jpg", "caption": "Dark demo cards: toolbar morph, X-ray, staggered text, minimap"},
+    {"src": "/research/rauno/desktop-scroll-2.jpg", "caption": "SwiftUI hand-held video cards, graph slider, exclusion tabs"},
+    {"src": "/research/rauno/mobile-hero.jpg", "caption": "Single-column cards; same barcode nav scaled up"}
+  ]
+}

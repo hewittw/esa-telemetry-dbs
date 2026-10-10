@@ -1,5 +1,13 @@
+import Link from "next/link";
+
 // The hub: the submitted URL. Placeholder structure until a style is picked.
 const sections = [
+  {
+    n: 0,
+    title: "Research",
+    note: "Fifteen reference sites, studied before we design.",
+    links: [{ label: "Open studies →", href: "/research" }],
+  },
   {
     n: 1,
     title: "Mood Boards",
@@ -35,6 +43,19 @@ export default function Hub() {
             <div>
               <h2 className="text-lg font-medium">{s.title}</h2>
               <p className="mt-1 text-sm text-neutral-600">{s.note}</p>
+              {s.links.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {s.links.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      className="rounded-full border border-neutral-900 px-4 py-1.5 text-sm transition-colors hover:bg-neutral-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 active:scale-[0.97]"
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
               {s.links.length === 0 && (
                 <p className="mt-3 text-sm text-neutral-400">In progress</p>
               )}

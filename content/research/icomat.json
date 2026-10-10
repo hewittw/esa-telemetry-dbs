@@ -1,0 +1,54 @@
+{
+  "slug": "icomat",
+  "name": "ICOMAT",
+  "url": "https://www.icomat.co.uk",
+  "category": "Motion & craft",
+  "oneLine": "UK composites manufacturer whose site turns its fiber-steering process into generative line art and mono-labelled technical panels.",
+  "moodWords": ["fibrous", "instrumented", "precise"],
+  "palette": [
+    {"hex": "#333333", "role": "background", "note": "Charcoal hero field behind the animated vertical fiber lines"},
+    {"hex": "#F8F8F8", "role": "surface", "note": "Off-white body background for the RTS explainer and comparison panels"},
+    {"hex": "#080808", "role": "surface", "note": "Near-black 'How we operate' section and 3D part render panels"},
+    {"hex": "#CFD9E0", "role": "text", "note": "Cool blue-grey light text, the most frequent text color; fades to 50% and 27% alpha for scroll-reveal paragraphs"},
+    {"hex": "#282728", "role": "text", "note": "Body ink on the light sections"},
+    {"hex": "#37FD08", "role": "accent", "note": "Electric green fiber strands in the hero canvas, with rare magenta (#B859B3) strands as counterpoint"}
+  ],
+  "type": [
+    {"family": "Lay Grotesk (Semibold cut, rendered at weight 400)", "role": "display", "note": "73px hero 'Engineer Without Limits', two lines, tight -2% tracking, sentence case, bottom-left anchored; 48px for big statement paragraphs"},
+    {"family": "Lay Grotesk", "role": "body", "note": "~18px semibold-looking body, tight leading (~1.05), second sentence set at 50% alpha as a lighter sub-claim"},
+    {"family": "Akkurat Mono", "role": "label", "note": "11-12px uppercase nav (SOLUTIONS / TECH / INDUSTRIES) and panel captions like 'RTS / STEERED FIBER COMPOSITES'"},
+    {"family": "Doto (variable dot-matrix)", "role": "mono", "note": "Pixel/dot font used sparingly (7 nodes) for numeric or technical callouts"}
+  ],
+  "layout": [
+    "Full-bleed hero split into a bottom-left headline and a mid-right 2-line claim, leaving ~70% of the viewport to the animated line field.",
+    "Light sections use a 12-column grid with tiny 4px square registration dots marking column edges at the top, plus hairline-bordered panels with corner ticks like a drawing sheet.",
+    "Dark sections run wide 48px statement paragraphs edge-to-edge, followed by a 2-up rounded-corner image grid at 20px gutters."
+  ],
+  "motion": [
+    "Hero is a canvas of vertical fiber strands in green/magenta that (inferred) drift and shear horizontally, visualizing Rapid Tow Shearing.",
+    "Large statement paragraph reveals word-by-word on scroll: words already passed are bright #CFD9E0, upcoming words are dimmed to ~27-50% alpha.",
+    "(inferred) Straight-vs-steered fiber comparison panels animate from straight to curved fiber paths as they enter view; panels appear blank mid-load in the capture.",
+    "(inferred) 3D carbon part renders on canvas (5 canvases, 5 videos on page) rotate with scroll inside the dark gridded frame."
+  ],
+  "interactions": [
+    "Floating pill nav in a black rounded bar with a white inverted 'BUILD W/ ICOMAT' primary button.",
+    "Square scroll-down arrow button pinned bottom-right of the hero.",
+    "Before/after comparison cards ('BEFORE RTS' / 'RTS DESIGN') with circular toggle icons."
+  ],
+  "steal": [
+    "Scroll-scrubbed word-by-word brightness reveal for our research-question statement paragraph between the hero and the methods section.",
+    "Registration-dot column markers and hairline panels with corner ticks as the frame for each telemetry chart card on the results page.",
+    "A generative hero canvas of vertical lines driven by actual telemetry channels (one strand per sensor, anomalies flare in accent color) instead of stock space imagery."
+  ],
+  "leave": [
+    "The neon green plus magenta strand mix: it reads as glitch art and would compete with our anomaly-highlight accent, which must be the only loud color.",
+    "Panels that stay blank until heavy canvas/JS loads; our figures should render static SVG first and animate on top."
+  ],
+  "relevance": 5,
+  "screenshots": [
+    {"src": "/research/icomat/desktop-hero.jpg", "caption": "Charcoal hero with green fiber-line canvas and bottom-left headline"},
+    {"src": "/research/icomat/desktop-scroll-1.jpg", "caption": "RTS explainer; comparison panels still blank while loading"},
+    {"src": "/research/icomat/desktop-scroll-2.jpg", "caption": "Dark section with word-by-word scroll reveal paragraph"},
+    {"src": "/research/icomat/mobile-hero.jpg", "caption": "Mobile hero keeps strands, headline moves to top"}
+  ]
+}

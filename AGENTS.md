@@ -14,8 +14,9 @@ One Next.js + Tailwind static site with four parts:
   every component in every state.
 - **The site** (`/<site-route>`): in the style we pick, with at least 2 faked interactions.
 
-**Site:** _TBD: what it is, who it's for, and what they should see/do first. Lives in `docs/brief.md`._
-**Styles:** _TBD: three styles that feel clearly different from each other._
+**Site:** an interactive findings explorer for our ESA satellite-telemetry paper (with Rhea Madhogarhia),
+for ML recruiters/engineers and research peers. Details in `docs/brief.md`; content in `content/`.
+**Styles:** _TBD_, to be remixed from the 15 studies at `/research` (`content/research/*.json`).
 
 ## Hard Rules (every task)
 - Next.js App Router + Tailwind. Design tokens go in `@theme`, classes in the markup.

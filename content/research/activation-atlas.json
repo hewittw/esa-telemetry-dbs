@@ -1,0 +1,109 @@
+{
+  "slug": "activation-atlas",
+  "name": "Distill — Activation Atlas",
+  "url": "https://distill.pub/2019/activation-atlas/",
+  "category": "Interactive figures",
+  "oneLine": "Peer-reviewed ML article whose hero is a zoomable atlas of a CNN's learned features; rigorous academic shell, dazzling figures.",
+  "moodWords": [
+    "rigorous",
+    "dense",
+    "revelatory"
+  ],
+  "palette": [
+    {
+      "hex": "#0F2E3D",
+      "role": "surface",
+      "note": "Deep teal-navy Distill header bar"
+    },
+    {
+      "hex": "#FFFFFF",
+      "role": "background",
+      "note": "Article page; atlas sits on a #EFEFEF panel"
+    },
+    {
+      "hex": "#333333",
+      "role": "text",
+      "note": "Body is black at 80% opacity; secondary text steps down via 60/50/30% black"
+    },
+    {
+      "hex": "#FF8200",
+      "role": "accent",
+      "note": "Orange for selected layer (MIXED4D), zoom buttons, and diagram points/arrows"
+    },
+    {
+      "hex": "#DBF2FD",
+      "role": "surface",
+      "note": "15% blue tint behind classifier result rows ('grey whale 91.0%')"
+    },
+    {
+      "hex": "#E6FDDB",
+      "role": "surface",
+      "note": "15% green tint for the altered-prediction row ('great white shark 66.7%')"
+    }
+  ],
+  "type": [
+    {
+      "family": "-apple-system (SF Pro)",
+      "role": "display",
+      "note": "Title ~50px weight 700, tight -1% tracking, two lines; H2 'Introduction' ~36px bold with a hairline rule below"
+    },
+    {
+      "family": "-apple-system (SF Pro)",
+      "role": "body",
+      "note": "16.96px regular, ~1.8 line-height, 700px column; citations as small blue bracketed [1, 2, 3]"
+    },
+    {
+      "family": "-apple-system (SF Pro)",
+      "role": "label",
+      "note": "9-13px for UI: uppercase layer names MIXED3A..MIXED5B in gray, orange when active; figure captions 13px gray"
+    },
+    {
+      "family": "KaTeX_Main",
+      "role": "mono",
+      "note": "Math notation only, used sparingly"
+    }
+  ],
+  "layout": [
+    "Classic Distill grid: 700px text column centered, while figures break out to a wider ~1100px or full 1440px (atlas spans edge to edge under the abstract).",
+    "Atlas figure is a mini app: 170px left rail of layer thumbnails, central tiled-image canvas, floating top-right control card with minimap.",
+    "Four-up explanatory diagrams in a row (axes, plane, manifold, grid) with 13px captions beneath, each linking to prior work."
+  ],
+  "motion": [
+    "(inferred) Pan/zoom on the atlas is smooth and continuous, with tiles resolving to higher-resolution feature visualizations as you zoom (tiled canvas, 11 canvases).",
+    "(inferred) Switching layers in the left rail crossfades the atlas; hover tooltips show the top attributed classes per cell.",
+    "Static prose otherwise: motion is reserved entirely for the figures, giving them maximal punch."
+  ],
+  "interactions": [
+    "Zoomable, pannable atlas with home/+/- buttons, minimap, and checkboxes for attribution labels, tooltips, and scroll-to-zoom.",
+    "Layer selector rail with orange active state and silhouette thumbnails.",
+    "Adversarial patch demo: paste a baseball onto a whale image and watch the classifier's top-1 flip."
+  ],
+  "steal": [
+    "Latent-space explorer: a full-bleed zoomable atlas of our telemetry windows (tiles = representative signal snippets) with a minimap card in the top-right.",
+    "Model-layer rail: left column of thumbnails for encoder layers / model variants with a single accent active state, reused in our model-comparison section.",
+    "Prediction rows: tinted result bars ('nominal 91.0%' vs 'anomaly 66.7%') in before/after pairs for our failure-case gallery."
+  ],
+  "leave": [
+    "Default checkboxes and gray 'more options' button feel like research-tool chrome; our controls need custom, fully-stated components.",
+    "Bright saturated header plus white academic body is credible but not cinematic; keep the rigor (citations, author block) but not the paper look."
+  ],
+  "relevance": 5,
+  "screenshots": [
+    {
+      "src": "/research/activation-atlas/desktop-hero.jpg",
+      "caption": "Bold title and abstract above full-bleed zoomable activation atlas"
+    },
+    {
+      "src": "/research/activation-atlas/desktop-scroll-1.jpg",
+      "caption": "Author block, Introduction heading, 700px column with citations"
+    },
+    {
+      "src": "/research/activation-atlas/desktop-scroll-2.jpg",
+      "caption": "Four orange manifold diagrams and baseball-patch classifier demo"
+    },
+    {
+      "src": "/research/activation-atlas/mobile-hero.jpg",
+      "caption": "Mobile: title stacks three lines, atlas scaled with layer rail"
+    }
+  ]
+}

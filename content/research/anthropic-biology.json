@@ -1,0 +1,53 @@
+{
+  "slug": "anthropic-biology",
+  "name": "On the Biology of a Large Language Model (Anthropic)",
+  "url": "https://transformer-circuits.pub/2025/attribution-graphs/biology.html",
+  "category": "Interactive figures",
+  "oneLine": "Anthropic's interpretability paper on Claude 3.5 Haiku: a hand-drawn circuit-diagram card grid opening a dense, figure-led long read.",
+  "moodWords": ["rigorous", "warm", "diagrammatic"],
+  "palette": [
+    {"hex": "#FBFBF9", "role": "background", "note": "Warm off-white hero band behind the title and case-study grid; the reading area below is pure white"},
+    {"hex": "#E5E3D7", "role": "surface", "note": "Parchment fill on the stacked 'feature' node boxes in every circuit diagram (capital, state, Dallas...)"},
+    {"hex": "#333333", "role": "text", "note": "Body copy at rgba(0,0,0,0.8); the title and card titles go to full #000000"},
+    {"hex": "#633333", "role": "muted", "note": "Deep oxblood-brown on diagram edges, arrows and the dark 'Induction Head' nodes (sampled from the screenshot)"},
+    {"hex": "#F08838", "role": "accent", "note": "Orange marks the highlighted path in diagrams (the 'say 大' and 'quote Chinese' nodes, token highlights) (sampled)"},
+    {"hex": "#2858A8", "role": "accent", "note": "Blue is a second semantic color for inhibitory edges in the Entity Recognition diagram and for citation links (sampled)"}
+  ],
+  "type": [
+    {"family": "system-ui (SF Pro / Inter-like grotesk)", "role": "display", "note": "Title around 48px bold with tight negative tracking, sentence case; it wraps to 3 lines at about 64px on mobile"},
+    {"family": "system-ui / Roboto", "role": "body", "note": "17px regular on about 29px leading over a 700px measure; italics mark terms such as 'attribution graphs'; underlined links in the same charcoal"},
+    {"family": "Roboto 600-700", "role": "label", "note": "Card titles 13-14px semibold in black; sidebar TOC 13px semibold for chapters and regular grey for appendices"},
+    {"family": "Roboto Mono", "role": "mono", "note": "12-13px, used inside diagrams for token strings (\"rabbit\", \"habit\", chain-of-thought transcripts)"}
+  ],
+  "layout": [
+    "The hero is a centered 1180px block: the title, a 2-line dek, then a 6x2 grid of 180x245px cards. Each card is a square diagram thumbnail over a white caption area, with a 1px light-grey border and no shadow.",
+    "Below the hero the paper switches to a sticky left table of contents (about 300px wide, behind a hairline divider) and a 700px reading column starting at x=368, with footnote and citation markers inline in small blue.",
+    "The text is dense but well spaced: about 16px between paragraphs, indented bulleted case-study lists with bold underlined lead-ins, and § section numbering that doubles as link text ('§ 16 Related Work')."
+  ],
+  "motion": [
+    "(inferred) Almost no ambient motion: 62 inline SVGs and 0 canvas or video elements suggest static diagrams that become interactive on hover or click, not animated ones.",
+    "(inferred) Hovering a hero card most likely lifts or outlines it before it jumps to its section anchor. The stacked 'paper' offset on each node box already gives the diagrams depth without animation.",
+    "(inferred) The interactive attribution-graph figures deeper in the paper highlight connected nodes and edges on hover, so the motion is state change rather than scripted animation."
+  ],
+  "interactions": [
+    "The case-study card grid works as visual navigation: each card links to its chapter, so the hero doubles as the table of contents.",
+    "The sticky sidebar TOC tracks reading position across a very long paper and splits chapters (bold) from appendices (grey).",
+    "Footnote and citation markers ([1, 2, 3, 4, 5]) open inline hovercards instead of sending readers to the bottom of the page."
+  ],
+  "steal": [
+    "Research landing hero: a grid of findings cards, each with a mini diagram of the anomaly mechanism (a channel spike, drift, or correlated failure across subsystems) that links to its deep-dive section.",
+    "Pipeline/architecture section: a node-and-edge diagram language with stacked offset 'feature' boxes, one neutral fill, and one accent color reserved for the path that triggered the anomaly flag.",
+    "Long-form methods page: a sticky left TOC with a bold-to-grey hierarchy (core sections vs. appendix: data prep, ESA dataset notes, eval details) next to a roughly 700px reading column."
+  ],
+  "leave": [
+    "The warm parchment-and-oxblood palette is tied to Anthropic's identity and reads as cozy and print-like. Our telemetry site should feel colder and more mission-control.",
+    "The 17px-on-700px wall of text works for peer researchers but will lose recruiters. Lead with visuals and keep the full prose behind a 'read the method' depth layer."
+  ],
+  "relevance": 5,
+  "screenshots": [
+    {"src": "/research/anthropic-biology/desktop-hero.jpg", "caption": "Bold title over a 6x2 grid of circuit-diagram case cards"},
+    {"src": "/research/anthropic-biology/desktop-scroll-1.jpg", "caption": "Sticky chapter TOC beside a 700px column with inline citations"},
+    {"src": "/research/anthropic-biology/desktop-scroll-2.jpg", "caption": "Bulleted roadmap with bold underlined lead-ins and § links"},
+    {"src": "/research/anthropic-biology/mobile-hero.jpg", "caption": "Mobile: three-line title, card grid reflows to three columns"}
+  ]
+}

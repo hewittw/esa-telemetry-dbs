@@ -1,0 +1,53 @@
+{
+  "slug": "distill-tsne",
+  "name": "How to Use t-SNE Effectively (Distill)",
+  "url": "https://distill.pub/2016/misread-tsne/",
+  "category": "Interactive figures",
+  "oneLine": "Distill's explainer on how t-SNE misleads. Serif essay prose with a live, steppable t-SNE run as the hero.",
+  "moodWords": ["scholarly", "hands-on", "honest"],
+  "palette": [
+    {"hex": "#FFFFFF", "role": "background", "note": "Page ground behind both the prose and the canvas figures; no tinted panels"},
+    {"hex": "#0F2E3D", "role": "surface", "note": "Deep teal-navy 70px masthead holding the Distill droplet logo and ABOUT / PRIZE / SUBMIT"},
+    {"hex": "#333333", "role": "text", "note": "Body and headings set in rgba(0,0,0,0.8), so text reads as soft charcoal instead of pure black"},
+    {"hex": "#808080", "role": "muted", "note": "rgba(0,0,0,0.5) for figure metadata such as 'Perplexity: 30 / Step: 10' and secondary labels"},
+    {"hex": "#4682B4", "role": "accent", "note": "Steel blue on the round play/pause and restart buttons and the slider thumbs; the only UI color"},
+    {"hex": "#F0F4F5", "role": "surface", "note": "Faint cool tint behind small UI chips and the selected dataset-thumbnail state"}
+  ],
+  "type": [
+    {"family": "Hoefler Text (Georgia fallback)", "role": "display", "note": "Title around 56px regular with tight default tracking, sentence case; section heads ('1. Those hyperparameters really matter') around 30px regular. The old-style numerals carry the editorial tone"},
+    {"family": "Georgia", "role": "body", "note": "20px regular on about 31px leading, a measure of about 650px (65-70 characters), quotations set in true italic"},
+    {"family": "-apple-system / Roboto", "role": "label", "note": "12px regular for every figure label, slider caption ('Perplexity 10') and step counter; the nav is 12px uppercase with wide tracking"}
+  ],
+  "layout": [
+    "The prose column sits about 650px wide, left-aligned at x=228 inside a 984px container. The right third stays empty beside the text, so figures can break out to the full 1080px width.",
+    "The hero puts an interactive figure right after the dek: a live point cloud on the left, a 6x3 grid of 56px dataset thumbnails on the right, and play/restart buttons, a step counter and three sliders below it.",
+    "Numbered sections are separated by full-bleed 1px hairlines with about 60px of air on each side. Small-multiple strips (one run captured at steps 10, 20, 60, 120 and 1,000) appear inline as evidence."
+  ],
+  "motion": [
+    "The hero figure animates t-SNE optimization in real time. Points drift from a scrambled cloud into a structure while the 'Step' counter ticks up (87 on desktop and 74 on mobile when captured, so it runs on load).",
+    "The motion carries the meaning: watching the embedding converge is the argument, not decoration.",
+    "(inferred) Re-running with a new perplexity or epsilon restarts the animation from a random seed, so readers see run-to-run variance with their own eyes.",
+    "(inferred) Apart from the canvas animations, the page has no scroll-triggered transitions or page-level motion."
+  ],
+  "interactions": [
+    "Click a dataset thumbnail (grid, clusters, rings, trefoil and others) to swap the data in the main simulation. The selected tile gets a blue outline.",
+    "Drag the sliders (Points Per Side, Perplexity, Epsilon) to re-run t-SNE live with new hyperparameters.",
+    "Play/pause and restart buttons let the reader freeze the optimization at any step."
+  ],
+  "steal": [
+    "Results page hero: a live latent-space embedding of telemetry windows (normal vs. anomalous) that settles into place on load, with a visible 'epoch' or 'step' counter.",
+    "Model-comparison section: small-multiple strips of one anomaly-score plot at several thresholds or window sizes, each captioned in 12px mono ('window: 256 / thr: 0.92').",
+    "Methods section: hyperparameter sliders (window length, contamination, latent dim) that update a figure in place, so readers can see why our chosen settings matter."
+  ],
+  "leave": [
+    "The 2016 masthead and stock steel-blue Material buttons feel dated and generic next to a SpaceX/Apple-level direction. Keep the idea and restyle the controls.",
+    "The all-white, serif-only presentation reads as an academic journal. Our recruiter audience needs a stronger cinematic first impression before the long-form explanation starts."
+  ],
+  "relevance": 5,
+  "screenshots": [
+    {"src": "/research/distill-tsne/desktop-hero.jpg", "caption": "Serif title above a live t-SNE run, dataset grid and sliders"},
+    {"src": "/research/distill-tsne/desktop-scroll-1.jpg", "caption": "650px Georgia prose column, hairline rule, numbered section head"},
+    {"src": "/research/distill-tsne/desktop-scroll-2.jpg", "caption": "Small multiples showing one run at steps 10 through 1,000"},
+    {"src": "/research/distill-tsne/mobile-hero.jpg", "caption": "Mobile stacks the simulation, a 3-column thumbnail grid and controls"}
+  ]
+}

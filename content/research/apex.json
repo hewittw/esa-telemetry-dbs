@@ -1,0 +1,109 @@
+{
+  "slug": "apex",
+  "name": "Apex",
+  "url": "https://www.apexspace.com",
+  "category": "Space & hardware",
+  "oneLine": "Satellite-bus manufacturer; engineering-spec aesthetic of numbered mono nav, hairline grids, and all-caps grotesk.",
+  "moodWords": [
+    "industrial",
+    "technical",
+    "confident"
+  ],
+  "palette": [
+    {
+      "hex": "#1A1A1A",
+      "role": "background",
+      "note": "Body background for text-heavy sections (pillars, mission statement)"
+    },
+    {
+      "hex": "#000000",
+      "role": "surface",
+      "note": "Pure black product section with the Aries / Nova / Comet bus cards and CTA buttons"
+    },
+    {
+      "hex": "#FFFFFF",
+      "role": "text",
+      "note": "Headlines and body copy"
+    },
+    {
+      "hex": "#808080",
+      "role": "muted",
+      "note": "Nav index numbers (1.0, 2.0...) and secondary copy; also the grey placeholder behind the unloaded hero video"
+    },
+    {
+      "hex": "#F6B717",
+      "role": "accent",
+      "note": "Single saturated CTA: yellow 'LEARN MORE' button with black mono text"
+    },
+    {
+      "hex": "#A145E4",
+      "role": "data",
+      "note": "Orbit-tag outlines: purple LEO; siblings #4E98F9 blue and #F76B0E orange Comet tags code product variants"
+    }
+  ],
+  "type": [
+    {
+      "family": "Space Grotesk",
+      "role": "display",
+      "note": "300 weight, all caps, 60-72px, near-zero tracking ('THE SPACECRAFT PLATFORM COMPANY'), soft drop shadow on video"
+    },
+    {
+      "family": "Inter",
+      "role": "body",
+      "note": "16px regular, sentence case, ~1.5 leading, max ~420px per column"
+    },
+    {
+      "family": "Space Mono",
+      "role": "label",
+      "note": "12px uppercase, wide tracking, the dominant face (62 nodes): nav, buttons, 'PROUDLY MADE IN AMERICA', orbit tags"
+    },
+    {
+      "family": "Custom wide techno wordmarks",
+      "role": "display",
+      "note": "ARIES / NOVA / COMET product names in an extended squared display face"
+    }
+  ],
+  "layout": [
+    "Nav is a ruled table: each item a cell divided by 1px grey hairlines, prefixed with a spec index (1.0 PLATFORMS, 2.0 FACTORY) and a '+' glyph.",
+    "Split hero: huge headline left 50%, short paragraph + small black CTA top-right; the rest of the viewport is full-bleed factory video.",
+    "Three-up columns and product cards bounded by hairline frames with '+' crosshair marks at the corners, like a drawing sheet."
+  ],
+  "motion": [
+    "Video-heavy (19 video elements): full-bleed cleanroom footage behind the hero (visible on mobile; desktop captured as flat grey before load).",
+    "(inferred) Each bus card plays its own looping render of the spacecraft in the black product grid.",
+    "(inferred) Orbit-tag chips (LEO/MEO/GEO) toggle between solid and dashed borders to show available vs unavailable configurations."
+  ],
+  "interactions": [
+    "'+' nav items expand into dropdown panels.",
+    "Orbit selector chips on each product card (solid = available, dashed = not).",
+    "'CONFIGURE NOW' leads to a spacecraft configurator."
+  ],
+  "steal": [
+    "Numbered ruled nav (1.0 DATA, 2.0 METHOD, 3.0 RESULTS, 4.0 LIMITS) in mono with hairline cell dividers for our top bar.",
+    "Corner '+' crosshair marks on hairline-framed figure panels for every chart on the Results section.",
+    "Solid vs dashed outlined chips to show detector states (flagged / not flagged) in the model-comparison table."
+  ],
+  "leave": [
+    "Multiple saturated hues (yellow, purple, blue, orange) would break our one-accent rule; keep a single accent.",
+    "All-caps light display for long headlines gets hard to read at 3+ lines ('ELIMINATING THE SATELLITE PRODUCTION BOTTLENECK...')."
+  ],
+  "relevance": 5,
+  "screenshots": [
+    {
+      "src": "/research/apex/desktop-hero.jpg",
+      "caption": "Split hero: caps headline over cleanroom satellite-bus footage"
+    },
+    {
+      "src": "/research/apex/desktop-scroll-1.jpg",
+      "caption": "Three pillars, then Aries/Nova/Comet cards with orbit chips"
+    },
+    {
+      "src": "/research/apex/desktop-scroll-2.jpg",
+      "caption": "Solar-panel photo beside mission statement and yellow CTA"
+    },
+    {
+      "src": "/research/apex/mobile-hero.jpg",
+      "caption": "Mobile hero over cleanroom factory video"
+    }
+  ]
+}

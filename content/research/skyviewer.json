@@ -1,0 +1,51 @@
+{
+  "slug": "skyviewer",
+  "name": "Skyviewer Explorer (Rubin Observatory)",
+  "url": "https://skyviewer.app/explorer",
+  "category": "Data explorers",
+  "oneLine": "Rubin Observatory's deep-zoom sky explorer: one full-bleed survey image, a few floating circular controls, zero chrome.",
+  "moodWords": ["immersive", "vast", "quiet"],
+  "palette": [
+    {"hex": "#000000", "role": "background", "note": "48px top bar (hamburger left, close X right) and the deep-space backdrop of the survey image"},
+    {"hex": "#1F2121", "role": "surface", "note": "Body background, near-black with a hint of green, shown while the canvas loads (fills the whole mobile capture)"},
+    {"hex": "#313333", "role": "surface", "note": "Translucent charcoal 48px circular buttons: compass/globe, markers, grid, zoom +/-, fullscreen, share"},
+    {"hex": "#E6E6E6", "role": "surface", "note": "Light-grey circular search button, top left; the one inverted control so search stands out"},
+    {"hex": "#FFFFFF", "role": "text", "note": "Icon strokes and body text color"},
+    {"hex": "#30E0E3", "role": "accent", "note": "Electric cyan pill banner at bottom center ('You are looking at ~1/10 of Rubin's field of view') with dark #1F2121 text"}
+  ],
+  "type": [
+    {"family": "Source Sans 3", "role": "body", "note": "17.5px regular with 700 bold for key figures ('~1/10'), sentence case; the only text on screen is the banner"},
+    {"family": "Noto Sans JP", "role": "label", "note": "Loaded as a fallback in the font stack for localized UI; not visible in the captures"}
+  ],
+  "layout": [
+    "The layout is 100% image with no scrolling. The two scroll captures are identical to the hero, confirming a single fixed viewport where the data is the whole interface.",
+    "Controls are 48px circles floating over the image, grouped by job: search alone top left, navigation tools (compass, markers, grid) in a column top right, zoom +/- at mid right, fullscreen and share bottom left.",
+    "One cyan pill banner at bottom center gives scale context, and a small 'Aladin' credit sits bottom right. Every other pixel is the dataset."
+  ],
+  "motion": [
+    "(inferred) Deep-zoom pan and pinch through a HiPS tile pyramid rendered with WebGL by Aladin Lite (2 canvases detected). Tiles sharpen progressively as you zoom, so the motion comes from direct manipulation.",
+    "(inferred) Search 'flies' the view to a named object with an eased pan-and-zoom, the signature motion of sky viewers.",
+    "The mobile capture shows only the flat #1F2121 loading surface under the black bar. The heavy canvas had not painted yet, a sign the first frame costs a lot."
+  ],
+  "interactions": [
+    "Drag to pan and scroll or pinch to zoom across a gigapixel survey image, with circular zoom buttons as a fallback.",
+    "Search an object or coordinates, then toggle overlays (markers, coordinate grid) from the right-hand tool column.",
+    "A dismissible context banner gives a sense of scale; share and fullscreen sit bottom left."
+  ],
+  "steal": [
+    "Telemetry explorer page: a full-bleed, chrome-free pan/zoom view of a multi-channel time series, with controls as 48px translucent floating circles grouped by job.",
+    "Explorer footer: a single cyan context pill ('You are viewing 3 of 76 channels, Mission 1, 2004–2006') that anchors scale without adding a panel.",
+    "Site-wide color rule: near-black #1F2121-style ground with one electric cyan accent, saved for the 'show anomaly' primary action (matching our accent-only-for-primary rule)."
+  ],
+  "leave": [
+    "The blank mobile first paint: shipping a heavy WebGL canvas with no poster or skeleton leaves phones on an empty grey screen. We need a static preview frame first.",
+    "Unlabeled icon-only controls (globe, diamond grid) are fine for astronomers but opaque to recruiters. Add tooltips or short labels."
+  ],
+  "relevance": 4,
+  "screenshots": [
+    {"src": "/research/skyviewer/desktop-hero.jpg", "caption": "Full-bleed Rubin deep field with floating circular controls"},
+    {"src": "/research/skyviewer/desktop-scroll-1.jpg", "caption": "Same frame as the hero: fixed viewport, the page doesn't scroll"},
+    {"src": "/research/skyviewer/desktop-scroll-2.jpg", "caption": "Same frame again: the explorer is a single canvas"},
+    {"src": "/research/skyviewer/mobile-hero.jpg", "caption": "Mobile capture is blank: canvas not yet painted under bar"}
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "slug": "r2d3",
+  "name": "R2D3 — A Visual Introduction to Machine Learning",
+  "url": "https://r2d3.us/visual-intro-to-machine-learning-part-1/",
+  "category": "Data explorers",
+  "oneLine": "Scrollytelling decision-tree explainer: light Helvetica narrative left, one persistent chart morphing on the right as you scroll.",
+  "moodWords": [
+    "airy",
+    "didactic",
+    "kinetic"
+  ],
+  "palette": [
+    {
+      "hex": "#FFFFFF",
+      "role": "background",
+      "note": "Pure white page, no section fills"
+    },
+    {
+      "hex": "#333333",
+      "role": "text",
+      "note": "Body copy in light Helvetica; titles in #000000"
+    },
+    {
+      "hex": "#41992B",
+      "role": "accent",
+      "note": "Green class: San Francisco homes, dots rendered at partial opacity"
+    },
+    {
+      "hex": "#104683",
+      "role": "accent",
+      "note": "Navy class: New York homes; overlap of the two creates the visual density"
+    },
+    {
+      "hex": "#428BCA",
+      "role": "accent",
+      "note": "Link/control blue"
+    },
+    {
+      "hex": "#AAAAAA",
+      "role": "muted",
+      "note": "10px axis tick labels like '$293.0 per sqft'"
+    }
+  ],
+  "type": [
+    {
+      "family": "Helvetica Neue",
+      "role": "display",
+      "note": "Title 60px weight 300, ~-2% tracking, tight ~1.1 leading, three stacked lines; H2 48px light with a 3px black rule beneath"
+    },
+    {
+      "family": "Helvetica Neue",
+      "role": "body",
+      "note": "21px weight 300, ~1.5 line-height; key terms bumped to weight 700 ('statistical learning', 'scatterplot')"
+    },
+    {
+      "family": "Helvetica Neue",
+      "role": "label",
+      "note": "10-11px regular gray axis labels and 'SCROLL' cue in bold caps with a downward triangle"
+    }
+  ],
+  "layout": [
+    "Two-column split at 1440px: ~460px text column starting at x=150, chart occupies the right ~55% and stays pinned while text scrolls.",
+    "Huge vertical gaps (300-400px) between text blocks so each step gets its own scroll beat; chart is often the only thing on screen.",
+    "On mobile the split is kept, so the chart is cropped off the right edge and text squeezes to ~270px (weak responsive story)."
+  ],
+  "motion": [
+    "Scroll-driven transitions: the same ~400 data points re-layout from scatterplot matrix to 1-D elevation strip to histogram bars as sections advance (visible across screenshots).",
+    "(inferred) Points tween positions with eased D3 transitions over ~1s, preserving object constancy so you can track a home from one chart to the next.",
+    "(inferred) Later sections grow a decision tree branch by branch with points flowing down the splits; won Kantar Information is Beautiful gold for this."
+  ],
+  "interactions": [
+    "Scroll is the primary interaction: position in the narrative drives the chart state.",
+    "Language selector dropdown in the hero; 'Keep scrolling' italic cue plus SCROLL arrow."
+  ],
+  "steal": [
+    "Model-pipeline section: one pinned chart of telemetry points that morphs (raw channels -> embedding scatter -> anomaly histogram) as the left-column copy advances.",
+    "Class encoding: two semi-transparent hues (nominal vs anomalous) so overlap density itself becomes the story in our scatter/UMAP view.",
+    "Hero typography: very light, large, tightly tracked display weight stacked over 3 lines, paired with 21px light body, for an Apple-like calm."
+  ],
+  "leave": [
+    "The non-responsive split on mobile (chart cropped off-screen); our scrolly sections must restack to chart-on-top on 390px.",
+    "Default browser select and dated 2015 chrome (boxed R2D3 logo, triangle arrow) undercut a modern polish bar."
+  ],
+  "relevance": 5,
+  "screenshots": [
+    {
+      "src": "/research/r2d3/desktop-hero.jpg",
+      "caption": "Light 60px title left; scatterplot matrix on the right"
+    },
+    {
+      "src": "/research/r2d3/desktop-scroll-1.jpg",
+      "caption": "Points collapse into elevation strip and bars; 'Adding nuance' heading"
+    },
+    {
+      "src": "/research/r2d3/desktop-scroll-2.jpg",
+      "caption": "Pinned scatterplot matrix beside wide-spaced narrative copy"
+    },
+    {
+      "src": "/research/r2d3/mobile-hero.jpg",
+      "caption": "Mobile keeps split; chart cropped, text squeezed narrow"
+    }
+  ]
+}

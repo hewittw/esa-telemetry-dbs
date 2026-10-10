@@ -1,0 +1,51 @@
+{
+  "slug": "teenage-engineering",
+  "name": "teenage engineering",
+  "url": "https://teenage.engineering",
+  "category": "Space & hardware",
+  "oneLine": "Swedish hardware maker's storefront; black, monochrome, hairline-light type and pictogram nav like a product manual.",
+  "moodWords": ["austere", "engineered", "playful"],
+  "palette": [
+    {"hex": "#000000", "role": "background", "note": "Page body and the band beneath the hero photo"},
+    {"hex": "#F1F2F2", "role": "text", "note": "Nav labels, 'NOW OPEN!' block, footer links"},
+    {"hex": "#E5E5E5", "role": "muted", "note": "Secondary nav sub-links (instruments, audio, designs)"},
+    {"hex": "#171717", "role": "surface", "note": "Near-black brick of the full-bleed B&W storefront photo"},
+    {"hex": "#FFFFFF", "role": "accent", "note": "Glowing neon sign text in the photo, the only highlight on the page"}
+  ],
+  "type": [
+    {"family": "te-20 (custom)", "role": "display", "note": "26px weight 100 hairline for nav headings ('products', 'store'), all lowercase, tight tracking"},
+    {"family": "te-20 (custom)", "role": "body", "note": "~19px weight 100 for footer links and announcements; announcements set in uppercase"},
+    {"family": "te-20 / Unicode", "role": "label", "note": "9px weight 100-300 for nav sub-links and a Japanese mission paragraph, lowercase, stacked 3 lines"},
+    {"family": "te-40 (custom)", "role": "mono", "note": "Single 300-weight use; wider sibling cut kept for special marks"}
+  ],
+  "layout": [
+    "Header is a six-column strip at 66px side margins: each column pairs a ~80px outlined SVG pictogram with a 26px heading and three 9px sub-links; the TE logo sits far right.",
+    "Body is a single full-bleed B&W photograph (~1200px tall) with the nav overlaid on it, then ~120px of black and a centered two-line announcement.",
+    "Footer is one baseline row: region select left, seven links centered, copyright right, all 19px hairline."
+  ],
+  "motion": [
+    "Very little visible motion; the page relies on stillness and photography.",
+    "(inferred) Line pictograms in the nav (flower, box, magnifier/gear) animate or redraw on hover; 17 inline SVGs support this.",
+    "(inferred) Mobile menu (three-dot button, cart counter tile) slides open as a full-screen sheet."
+  ],
+  "interactions": [
+    "Pictogram-plus-label mega nav: each column is a hover target revealing its three sub-links.",
+    "Mobile collapses to a cart counter tile (light grey '0') top-left and a vertical three-dot menu top-right."
+  ],
+  "steal": [
+    "Pictogram nav columns: one hairline SVG glyph per section (dataset, model, results, demo) in the header of our telemetry site.",
+    "Hairline weight-100 lowercase headings at ~26px over pure black for the page chrome, keeping the data visuals the brightest thing on screen.",
+    "Single full-bleed monochrome hero image (a satellite or ground-station photo) with nav overlaid, then a stark black band with a centered two-line status line ('MISSION ACTIVE / 58 CHANNELS')."
+  ],
+  "leave": [
+    "9px weight-100 sub-labels: near-illegible on non-retina screens and fails contrast for dense technical copy.",
+    "Almost zero content on the home page: fine for a brand store, but our page must surface results and methodology immediately."
+  ],
+  "relevance": 3,
+  "screenshots": [
+    {"src": "/research/teenage-engineering/desktop-hero.jpg", "caption": "Pictogram nav over B&W storefront with neon sign"},
+    {"src": "/research/teenage-engineering/desktop-scroll-1.jpg", "caption": "Photo ends into black band, announcement, one-row footer"},
+    {"src": "/research/teenage-engineering/desktop-scroll-2.jpg", "caption": "Page bottom; identical to previous shot, page is short"},
+    {"src": "/research/teenage-engineering/mobile-hero.jpg", "caption": "Full storefront photo, cart tile and three-dot menu"}
+  ]
+}
