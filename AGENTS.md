@@ -48,6 +48,7 @@ One Next.js + Tailwind static site with four parts:
 - Site brief, audience, and content → `docs/brief.md`
 - UI/UX principles and naming vocabulary → `docs/design-principles.md`
 - Looks to avoid (AI defaults) → `docs/avoid.md`
+- Reference sites and what to steal → `docs/references.md`
 - Style-specific tokens and rules → `docs/styles/<style>.md` (create one per style once its board exists)
 - Writing Next.js code → read the docs for the installed version (next-devtools MCP `nextjs_docs`)
 

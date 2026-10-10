@@ -27,3 +27,9 @@ Append as decisions happen, newest at the bottom.
 - **Direction from the user:** very modern and clean, like SpaceX/Apple, with incredible animations and all-new figures.
 - **Scaffold:** Next.js 16.4 + Tailwind v4 (create-next-app, src/ dir, TS). Generated in a temp dir and merged,
   keeping our AGENTS.md plus Next's agent-rules block.
+
+## 2026-10-09 · Reference research
+- Three parallel research agents (aerospace/deep-tech, research data-viz, out-of-the-box) found ~35 live sites.
+  Curated to 15 in `docs/references.md`.
+- Strongest recurring idea: one interaction carries the thesis, e.g. a Planet-style zoom or an iCOMAT-style
+  before/after, showing subsystem-level (4–5) vs. group-level (18–29) structure.
