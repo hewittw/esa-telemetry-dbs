@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* Placeholder tokens. Replaced by the picked style's design system. */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: #ffffff;
+  color: #171717;
+}
