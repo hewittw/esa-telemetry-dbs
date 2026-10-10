@@ -1,0 +1,119 @@
+{
+  "source": "tticfinalreportrheahewitt (10).pdf, Table 1 (p. 5) and body text. Numbers are exactly as printed in the report. 'verification' fields cross-check against notebook outputs and saved .npz files in TTIC-ESA-Spacecraft-Telemetry/ (null = no matching saved output found).",
+  "title": "Uncovering Latent Structure in ESA Satellite Telemetry",
+  "authors": ["Rhea Madhogarhia", "Hewitt Watkins"],
+  "course": "TTIC 31220 — Unsupervised Learning and Data Analysis",
+  "institution": "The University of Chicago / TTIC",
+  "table1": {
+    "caption": "Point-wise and event-wise performance across all methods.",
+    "notes": "GMM and VAE use different fitting protocols from the 80/20 baseline split—see Sections 4 and 5. Results have been updated since poster presentation.",
+    "columns": ["method", "scoring", "prAuc", "rocAuc", "eventF1", "trend"],
+    "bold": ["TransformerVAE M1 prAuc", "TransformerVAE M1 rocAuc", "TransformerVAE M2 prAuc", "TransformerVAE M2 rocAuc"],
+    "rows": [
+      {"method": "K-Means", "label": "K-Means (M1, K = 2)", "family": "baseline", "mission": 1, "latentK": 2, "d": null, "scoring": "Centroid dist.", "prAuc": 0.322, "rocAuc": 0.620, "eventF1": 0.661, "trend": "Baseline", "trendDirection": null,
+       "verification": {"status": "not found", "detail": "Report run (MiniBatch K-Means, 80/20 split) not in repo. Only saved K-Means scores are an earlier K=8 run: PR-AUC 0.3306, ROC-AUC 0.6336 (results/01_kmeans_results.npz). An older K=2 run (OLD TRASH NOTEBOOKS) printed ROC-AUC 0.6553."}},
+      {"method": "PCA Recon", "label": "PCA Recon (M1, d = 33)", "family": "baseline", "mission": 1, "latentK": null, "d": 33, "scoring": "Recon. MSE", "prAuc": 0.322, "rocAuc": 0.623, "eventF1": 0.501, "trend": "Neutral", "trendDirection": null,
+       "verification": {"status": "not found", "detail": "02_pca_and_k_means.ipynb (earlier version, no 80/20 split) printed Recon PR-AUC 0.3309; no scores saved."}},
+      {"method": "PCA + K-Means", "label": "PCA + K-Means (M1)", "family": "baseline", "mission": 1, "latentK": null, "d": null, "scoring": "Centroid dist.", "prAuc": 0.317, "rocAuc": 0.612, "eventF1": 0.576, "trend": "Neutral", "trendDirection": null,
+       "verification": {"status": "not found", "detail": "02_pca_and_k_means.ipynb (earlier, K=8) printed PR-AUC 0.3344; no scores saved."}},
+      {"method": "Nystroem-KPCA Dist", "label": "Nystroem-KPCA Dist (M1)", "family": "baseline", "mission": 1, "latentK": null, "d": null, "scoring": "Centroid dist.", "prAuc": 0.334, "rocAuc": 0.611, "eventF1": 0.661, "trend": "+0.012 ↑", "trendDirection": "up",
+       "verification": {"status": "not found", "detail": "03_nystroem_kpca.ipynb has no executed outputs; kpca_kmeans_results.npz it would write does not exist."}},
+      {"method": "Nystroem-KPCA Feat-Recon", "label": "Nystroem-KPCA Feat-Recon (M1)", "family": "baseline", "mission": 1, "latentK": null, "d": null, "scoring": "Recon. (feat.)", "prAuc": 0.164, "rocAuc": 0.605, "eventF1": 0.314, "trend": "Regress ↓", "trendDirection": "down",
+       "verification": {"status": "not found", "detail": "As above."}},
+      {"method": "GMM", "label": "GMM (M1, K = 21)", "family": "parametric", "mission": 1, "latentK": 21, "d": null, "scoring": "Neg. log-lik.", "prAuc": 0.384, "rocAuc": 0.692, "eventF1": null, "trend": "Improve ↑", "trendDirection": "up",
+       "verification": {"status": "exact", "notebook": "parametric_discovery/01_gmm_parametric_discovery copy.ipynb", "scores": "parametric_discovery/results/gmm_m1_scores.npz", "prAuc": 0.3840, "rocAuc": 0.6915, "f1At99pct": 0.159, "precisionAt99pct": 0.963, "recallAt99pct": 0.087}},
+      {"method": "GMM", "label": "GMM (M2, K = 29)", "family": "parametric", "mission": 2, "latentK": 29, "d": null, "scoring": "Neg. log-lik.", "prAuc": 0.390, "rocAuc": 0.764, "eventF1": null, "trend": "Improve ↑", "trendDirection": "up",
+       "verification": {"status": "exact", "notebook": "parametric_discovery/01_gmm_parametric_discovery copy.ipynb", "scores": "parametric_discovery/results/gmm_m2_scores.npz", "prAuc": 0.3895, "rocAuc": 0.7639, "f1At99pct": 0.307, "precisionAt99pct": 0.872, "recallAt99pct": 0.186}},
+      {"method": "CapacityVAE", "label": "CapacityVAE (M1, lat. K = 5)", "family": "generative", "mission": 1, "latentK": 5, "d": null, "scoring": "GMM-OOD", "prAuc": 0.305, "rocAuc": 0.640, "eventF1": null, "trend": "Regress ↓", "trendDirection": "down",
+       "verification": {"status": "near", "notebook": "generative_discovery/run_notebooks_2/01_vae_conv_capacity_(2).ipynb", "scores": null, "prAuc": 0.3037, "rocAuc": 0.6396, "detail": "Notebook PR-AUC 0.3037 rounds to 0.304, not 0.305. Score arrays for this run were not saved."}},
+      {"method": "HierarchicalVAE", "label": "HierarchicalVAE (M1, lat. K = 2)", "family": "generative", "mission": 1, "latentK": 2, "d": null, "scoring": "GMM-OOD", "prAuc": 0.293, "rocAuc": 0.591, "eventF1": null, "trend": "Regress ↓", "trendDirection": "down",
+       "verification": {"status": "exact", "notebook": "generative_discovery/run_notebooks/02_vae_hierarchical_(2).ipynb", "scores": "generative_discovery/results/02_run1/hvae_m1_scores.npz", "prAuc": 0.2932, "rocAuc": 0.5906}},
+      {"method": "TransformerVAE", "label": "TransformerVAE (M1, lat. K = 16)", "family": "generative", "mission": 1, "latentK": 16, "d": null, "scoring": "GMM-OOD", "prAuc": 0.335, "rocAuc": 0.628, "eventF1": null, "trend": "Best M1", "trendDirection": "best",
+       "verification": {"status": "exact", "notebook": "generative_discovery/run_notebooks_2/03_vae_transformer_(4).ipynb", "scores": null, "prAuc": 0.3353, "rocAuc": 0.6280, "detail": "Score arrays for this run were not saved (saved TransformerVAE npz files are earlier K=3 runs)."}},
+      {"method": "CapacityVAE", "label": "CapacityVAE (M2, lat. K = 16)", "family": "generative", "mission": 2, "latentK": 16, "d": null, "scoring": "Neg. ELBO", "prAuc": 0.414, "rocAuc": 0.719, "eventF1": null, "trend": "Improve ↑", "trendDirection": "up",
+       "verification": {"status": "exact", "notebook": "generative_discovery/run_notebooks_2/01_vae_conv_capacity_(2).ipynb", "scores": null, "prAuc": 0.4138, "rocAuc": 0.7188}},
+      {"method": "HierarchicalVAE", "label": "HierarchicalVAE (M2, lat. K = 28)", "family": "generative", "mission": 2, "latentK": 28, "d": null, "scoring": "Recon. MSE", "prAuc": 0.434, "rocAuc": 0.739, "eventF1": null, "trend": "Improve ↑", "trendDirection": "up",
+       "verification": {"status": "mixed", "detail": "Metrics match run_notebooks_2/02_vae_hierarchical_(3).ipynb (PR 0.4343, ROC 0.7392), but that run's latent GMM K = 18. K = 28 comes from run_notebooks/02_vae_hierarchical_(2).ipynb / results/02_run1/hvae_m2_scores.npz, whose Recon MSE gives PR 0.4501, ROC 0.7403."}},
+      {"method": "TransformerVAE", "label": "TransformerVAE (M2, lat. K = 18)", "family": "generative", "mission": 2, "latentK": 18, "d": null, "scoring": "Neg. ELBO", "prAuc": 0.438, "rocAuc": 0.749, "eventF1": null, "trend": "Best M2", "trendDirection": "best",
+       "verification": {"status": "mixed", "detail": "K = 18 and PR 0.4384 match run_notebooks_2/03_vae_transformer_(4).ipynb, whose ROC is 0.7381 (not 0.749). ROC 0.7486 is from run_notebooks/03_vae_transformer_(3).ipynb (K = 15, PR 0.4518; scores in results/03_run2/tvae_m2_scores.npz)."}}
+    ]
+  },
+  "headline": {
+    "missions": {
+      "1": {
+        "channels": 76,
+        "trainingTimesteps": "7.4M",
+        "trainingTimestepsExact": 7364161,
+        "testTimestepsExact": 7364161,
+        "sampleRateHz": 0.033,
+        "sampleInterval": "one reading per ~30 seconds",
+        "subsystems": 4,
+        "groups": 18,
+        "labelType": "genuine system faults",
+        "anomalyFraction": "~10% of timesteps (report)",
+        "testAnomalyRate": 0.11098,
+        "trainAnomalyRate": 0.0993,
+        "constantChannelsRemovedForGmm": 8,
+        "anomalyEvents": {"Anomaly": 118, "Rare Event": 78, "Communication Gap": 4},
+        "longestTestAnomaly": {"timesteps": 116061, "hours": 967, "start": "2009-05-25"},
+        "sources": "report §2, Fig. 3 caption; exact counts from notebook outputs (01_k_means_baseline.ipynb, gmm copy nb); events from ESA-Mission1/anomaly_types.csv"
+      },
+      "2": {
+        "channels": 100,
+        "trainingTimesteps": "3.1M",
+        "trainingTimestepsExact": 3067201,
+        "testTimestepsExact": 3062401,
+        "sampleRateHz": 0.056,
+        "subsystems": 5,
+        "groups": 29,
+        "labelType": "≈95% rare operational events rather than true failures",
+        "testAnomalyRate": 0.0468,
+        "constantChannelsRemovedForGmm": 33,
+        "constantChannelsRemovedForGmmNotebook": 17,
+        "anomalyEvents": {"Rare Event": 613, "Anomaly": 31},
+        "sources": "report §2, §4; exact counts from notebook outputs; events from ESA-Mission2/anomaly_types.csv"
+      }
+    },
+    "splits": {
+      "benchmark": "ESA-ADB temporal 50/50 train/test split",
+      "baselines": "training data split 80/20 temporally (fit / hyperparameter validation); scaler fit on 80%",
+      "gmm": "800K randomly sampled training rows; BIC uses only this sample",
+      "vae": "90/10 temporal split of training data; scaler fit on 90%; 10% for validation/early stopping",
+      "evaluation": "all metrics on ESA-ADB test set"
+    },
+    "metrics": {"primary": "PR-AUC (average precision)", "secondary": ["ROC-AUC", "event-wise F1 (baselines only; Hundman et al., 2018)"]},
+    "kmeans": {"kSweep": [2, 10], "algorithm": "MiniBatch K-Means", "bestK": 2, "silhouetteAtBestK": 0.388, "testPrAuc": 0.322},
+    "pca": {"componentsFor95pctVariance": 33, "pc1LoadingCV": 0.006, "pc1LoadingRange": [0.1685, 0.1753], "pc1LoadingRangeSource": "Fig. 2b annotation", "tsneModes": "10–15 distinct operational modes", "prAuc": 0.322},
+    "nystroemKpca": {"kernel": "RBF", "nComponents": 300, "bestGamma": "0.1/n", "gammaGrid": ["0.1/n", "0.5/n", "1.0/n", "2.0/n"], "pcaDimGrid": [5, 10, 15, 25, 40], "bestPcaDim": 5, "bestValPrAuc": 0.208, "testPrAucDist": 0.334, "testPrAucFeatRecon": 0.164},
+    "gmm": {
+      "covariance": "full",
+      "pcaComponents": 30,
+      "pcaVarianceRetained": {"1": 0.991, "2": 0.910},
+      "pcaVarianceRetainedNotebookFinalRun": {"1": 0.998, "2": 0.903},
+      "kSweepReport": [2, 20],
+      "kSweepNotebook": [2, 30],
+      "bicSelectedK": {"1": 21, "2": 29},
+      "referenceCounts": {"subsystems": {"1": 4, "2": 5}, "groups": {"1": 18, "2": 29}},
+      "threshold": "99th percentile of training NLL",
+      "trainingNllThreshold99pct": {"1": 36.24, "2": 37.16},
+      "ariVsSubsystemsM1": 0.0466,
+      "ariVsGroupsM1": 0.0941
+    },
+    "vae": {
+      "windowLength": 32,
+      "windowMinutesM1": "≈16",
+      "trainingWindows": "pure-nominal only (every timestep y = 0)",
+      "scores": ["Reconstruction MSE", "Negative ELBO", "GMM-OOD"],
+      "capacityVae": {"encoder": "3-layer Conv1D [64, 128, 256], stride 2", "denoisingSigma": 0.1, "cMax": 50, "warmupEpochs": 40, "gamma": 10},
+      "hierarchicalVae": {"globalDim": 16, "localDim": 16, "betaMax": 1, "betaWarmupEpochs": 20},
+      "transformerVae": {"tokenDim": 128, "layers": 3, "heads": 4, "ffDim": 512, "tokens": 33, "cMax": 25, "gamma": 50, "warmupEpochs": 60},
+      "latentK": {"CapacityVAE": {"1": 5, "2": 16}, "HierarchicalVAE": {"1": 2, "2": 28}, "TransformerVAE": {"1": 16, "2": 18}}
+    },
+    "conclusions": {
+      "structureGranularity": "operational group level (18–29 modes), not subsystem level (4–5)",
+      "bestM1": "GMM: PR-AUC 0.384, ROC-AUC 0.692 (vs best VAE ROC-AUC 0.628)",
+      "bestM2": "TransformerVAE: PR-AUC 0.438 (vs GMM 0.390)",
+      "linearPlateau": "PR-AUC = 0.322 (ROC-AUC ≈ 0.62)"
+    }
+  }
+}
