@@ -120,27 +120,43 @@ export default function Hub() {
       </section>
 
       <section className="mt-20">
-        <SectionHead n="03" title="The Site" note="In the style we picked" />
-        <div className="mt-8 grid gap-8 md:grid-cols-12">
+        <SectionHead n="03" title="The Site" note="Three finished finals, one per style" />
+        <ul className="mt-8 grid gap-4 md:grid-cols-3">
+          {[
+            { b: intenseSpace, href: "/telemetry", tag: "Final · agent's pick" },
+            { b: refinedPaper, href: "/finalists/refined-paper", tag: "Final" },
+            { b: whiteImmersion, href: "/finalists/white-immersion", tag: "Final" },
+          ].map(({ b, href, tag }, i) => (
+            <li key={href}>
+              <Link
+                href={href}
+                className={`group flex h-full flex-col justify-between rounded-lg border border-neutral-900 px-5 py-5 transition-colors hover:bg-neutral-900 hover:text-white active:scale-[0.99] ${ring}`}
+              >
+                <div>
+                  <p className="font-mono text-xs text-neutral-500 group-hover:text-neutral-300">
+                    0{i + 1} · {tag}
+                  </p>
+                  <p className="mt-2 text-[17px] font-medium tracking-tight">{b.name}</p>
+                </div>
+                <span className="mt-6 text-sm">Open the explorer →</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-10 grid gap-8 md:grid-cols-12">
           <div className="md:col-span-7">
-            <Link
-              href="/telemetry"
-              className={`inline-flex rounded-full bg-neutral-900 px-6 py-3 text-[15px] font-medium text-white transition-colors hover:bg-neutral-700 active:scale-[0.97] ${ring}`}
-            >
-              Open the ESA Telemetry explorer →
-            </Link>
-            <h3 className="mt-8 text-sm font-medium">Our pick, and why</h3>
+            <h3 className="text-sm font-medium">Our pick, and why</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-neutral-700">
               <strong className="font-medium text-neutral-900">{intenseSpace.name}.</strong> An ML recruiter gets the
               finding in one look, and the instrument aesthetic reads as engineering rigor; research peers get every
-              number on real data, with a link to the page of the paper that backs it. It was also the most distinct of
-              the three directions.
+              number on real data, with a link to the page of the paper that backs it. All three were finished to the
+              same standard so the final choice can be made side by side.
             </p>
             <h3 className="mt-6 text-sm font-medium">The browser check</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-neutral-700">
               Every page was opened in a headless, logged-out browser at 11 screen sizes, from a 320px phone to a
-              2560px display. Each interaction was run by mouse, keyboard, and touch, and contrast was measured. The
-              bugs those checks caught are listed on the{" "}
+              2560px display, in Chromium and in WebKit (Safari&apos;s engine). Each interaction was run by mouse,
+              keyboard, and touch, and contrast was measured. The bugs those checks caught are listed on the{" "}
               <Link href="/decisions" className={`underline underline-offset-4 hover:text-neutral-900 ${ring}`}>
                 decisions page
               </Link>
@@ -148,18 +164,13 @@ export default function Hub() {
             </p>
           </div>
           <div className="md:col-span-5">
-            <h3 className="text-sm font-medium">The three candidate versions</h3>
+            <h3 className="text-sm font-medium">Earlier candidate versions</h3>
             <ul className="mt-3 divide-y divide-neutral-200 border-y border-neutral-200">
               {boards.map((b) => (
                 <li key={b.slug}>
-                  <Link
-                    href={`/versions/${b.slug}`}
-                    className={`group flex items-center justify-between gap-4 py-3 text-sm ${ring}`}
-                  >
+                  <Link href={`/versions/${b.slug}`} className={`group flex items-center justify-between gap-4 py-3 text-sm ${ring}`}>
                     <span className="group-hover:underline">{b.name}</span>
-                    <span className="font-mono text-xs text-neutral-500">
-                      {b.slug === "intense-space" ? "picked" : "candidate"} →
-                    </span>
+                    <span className="font-mono text-xs text-neutral-500">first build →</span>
                   </Link>
                 </li>
               ))}
