@@ -1,0 +1,482 @@
+/* /design-systems/white-immersion · page-scoped styles. Every class is prefixed wiv- (CSS Modules don't work here).
+   Tokens come from the mood board (.wi-root in board.css); the aliases below name their roles. */
+@layer components {
+.wiv-root {
+  --bg: #f4f6f8;        /* Whiteout · background */
+  --surface: #ffffff;   /* Frost · surface */
+  --rime: #d5dce4;      /* Rime · border */
+  --muted: #56616f;     /* Glacier · muted text */
+  --ink: #111824;       /* Ink · text */
+  --signal: #2fe0e3;    /* Signal · primary action fill only */
+  --press: #e9edf2;     /* pressed fill (Rime-tinted Frost) */
+  --dis: #7b8794;       /* disabled text, 3.6:1 on Frost (WCAG exempts disabled; still readable) */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fast: 160ms;
+  --slow: 520ms;
+  --shadow: 0 1px 0 rgba(17, 24, 36, 0.05), 0 40px 70px -50px rgba(61, 69, 88, 0.45);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--wi-mono), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+.wiv-root ::selection { background: var(--ink); color: #fff; }
+.wiv-display { font-family: var(--wi-display), sans-serif; font-weight: 400; text-transform: uppercase; }
+
+/* ---------- the field (fixed, behind everything) ---------- */
+.wiv-field {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 40%, #ffffff 0%, #f4f6f8 55%, #e3e8ee 100%);
+}
+.wiv-field canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wiv-gridOverlay {
+  position: fixed; inset: 0; z-index: 4; pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(17, 24, 36, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(17, 24, 36, 0.05) 1px, transparent 1px);
+  background-size: 96px 96px, 8px 8px;
+}
+
+/* ---------- glass + slabs ---------- */
+.wiv-glass {
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid var(--rime);
+}
+.wiv-slab { background: var(--surface); border: 1px solid var(--rime); box-shadow: var(--shadow); }
+.wiv-hair { border-color: var(--rime); }
+.wiv-backing { background: rgba(244, 246, 248, 0.86); width: fit-content; padding: 2px 6px; margin-left: -6px; }
+
+/* ---------- type roles ---------- */
+.wiv-label { font-size: 10.5px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); line-height: 1.5; }
+.wiv-hud { font-size: 10.5px; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.75; }
+.wiv-caption { font-size: 11px; font-weight: 300; color: var(--muted); line-height: 1.55; }
+.wiv-title { font-size: 15px; font-weight: 500; line-height: 1.35; color: var(--ink); }
+.wiv-num { font-family: var(--wi-display), sans-serif; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+
+/* ---------- focus: one ring everywhere (Ink, 2px, offset 3) ---------- */
+.wiv-root :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--ink); outline-offset: 3px;
+}
+
+/* ---------- secondary button: frost glass, hairline ---------- */
+.wiv-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 40px; padding: 0 16px; border-radius: 0;
+  background: rgba(255, 255, 255, 0.78); border: 1px solid var(--rime); color: var(--ink);
+  font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap;
+  cursor: pointer; transition: box-shadow var(--fast) var(--ease), background var(--fast) var(--ease), transform 120ms var(--ease);
+}
+.wiv-btn:hover, .wiv-btn.is-hover { box-shadow: inset 0 0 0 1px var(--ink); }
+.wiv-btn.is-focus { outline: 2px solid var(--ink); outline-offset: 3px; }
+.wiv-btn:active, .wiv-btn.is-press { background: var(--press); transform: translateY(1px); }
+.wiv-btn[aria-pressed="true"], .wiv-btn[aria-expanded="true"], .wiv-btn.is-sel { background: var(--ink); color: #fff; border-color: var(--ink); }
+.wiv-btn:disabled, .wiv-btn.is-dis { color: var(--dis); border-style: dashed; background: transparent; box-shadow: none; transform: none; cursor: not-allowed; }
+.wiv-btn.is-ghost { background: transparent; border-color: transparent; }
+.wiv-btn.is-ghost:hover { box-shadow: inset 0 0 0 1px var(--rime); }
+
+/* ---------- primary: the one Signal thing ---------- */
+.wiv-pill {
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 44px; padding: 0 20px; border-radius: 999px; border: 0;
+  background: var(--signal); color: var(--ink);
+  font-size: 11.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
+  box-shadow: 0 12px 30px -18px rgba(17, 24, 36, 0.6);
+  cursor: pointer; transition: box-shadow var(--fast) var(--ease), transform 120ms var(--ease), filter var(--fast);
+}
+.wiv-pill:hover, .wiv-pill.is-hover { box-shadow: inset 0 0 0 1.5px var(--ink), 0 12px 30px -18px rgba(17, 24, 36, 0.6); }
+.wiv-pill:focus-visible, .wiv-pill.is-focus { outline: 2px solid var(--ink); outline-offset: 4px; }
+.wiv-pill:active, .wiv-pill.is-press { transform: scale(0.97); filter: brightness(0.93); }
+.wiv-pill[aria-pressed="true"], .wiv-pill.is-sel { box-shadow: inset 0 0 0 1.5px var(--ink); }
+/* disabled: the accent leaves when there is nothing to do */
+.wiv-pill:disabled, .wiv-pill.is-dis { background: transparent; color: var(--dis); box-shadow: inset 0 0 0 1px var(--rime); cursor: not-allowed; transform: none; filter: none; }
+.wiv-pill.is-sm { min-height: 36px; padding: 0 14px; font-size: 10.5px; }
+.wiv-progress { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--ink); transform-origin: 0 50%; animation: wiv-progress linear forwards; }
+@keyframes wiv-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ---------- floating circle (Skyviewer) ---------- */
+.wiv-circle {
+  display: inline-grid; place-items: center; flex: none;
+  width: 44px; height: 44px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid var(--rime); color: var(--ink); cursor: pointer;
+  transition: box-shadow var(--fast) var(--ease), background var(--fast) var(--ease), transform 120ms var(--ease);
+}
+.wiv-circle.is-sm { width: 36px; height: 36px; }
+.wiv-circle:hover, .wiv-circle.is-hover { box-shadow: inset 0 0 0 1px var(--ink); }
+.wiv-circle.is-focus { outline: 2px solid var(--ink); outline-offset: 3px; }
+.wiv-circle:active, .wiv-circle.is-press { transform: scale(0.94); background: var(--press); }
+.wiv-circle[aria-pressed="true"], .wiv-circle[aria-expanded="true"], .wiv-circle.is-sel { background: var(--ink); color: #fff; border-color: var(--ink); }
+.wiv-circle:disabled, .wiv-circle.is-dis { color: var(--dis); border-style: dashed; background: transparent; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ---------- link ---------- */
+.wiv-link { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-decoration-color: var(--muted); cursor: pointer; transition: text-decoration-color var(--fast); }
+.wiv-link:hover, .wiv-link.is-hover { text-decoration-thickness: 2px; text-decoration-color: var(--ink); }
+.wiv-link.is-focus { outline: 2px solid var(--ink); outline-offset: 2px; }
+.wiv-link:active, .wiv-link.is-press { background: var(--press); }
+.wiv-link[aria-current="page"], .wiv-link.is-sel { text-decoration: none; box-shadow: inset 0 -2px 0 var(--ink); }
+.wiv-link.is-dis { color: var(--dis); text-decoration-style: dashed; cursor: not-allowed; }
+
+/* ---------- text input + select ---------- */
+.wiv-field-wrap { position: relative; display: block; }
+.wiv-input, .wiv-select {
+  width: 100%; min-height: 44px; padding: 0 14px; border-radius: 0;
+  background: var(--surface); border: 1px solid var(--rime); color: var(--ink);
+  font: inherit; font-size: 13px; letter-spacing: 0.02em;
+  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+}
+.wiv-input::placeholder { color: var(--muted); opacity: 1; }
+.wiv-input:hover, .wiv-select:hover, .wiv-input.is-hover, .wiv-select.is-hover { border-color: var(--muted); }
+.wiv-input:focus-visible, .wiv-select:focus-visible, .wiv-input.is-focus, .wiv-select.is-focus { outline: 2px solid var(--ink); outline-offset: 0; border-color: var(--ink); }
+.wiv-input.is-press { background: var(--press); }
+.wiv-input.is-sel, .wiv-select.is-sel { border-color: var(--ink); box-shadow: inset 0 -2px 0 var(--ink); }
+.wiv-input:disabled, .wiv-select:disabled, .wiv-input.is-dis, .wiv-select.is-dis { background: transparent; border-style: dashed; color: var(--dis); cursor: not-allowed; }
+.wiv-input[aria-invalid="true"] { border-color: var(--ink); border-width: 1px 1px 1px 4px; }
+.wiv-select {
+  appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%23111824' stroke-width='1.3'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+
+/* ---------- checkbox, radio ---------- */
+.wiv-check, .wiv-radio {
+  appearance: none; -webkit-appearance: none; flex: none; margin: 0;
+  width: 18px; height: 18px; border: 1px solid var(--muted); background: var(--surface); cursor: pointer;
+  display: inline-grid; place-items: center; transition: background var(--fast), box-shadow var(--fast), border-color var(--fast);
+}
+.wiv-radio { border-radius: 999px; }
+.wiv-check:hover, .wiv-radio:hover, .wiv-check.is-hover, .wiv-radio.is-hover { box-shadow: 0 0 0 4px var(--press); border-color: var(--ink); }
+.wiv-check:focus-visible, .wiv-radio:focus-visible, .wiv-check.is-focus, .wiv-radio.is-focus { outline: 2px solid var(--ink); outline-offset: 3px; }
+.wiv-check:active, .wiv-radio:active, .wiv-check.is-press, .wiv-radio.is-press { background: var(--press); transform: scale(0.92); }
+.wiv-check:checked, .wiv-check.is-sel { background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='white' stroke-width='1.6'%3E%3Cpath d='M2.5 6.2 5 8.6l4.6-5'/%3E%3C/svg%3E") center / 12px no-repeat; border-color: var(--ink); }
+.wiv-radio:checked, .wiv-radio.is-sel { border-color: var(--ink); background: radial-gradient(circle, var(--ink) 0 4.5px, var(--surface) 5px); }
+.wiv-check:disabled, .wiv-radio:disabled, .wiv-check.is-dis, .wiv-radio.is-dis { border-style: dashed; border-color: var(--dis); background: transparent; cursor: not-allowed; box-shadow: none; }
+
+/* ---------- switch ---------- */
+.wiv-switch {
+  position: relative; flex: none; width: 44px; height: 24px; border-radius: 999px; padding: 0;
+  border: 1px solid var(--muted); background: var(--surface); cursor: pointer;
+  transition: background var(--fast) var(--ease), border-color var(--fast), box-shadow var(--fast);
+}
+.wiv-switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 999px;
+  background: var(--muted); transition: transform 280ms var(--ease), background var(--fast);
+}
+.wiv-switch:hover, .wiv-switch.is-hover { box-shadow: 0 0 0 4px var(--press); border-color: var(--ink); }
+.wiv-switch.is-focus { outline: 2px solid var(--ink); outline-offset: 3px; }
+.wiv-switch:active::after, .wiv-switch.is-press::after { width: 20px; }
+.wiv-switch[aria-checked="true"], .wiv-switch.is-sel { background: var(--ink); border-color: var(--ink); }
+.wiv-switch[aria-checked="true"]::after, .wiv-switch.is-sel::after { transform: translateX(20px); background: #fff; }
+.wiv-switch[aria-checked="true"]:active::after { transform: translateX(16px); }
+.wiv-switch:disabled, .wiv-switch.is-dis { border-style: dashed; border-color: var(--dis); background: transparent; cursor: not-allowed; box-shadow: none; }
+.wiv-switch:disabled::after, .wiv-switch.is-dis::after { background: var(--rime); }
+
+/* ---------- tabs ---------- */
+.wiv-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--rime); overflow-x: auto; scrollbar-width: none; }
+.wiv-tab {
+  position: relative; min-height: 44px; padding: 0 16px; background: transparent; border: 0; color: var(--muted); cursor: pointer;
+  font: inherit; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap;
+  transition: color var(--fast), background var(--fast);
+}
+.wiv-tab::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink); transform: scaleX(0); transition: transform 300ms var(--ease); }
+.wiv-tab:hover, .wiv-tab.is-hover { color: var(--ink); background: rgba(255,255,255,.6); }
+.wiv-tab:focus-visible, .wiv-tab.is-focus { outline: 2px solid var(--ink); outline-offset: -2px; }
+.wiv-tab:active, .wiv-tab.is-press { background: var(--press); }
+.wiv-tab[aria-selected="true"], .wiv-tab.is-sel { color: var(--ink); }
+.wiv-tab[aria-selected="true"]::after, .wiv-tab.is-sel::after { transform: scaleX(1); }
+.wiv-tab:disabled, .wiv-tab.is-dis { color: var(--dis); text-decoration: line-through; cursor: not-allowed; background: transparent; }
+
+/* ---------- chips + segmented ---------- */
+.wiv-chip {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px; border-radius: 0;
+  border: 1px solid var(--rime); background: var(--surface); color: var(--ink); cursor: pointer;
+  font: inherit; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+  transition: box-shadow var(--fast) var(--ease), background var(--fast), border-color var(--fast);
+}
+.wiv-chip .wiv-chipMark { width: 12px; height: 12px; display: inline-grid; place-items: center; border: 1px solid var(--muted); }
+.wiv-chip:hover, .wiv-chip.is-hover { border-color: var(--ink); }
+.wiv-chip.is-focus { outline: 2px solid var(--ink); outline-offset: 3px; }
+.wiv-chip:active, .wiv-chip.is-press { background: var(--press); }
+.wiv-chip[aria-pressed="true"], .wiv-chip.is-sel { background: var(--ink); color: #fff; border-color: var(--ink); }
+.wiv-chip[aria-pressed="true"] .wiv-chipMark, .wiv-chip.is-sel .wiv-chipMark { border-color: #fff; }
+.wiv-chip:disabled, .wiv-chip.is-dis { color: var(--dis); border-style: dashed; background: transparent; cursor: not-allowed; }
+
+.wiv-seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rime); background: var(--surface); padding: 3px; gap: 3px; max-width: 100%; }
+.wiv-segBtn {
+  min-height: 36px; padding: 0 14px; border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  font: inherit; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap;
+  transition: background var(--fast) var(--ease), color var(--fast);
+}
+.wiv-segBtn:hover, .wiv-segBtn.is-hover { color: var(--ink); box-shadow: inset 0 0 0 1px var(--rime); }
+.wiv-segBtn:focus-visible, .wiv-segBtn.is-focus { outline: 2px solid var(--ink); outline-offset: 1px; }
+.wiv-segBtn:active, .wiv-segBtn.is-press { background: var(--press); }
+.wiv-segBtn[aria-checked="true"], .wiv-segBtn[aria-pressed="true"], .wiv-segBtn.is-sel { background: var(--ink); color: #fff; }
+.wiv-segBtn:disabled, .wiv-segBtn.is-dis { color: var(--dis); text-decoration: line-through; cursor: not-allowed; }
+
+/* ---------- slab card (ice slab) ---------- */
+.wiv-card {
+  position: relative; display: block; width: 100%; text-align: left; padding: 20px; border-radius: 0;
+  background: var(--surface); border: 1px solid var(--rime); color: inherit; box-shadow: var(--shadow); font: inherit;
+  transition: box-shadow 300ms var(--ease), transform 300ms var(--ease);
+}
+button.wiv-card, a.wiv-card { cursor: pointer; }
+button.wiv-card:hover, a.wiv-card:hover, .wiv-card.is-hover { box-shadow: 0 0 0 1px var(--ink), 0 40px 70px -50px rgba(61, 69, 88, 0.6); }
+.wiv-card.is-focus { outline: 2px solid var(--ink); outline-offset: 6px; }
+button.wiv-card:active, .wiv-card.is-press { transform: translateY(1px); background: #fbfcfd; }
+.wiv-card.is-dis { opacity: 0.55; box-shadow: none; border-style: dashed; }
+
+/* corner brackets crystallize around a selected thing */
+.wiv-corners { position: absolute; inset: -12px; pointer-events: none; opacity: 0; transition: opacity 400ms var(--ease), inset 600ms var(--ease); }
+[data-sel="true"] > .wiv-corners, .is-sel > .wiv-corners { opacity: 1; inset: -7px; }
+.wiv-corners i { position: absolute; width: 12px; height: 12px; border: 0 solid var(--ink); }
+.wiv-corners i:nth-child(1) { left: 0; top: 0; border-left-width: 1.5px; border-top-width: 1.5px; }
+.wiv-corners i:nth-child(2) { right: 0; top: 0; border-right-width: 1.5px; border-top-width: 1.5px; }
+.wiv-corners i:nth-child(3) { right: 0; bottom: 0; border-right-width: 1.5px; border-bottom-width: 1.5px; }
+.wiv-corners i:nth-child(4) { left: 0; bottom: 0; border-left-width: 1.5px; border-bottom-width: 1.5px; }
+
+/* ---------- list rows ---------- */
+.wiv-row {
+  display: grid; align-items: center; gap: 12px; width: 100%; min-height: 48px; padding: 8px 12px; text-align: left;
+  background: transparent; border: 0; border-bottom: 1px solid var(--rime); color: inherit; font: inherit; cursor: pointer;
+  transition: background var(--fast) var(--ease);
+}
+.wiv-row:hover, .wiv-row.is-hover { background: rgba(255, 255, 255, 0.9); box-shadow: inset 2px 0 0 var(--ink); }
+.wiv-row:focus-visible { outline-offset: -2px; }
+.wiv-row:active, .wiv-row.is-press { background: var(--press); }
+.wiv-row[aria-selected="true"], .wiv-row[aria-pressed="true"], .wiv-row.is-sel { background: var(--surface); box-shadow: inset 4px 0 0 var(--ink); }
+.wiv-row:disabled, .wiv-row.is-dis { color: var(--dis); cursor: not-allowed; }
+
+/* ---------- badge, tag ---------- */
+.wiv-badge {
+  display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px;
+  border: 1px solid var(--ink); color: var(--ink); background: var(--surface);
+  font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
+}
+.wiv-badge.is-solid { background: var(--ink); color: #fff; }
+.wiv-badge.is-quiet { border-color: var(--rime); color: var(--muted); }
+.wiv-count {
+  position: absolute; top: -5px; right: -5px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px;
+  display: grid; place-items: center; background: var(--ink); color: #fff; font-size: 10px; font-weight: 500; letter-spacing: 0;
+  box-shadow: 0 0 0 2px var(--bg);
+}
+
+/* ---------- tooltip ---------- */
+.wiv-tipWrap { position: relative; display: inline-flex; }
+.wiv-tip {
+  position: absolute; left: 50%; bottom: calc(100% + 10px); transform: translate(-50%, 4px); z-index: 30;
+  width: max-content; max-width: min(240px, 70vw); padding: 7px 10px; background: var(--ink); color: #fff;
+  font-size: 11px; line-height: 1.45; letter-spacing: 0.02em; text-transform: none; pointer-events: none;
+  display: none;
+}
+.wiv-tip::after { content: ""; position: absolute; left: 50%; top: 100%; margin-left: -5px; border: 5px solid transparent; border-top-color: var(--ink); }
+.wiv-tip[data-open="true"] { display: block; transform: translate(-50%, 0); animation: wiv-tipIn var(--fast) var(--ease) both; }
+@keyframes wiv-tipIn { from { opacity: 0; transform: translate(-50%, 4px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ---------- toast, banner ---------- */
+.wiv-toasts { position: fixed; z-index: 60; left: 50%; bottom: 84px; transform: translateX(-50%); display: grid; gap: 8px; width: min(420px, calc(100vw - 24px)); pointer-events: none; }
+.wiv-toast { position: relative; overflow: hidden; pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 16px; animation: wiv-rise 420ms var(--ease) both; }
+.wiv-toast .wiv-progress { animation-name: wiv-drain; }
+@keyframes wiv-drain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@keyframes wiv-rise { from { opacity: 0; transform: translateY(12px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+.wiv-banner { display: flex; align-items: flex-start; gap: 12px; padding: 12px 12px 12px 16px; border: 1px solid var(--ink); border-left-width: 4px; background: var(--surface); }
+
+/* ---------- skeleton: frost forming ---------- */
+.wiv-skel { position: relative; overflow: hidden; background: #e8edf2; }
+.wiv-skel::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  animation: wiv-frost 1800ms var(--ease) infinite;
+}
+@keyframes wiv-frost { to { transform: translateX(100%); } }
+
+/* ---------- modal ---------- */
+.wiv-dialog { margin: auto; padding: 0; border: 1px solid var(--rime); background: var(--surface); color: var(--ink); max-width: min(560px, calc(100vw - 24px)); width: 100%; max-height: calc(100dvh - 32px); box-shadow: 0 60px 100px -50px rgba(61, 69, 88, 0.6); font-family: var(--wi-mono), ui-monospace, monospace; }
+.wiv-dialog[open] { animation: wiv-crystal 480ms var(--ease) both; }
+.wiv-dialog::backdrop { background: rgba(228, 233, 239, 0.72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+@keyframes wiv-crystal { from { opacity: 0; transform: scale(0.97); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+
+/* ---------- accordion ---------- */
+.wiv-acc { border-top: 1px solid var(--rime); }
+.wiv-accItem { border-bottom: 1px solid var(--rime); }
+.wiv-accBtn { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 0 4px; background: transparent; border: 0; color: var(--ink); text-align: left; font: inherit; cursor: pointer; }
+.wiv-accBtn:hover { background: rgba(255, 255, 255, 0.85); }
+.wiv-accBtn:active { background: var(--press); }
+.wiv-accBtn .wiv-plus { transition: transform 360ms var(--ease); }
+.wiv-accBtn[aria-expanded="true"] .wiv-plus { transform: rotate(45deg); }
+.wiv-accPanel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 420ms var(--ease); }
+.wiv-accPanel[data-open="true"] { grid-template-rows: 1fr; }
+.wiv-accPanel > div { overflow: hidden; }
+
+/* ---------- menu popover ---------- */
+.wiv-menu { position: absolute; z-index: 40; min-width: 220px; padding: 6px; background: rgba(255, 255, 255, 0.96); border: 1px solid var(--rime); box-shadow: 0 30px 60px -30px rgba(61, 69, 88, 0.5); animation: wiv-rise 260ms var(--ease) both; }
+.wiv-menuItem { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 0 10px; background: transparent; border: 0; color: var(--ink); font: inherit; font-size: 12px; text-align: left; cursor: pointer; }
+.wiv-menuItem:hover, .wiv-menuItem:focus-visible { background: var(--press); outline: none; box-shadow: inset 2px 0 0 var(--ink); }
+.wiv-menuItem:disabled { color: var(--dis); cursor: not-allowed; background: transparent; box-shadow: none; }
+
+/* ---------- range slider ---------- */
+.wiv-range { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; cursor: pointer; }
+.wiv-range::-webkit-slider-runnable-track { height: 1px; background: var(--ink); }
+.wiv-range::-moz-range-track { height: 1px; background: var(--ink); }
+.wiv-range::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; margin-top: -9px; border-radius: 999px; background: var(--surface); border: 1.5px solid var(--ink); transition: transform var(--fast) var(--ease); }
+.wiv-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 999px; background: var(--surface); border: 1.5px solid var(--ink); }
+.wiv-range:hover::-webkit-slider-thumb { transform: scale(1.15); }
+.wiv-range:active::-webkit-slider-thumb { background: var(--ink); }
+.wiv-range:focus-visible { outline-offset: 2px; }
+
+/* ---------- section head + shard divider ---------- */
+.wiv-section { position: relative; scroll-margin-top: 88px; }
+@media (min-width: 1280px) { .wiv-section { scroll-margin-top: 32px; } }
+.wiv-shard path, .wiv-shard line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1400ms var(--ease); }
+.wiv-shard[data-in="true"] path, .wiv-shard[data-in="true"] line { stroke-dashoffset: 0; }
+
+/* index rail / strip */
+.wiv-idx { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 34px; padding: 0 10px; color: var(--muted); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border: 0; background: transparent; text-align: left; cursor: pointer; white-space: nowrap; transition: color var(--fast), background var(--fast); }
+.wiv-idx:hover { color: var(--ink); background: rgba(255, 255, 255, 0.7); }
+.wiv-idx:active { background: var(--press); }
+.wiv-idx[aria-current="true"] { color: var(--ink); background: var(--surface); box-shadow: inset 2px 0 0 var(--ink); }
+.wiv-strip .wiv-idx { width: auto; min-height: 40px; padding: 0 12px; }
+.wiv-strip .wiv-idx[aria-current="true"] { box-shadow: inset 0 -2px 0 var(--ink); }
+
+/* atlas (zoom-out overview) */
+.wiv-atlas { position: fixed; inset: 0; z-index: 70; overflow: auto; background: radial-gradient(120% 90% at 50% 45%, #ffffff 0%, #f4f6f8 55%, #e3e8ee 100%); animation: wiv-zoomOut 560ms var(--ease) both; }
+@keyframes wiv-zoomOut { from { opacity: 0; transform: scale(1.12); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+.wiv-atlas[data-leaving="true"] { animation: wiv-zoomIn 520ms var(--ease) both; }
+@keyframes wiv-zoomIn { to { opacity: 0; transform: scale(1.6); filter: blur(8px); } }
+.wiv-atlasTile { display: flex; flex-direction: column; gap: 6px; min-height: 120px; }
+
+/* specimen board: states side by side */
+.wiv-states { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 16px 12px; }
+.wiv-stateCell { display: grid; gap: 10px; align-content: start; justify-items: start; }
+
+.wiv-root .wiv-svgFocus:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+#wiv-main { transition: opacity 400ms var(--ease); }
+#wiv-main[data-flying="true"] { opacity: 0.88; }
+/* HUD readout ticker */
+.wiv-tick { font-variant-numeric: tabular-nums; }
+
+/* viewer (deep zoom) */
+.wiv-viewer { position: relative; overflow: hidden; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; background: radial-gradient(120% 120% at 50% 40%, #ffffff 0%, #f4f6f8 60%, #e6ebf0 100%); }
+.wiv-viewer[data-drag="true"] { cursor: grabbing; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wiv-root *, .wiv-root *::before, .wiv-root *::after, .wiv-dialog, .wiv-atlas { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+  .wiv-skel::after { display: none; }
+  .wiv-progress { display: none; }
+}
+@media (max-width: 640px) { .wiv-circle { width: 40px; height: 40px; } }
+
+
+/* ======================================================================
+   /finalists/white-immersion · the site layer (world + scroll fallback)
+   World mode = (min-width: 1180px) and (min-height: 740px). Below that the same places stack as a
+   scroll document over the fixed snowfield. The media query decides the first paint; JS only drives the camera.
+   ====================================================================== */
+.wiv-root { min-height: 100dvh; }
+.wiv-lead { font-size: 22px; font-weight: 400; line-height: 1.45; letter-spacing: -0.005em; color: var(--ink); }
+.wiv-body { font-size: 13px; line-height: 1.65; color: var(--ink); }
+.wiv-stamp { font-family: var(--wi-display), sans-serif; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* places (ice slabs) */
+.wiv-place {
+  position: relative; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--rime);
+  box-shadow: var(--shadow); padding: 20px 16px 22px; outline: none;
+  transition: opacity 600ms var(--ease);
+}
+.wiv-place:focus-visible { outline: none; } /* replaced by the Ink corner brackets: a focused place is always the current one */
+.wiv-place:focus-visible > .wiv-corners { opacity: 1; inset: -9px; }
+.wiv-place > .wiv-corners { inset: -14px; }
+.wiv-place[data-current="true"] > .wiv-corners { opacity: 1; inset: -9px; }
+.wiv-placeTag { display: none; }
+.wiv-scrollStack { display: grid; gap: 72px; padding: 24px 12px 140px; max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+.wiv-scrollStack .wiv-place { scroll-margin-top: 64px; }
+@media (min-width: 640px) { .wiv-place { padding: 26px 28px 28px; } .wiv-scrollStack { padding: 32px 24px 150px; gap: 96px; } }
+
+.wiv-stage { position: relative; }
+.wiv-world { position: relative; }
+.wiv-worldHud { display: none !important; }
+.wiv-scrollHud { display: block; }
+
+@media (min-width: 1180px) and (min-height: 740px) {
+  .wiv-stage { position: fixed; inset: 0; overflow: hidden; touch-action: none; cursor: grab; -webkit-user-select: none; user-select: none; z-index: 1; }
+  .wiv-stage[data-drag="true"] { cursor: grabbing; }
+  .wiv-world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; transform: translate(50vw, 50vh); }
+  .wiv-world[data-flying="true"] { will-change: transform; }
+  .wiv-scrollStack { display: block; padding: 0; margin: 0; max-width: none; }
+  .wiv-place { position: absolute; width: var(--w, 1040px); left: calc(var(--x) * 1px - var(--w, 1040px) / 2); top: calc(var(--y) * 1px); transform: translateY(-50%); cursor: auto; }
+  .wiv-world[data-has-cur="true"] .wiv-place:not([data-current="true"]) { opacity: 0.5; cursor: pointer; }
+  .wiv-world[data-has-cur="true"] .wiv-place:not([data-current="true"]):hover { opacity: 0.85; }
+  .wiv-placeTag {
+    display: block; position: absolute; left: -1px; bottom: calc(100% + 10px * var(--inv, 1)); transform: scale(var(--inv, 1)); transform-origin: 0 100%;
+    white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 300ms var(--ease);
+  }
+  .wiv-world[data-far="true"] .wiv-placeTag { opacity: 1; }
+  .wiv-worldHud { display: flex !important; }
+  .wiv-worldHud.is-block { display: block !important; }
+  .wiv-scrollHud { display: none !important; }
+}
+
+/* fixed snowfield behind everything */
+.wiv-field { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(120% 90% at 50% 40%, #ffffff 0%, #f4f6f8 55%, #e3e8ee 100%); }
+.wiv-field canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* HUD layer */
+.wiv-hud-layer { position: fixed; z-index: 30; }
+.wiv-hint { transition: opacity 500ms var(--ease); }
+.wiv-chipIdx { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 10px; border: 0; background: transparent; color: var(--muted); cursor: pointer; font: inherit; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; transition: color var(--fast), background var(--fast), box-shadow var(--fast); }
+.wiv-chipIdx:hover { color: var(--ink); background: rgba(255,255,255,.9); }
+.wiv-chipIdx:active { background: var(--press); }
+.wiv-chipIdx[aria-current="true"] { color: var(--ink); background: var(--surface); box-shadow: inset 0 -2px 0 var(--ink); }
+.wiv-chipIdx .wiv-idxName { display: none; }
+.wiv-chipIdx[aria-current="true"] .wiv-idxName, .wiv-chipIdx:hover .wiv-idxName, .wiv-chipIdx:focus-visible .wiv-idxName { display: inline; }
+@media (min-width: 1600px) { .wiv-chipIdx .wiv-idxName { display: inline; } }
+
+/* draw-in: data figures draw once when their place is first reached */
+.wiv-draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+[data-seen="true"] .wiv-draw { transition: stroke-dashoffset 1800ms var(--ease); stroke-dashoffset: 0; }
+
+/* crystal: channel specks glide between levels */
+.wiv-speck { transition: transform 1100ms var(--ease), opacity 600ms var(--ease); }
+.wiv-fade { transition: opacity 700ms var(--ease); }
+
+/* paper place: floating pages */
+.wiv-thumb { position: absolute; display: block; padding: 0; border: 1px solid var(--rime); background: #fff; cursor: pointer; box-shadow: var(--shadow); transition: transform 400ms var(--ease), box-shadow 200ms var(--ease); }
+.wiv-thumb img { display: block; width: 100%; height: auto; }
+.wiv-thumb:hover { box-shadow: 0 0 0 1px var(--ink), 0 40px 70px -50px rgba(61, 69, 88, 0.6); transform: translateY(-4px); }
+.wiv-thumb:active { transform: translateY(-1px) scale(.99); }
+.wiv-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+/* report viewer: a second field where the 11 pages float */
+.wiv-reader { position: fixed; inset: 0; z-index: 80; overflow: hidden; background: radial-gradient(120% 90% at 50% 45%, #ffffff 0%, #f4f6f8 55%, #e3e8ee 100%); animation: wiv-open 520ms var(--ease) both; }
+.wiv-reader[data-leaving="true"] { animation: wiv-close 380ms var(--ease) both; }
+@keyframes wiv-open { from { opacity: 0; transform: scale(1.06); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes wiv-close { to { opacity: 0; transform: scale(0.97); filter: blur(4px); } }
+.wiv-readerStage { position: absolute; inset: 0; touch-action: none; cursor: grab; -webkit-user-select: none; user-select: none; outline: none; }
+.wiv-readerStage[data-drag="true"] { cursor: grabbing; }
+.wiv-readerStage:focus-visible { box-shadow: inset 0 0 0 2px var(--ink); }
+.wiv-pageWorld { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.wiv-page { position: absolute; width: 1000px; height: 1294px; background: #fff; border: 1px solid var(--rime); box-shadow: 0 2px 0 rgba(17,24,36,.04), 0 80px 120px -70px rgba(61, 69, 88, 0.55); transition: opacity 500ms var(--ease); }
+.wiv-page img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.wiv-page[data-cur="false"] { opacity: .55; }
+.wiv-strip { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 6px; }
+.wiv-stripBtn { position: relative; flex: none; width: 40px; height: 52px; padding: 0; border: 1px solid var(--rime); background: #fff; cursor: pointer; transition: box-shadow var(--fast) var(--ease), transform 120ms var(--ease); }
+.wiv-stripBtn img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wiv-stripBtn:hover { box-shadow: 0 0 0 1px var(--ink); }
+.wiv-stripBtn:active { transform: scale(.95); }
+.wiv-stripBtn[aria-current="true"] { box-shadow: 0 0 0 2px var(--ink); }
+.wiv-stripBtn[aria-current="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--ink); }
+.wiv-stripBtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+a.wiv-pill { text-decoration: none; }
+
+/* large displays: the HUD scales with the screen so it reads at the same physical size */
+@media (min-width: 1800px) { .wiv-hudZ { zoom: 1.2; } }
+@media (min-width: 2300px) { .wiv-hudZ { zoom: 1.45; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .wiv-reader, .wiv-reader[data-leaving="true"] { animation: none; }
+  .wiv-draw { stroke-dashoffset: 0; }
+}
+}
