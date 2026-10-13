@@ -35,8 +35,8 @@ looks like", "How many operating modes does the data contain?"), and gloss every
 - Every fact comes from `content/report.md` (the paper) or is general knowledge stated plainly (what ESA is).
   Accuracy rules (verifiers found these errors before):
   - Claim group-level **granularity**, not that the structure "lives in" or matches the groups.
-  - 0.322 is the **linear** plateau. The M1 VAEs (0.305/0.293/0.335) don't clear it; GMM is 0.384 on M1; the VAEs
-    lead M2 (0.438).
+  - 0.322 is the **linear** plateau. The M1 VAEs land close to it (0.293–0.335; only TransformerVAE, 0.335, edges
+    above); GMM is 0.384 on M1; the VAEs lead M2 (0.414–0.438). Never say "mode-aware models clear it" for M1.
   - Multi-modality is "the fundamental bottleneck for all global models".
   - Two-run rows are "Mixed".
   - Page chips match the page images (p1 = abstract + §1 + Q1/Q2; p2 = §2 + §3 K-Means/PCA; p3 = KPCA + Fig 1 + §4 GMM;

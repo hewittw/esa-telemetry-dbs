@@ -20,7 +20,7 @@ const reduced = () => typeof window !== "undefined" && matchMedia("(prefers-redu
 export function Figure({ id, title, cap, chip, children, className = "" }: { id?: string; title?: string; cap: ReactNode; chip: ReactNode; children: ReactNode; className?: string }) {
   return (
     <figure id={id} tabIndex={id ? -1 : undefined} className={`flex min-w-0 flex-col outline-none ${className}`}>
-      {title && <h3 className={`${SERIF} mb-5 text-[22px] leading-[1.2] font-[450]`}>{title}</h3>}
+      {title && <h4 className={`${SANS} mb-4 text-[14px] leading-[1.35] font-semibold`}>{title}</h4>}
       <div className="min-w-0 flex-1">{children}</div>
       <figcaption className={`${caption} mt-3 flex flex-wrap items-baseline gap-x-1.5`}>
         <span>{cap}</span> {chip}
@@ -81,8 +81,8 @@ export function ChannelField({ ch, stage, label }: { ch: Ch[]; stage: 0 | 1 | 2;
         {f.spans.map((s) => (
           <g key={s.s}>
             <path d={`M${s.x0 + 1},${BASE - 4} V${BASE} H${s.x1 - 1} V${BASE - 4}`} fill="none" stroke="var(--ochre)" strokeWidth="1" />
-            <text x={(s.x0 + s.x1) / 2} y={BASE + 18} textAnchor="middle" className={MONO} fill="var(--ochre)">S{s.s}</text>
-            <text x={(s.x0 + s.x1) / 2} y={BASE + 33} textAnchor="middle" className={MONO} fill="var(--muted)">{stage === 2 ? `${s.groups} gr` : `${s.n} ch`}</text>
+            <text x={(s.x0 + s.x1) / 2} y={BASE + 18} textAnchor="middle" className={MONO} fill="var(--ochre)">{s.s}</text>
+            <text x={(s.x0 + s.x1) / 2} y={BASE + 33} textAnchor="middle" className={MONO} fill={stage === 2 ? "var(--prussian)" : "var(--muted)"}>{stage === 2 ? s.groups : s.n}</text>
           </g>
         ))}
       </g>
@@ -127,17 +127,23 @@ export function ChannelSteps({ ch, m }: { ch: Ch[]; m: M }) {
   const subs = new Set(ch.map((c) => c.s)).size, groups = new Set(ch.map((c) => c.g)).size;
   const STEPS: [string, ReactNode][] = [
     [`${ch.length} channels`, <>Each <b className="font-semibold">channel</b> is one sensor’s time series: a reading every ~{m === 1 ? 30 : 18} s, for years.</>],
-    [`${subs} subsystems`, <>ESA files them under {subs} <b className="font-semibold text-[var(--ochre)]">subsystems</b>: physical units such as power or attitude control.</>],
-    [`${groups} groups`, <>Each subsystem divides into finer <b className="font-semibold text-[var(--prussian)]">operational groups</b>, such as battery charging.</>],
+    [`${subs} subsystems`, <>ESA files them under {subs} <b className="font-semibold text-[var(--ochre)]">subsystems</b>: physical parts of the spacecraft, such as power or attitude control.</>],
+    [`${groups} groups`, <>Each subsystem divides into finer <b className="font-semibold text-[var(--prussian)]">operational groups</b>, such as battery charging: {groups} in all.</>],
   ];
   const cap = m === 1 ? <>Mission 1 labels: genuine system faults, marked by ESA engineers.</> : <>Mission 2 labels: ≈95% rare operational events, not failures.</>;
   const label = (k: number) => `Mission ${m} channels. Step ${k + 1}: ${STEPS[k][0]}.`;
+  const key = (k: number) => (
+    <p className={`${SANS} mb-3 text-[12px] leading-[1.45] text-[var(--muted)]`}>
+      {k === 0 ? <>One dot per channel, {ch.length} in all.</> : <>Under each <span className="text-[var(--ochre)]">ochre bracket</span>: the subsystem’s number (ESA anonymises the names), then how many {k === 1 ? "channels" : <span className="text-[var(--prussian)]">groups</span>} it holds.</>}
+    </p>
+  );
   return (
     <>
       {/* phones + tablets */}
       <div className="lg:hidden">
         <Figure cap={cap} chip={<PageRef p={2}>§2</PageRef>}>
           <div className="mx-auto max-w-[520px]">
+            {key(tap)}
             <ChannelField ch={ch} stage={tap} label={label(tap)} />
           </div>
           <div className="mt-5">
@@ -153,6 +159,7 @@ export function ChannelSteps({ ch, m }: { ch: Ch[]; m: M }) {
       <div className="hidden gap-x-10 lg:grid lg:grid-cols-12">
         <div className="sticky top-[88px] order-2 col-span-7 self-start">
           <Figure cap={cap} chip={<PageRef p={2}>§2</PageRef>}>
+            {key(step)}
             <ChannelField ch={ch} stage={step} label={label(step)} />
           </Figure>
         </div>
@@ -180,7 +187,7 @@ export function GiantK({ m, bic }: { m: M; bic: Bic[] }) {
         const on = b.mission === m;
         return (
           <div key={b.mission} className={`border-t pt-3 transition-colors duration-300 ${on ? "border-[var(--ink)]" : "border-[var(--rule-strong)]"}`}>
-            <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>Mission {b.mission} · K*</p>
+            <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>Mission {b.mission} · modes chosen</p>
             <p data-d style={{ transitionDelay: `${j * 140}ms` }} className={`${SERIF} mt-3 text-[clamp(5.5rem,10vw,9.5rem)] leading-[0.82] font-light tracking-[-0.045em] tabular-nums transition-colors duration-300 ${on ? "text-[var(--ink)]" : "text-[var(--muted)]"}`}>{b.selectedK}</p>
             <div data-d style={{ transitionDelay: `${260 + j * 140}ms` }} className="relative mt-6 h-10" aria-hidden>
               <span className="absolute inset-x-0 top-3 h-px bg-[var(--ink)]" />
@@ -235,16 +242,16 @@ export function BicPlayer({ m, sweeps }: { m: M; sweeps: Bic[] }) {
         {i >= minI && (
           <g className="rpd-fade">
             <circle cx={x(b.selectedK)} cy={y(b.sweep[minI].bic)} r="7" fill="none" stroke="var(--ink)" strokeWidth="1.5" />
-            <text x={x(b.selectedK) + (b.selectedK > 25 ? -14 : 12)} y={y(b.sweep[minI].bic) - (b.selectedK > 25 ? 34 : 14)} textAnchor={b.selectedK > 25 ? "end" : "start"} className={`${MONO} rpd-t-lg`} fontWeight={600} fill="var(--ink)" stroke="var(--paper)" strokeWidth="4" paintOrder="stroke">K* = {b.selectedK}</text>
+            <text x={x(b.selectedK) + (b.selectedK > 25 ? -14 : 12)} y={y(b.sweep[minI].bic) - (b.selectedK > 25 ? 34 : 14)} textAnchor={b.selectedK > 25 ? "end" : "start"} className={`${MONO} rpd-t-lg`} fontWeight={600} fill="var(--ink)" stroke="var(--paper)" strokeWidth="4" paintOrder="stroke">lowest: K = {b.selectedK}</text>
           </g>
         )}
         <circle cx={x(cur.k)} cy={y(cur.bic)} r="4.5" fill="var(--paper)" stroke="var(--ink)" strokeWidth="1.5" />
         <line x1={L} x2={W - R} y1={H - B} y2={H - B} stroke="var(--ink)" strokeWidth="0.75" />
         {[2, 10, 20, 30].map((k) => <text key={k} x={x(k)} y={H - B} dy="1.4em" textAnchor="middle" className={MONO} fill="var(--muted)">{k}</text>)}
-        <text x={W - R} y={H - B} dy="2.8em" textAnchor="end" className={MONO} fill="var(--muted)">components K</text>
+        <text x={W - R} y={H - B} dy="2.8em" textAnchor="end" className={MONO} fill="var(--muted)">number of modes, K</text>
         <text x={L - 8} y={y(hi)} dy="0.35em" textAnchor="end" className={MONO} fill="var(--muted)">{hi.toFixed(0)}M</text>
         <text x={L - 8} y={y(lo)} dy="0.35em" textAnchor="end" className={MONO} fill="var(--muted)">{lo.toFixed(1)}M</text>
-        <text x={L - 8} y={T - 12} textAnchor="end" className={MONO} fill="var(--muted)">BIC</text>
+        <text x={L - 8} y={T - 12} textAnchor="end" className={MONO} fill="var(--muted)">BIC ↓</text>
       </Svg>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <button type="button" aria-pressed={playing} aria-label={playing ? "Pause the sweep" : "Play the sweep"} onClick={() => { if (!playing && i >= n - 1) setI(0); setPlaying((p) => !p); }} className={btnTransportMain}>{playing ? <IconPause /> : <IconPlay />}</button>
@@ -396,11 +403,11 @@ export function FaultScrub({ twin }: { twin: Twin }) {
 
 /* ================================================================== 02 · the method ladder */
 const LADDER = [
-  { n: "K-Means", d: "Global clustering, K swept 2–10.", p: 2, sec: "§3", by: 0 },
-  { n: "PCA", d: "Linear compression: 33 components hold 95% of variance.", p: 2, sec: "§3", by: 0 },
-  { n: "Nyström-KPCA", d: "A non-linear, kernel boundary.", p: 3, sec: "§3", by: 0 },
-  { n: "GMM", d: "Full-covariance mixture; BIC picks K.", p: 3, sec: "§4", by: 1 },
-  { n: "Three VAEs", d: "Capacity, Hierarchical, Transformer: learned latent codes.", p: 4, sec: "§5", by: 1 },
+  { n: "K-Means", d: "Sorts timesteps into K clusters. Far from every cluster centre means anomalous. K swept 2–10.", p: 2, sec: "§3", by: 0 },
+  { n: "PCA", d: "Compresses the channels into a few directions; a timestep that rebuilds badly is anomalous. 33 directions hold 95% of the variation.", p: 2, sec: "§3", by: 0 },
+  { n: "Nyström-KPCA", d: "The same idea through a non-linear kernel, to test whether a curved boundary helps.", p: 3, sec: "§3", by: 0 },
+  { n: "GMM", d: "K overlapping ellipsoidal clusters, one per mode, with K chosen by BIC. Unlikely timesteps are anomalous.", p: 3, sec: "§4", by: 1 },
+  { n: "Three VAEs", d: "Neural networks trained on normal 32-step windows (≈16 min): Capacity, Hierarchical and Transformer.", p: 4, sec: "§5", by: 1 },
 ] as const;
 export function Ladder() {
   const [ref, seen] = useInView<HTMLOListElement>(0.3);
@@ -416,7 +423,7 @@ export function Ladder() {
               ))}
             </span>
             <p className={`${MONO} flex justify-between text-[11px] text-[var(--muted)]`}><span>{String(k + 1).padStart(2, "0")}</span>{s.by ? null : <span>Mission 1 only</span>}</p>
-            <h3 className={`${SERIF} mt-0.5 text-[22px] leading-[1.15] font-[450]`}>{s.n}</h3>
+            <h4 className={`${SERIF} mt-0.5 text-[22px] leading-[1.15] font-[450]`}>{s.n}</h4>
             <p className={`${SANS} mt-1.5 text-[13.5px] leading-[1.45] text-[var(--ink-soft)]`}>{s.d}</p>
             <p className="mt-auto flex items-center justify-between gap-2 pt-3">
               <span className={`${SANS} text-[12px] text-[var(--muted)]`}>{s.by ? "Hewitt Watkins" : "Rhea Madhogarhia"}</span>
@@ -425,6 +432,45 @@ export function Ladder() {
           </li>
         ))}
       </ol>
+    </div>
+  );
+}
+
+/* ================================================================== hero · the satellite, in ink
+   A generic satellite (the dataset anonymises the missions): body, two solar wings, a dish, on a hairline
+   orbit. Every stroke draws in once (pathLength = 1, the system curve); reduced motion shows it finished. */
+const SAT_PARTS: { d: string; w?: number; c?: string; fill?: boolean; delay: number }[] = [
+  { d: "M14,193 A206,84 0 1,1 426,193 A206,84 0 1,1 14,193", w: 0.75, c: "var(--graphite)", delay: 0 },
+  // wings, then their cells
+  { d: "M32,170 H158 V216 H32 Z", fill: true, delay: 300 },
+  { d: "M282,170 H408 V216 H282 Z", fill: true, delay: 300 },
+  { d: "M63.5,170 V216 M95,170 V216 M126.5,170 V216 M32,193 H158", w: 0.6, c: "var(--ink-soft)", delay: 700 },
+  { d: "M313.5,170 V216 M345,170 V216 M376.5,170 V216 M282,193 H408", w: 0.6, c: "var(--ink-soft)", delay: 700 },
+  // struts and the body
+  { d: "M158,193 H190 M250,193 H282 M172,187 V199 M268,187 V199", delay: 500 },
+  { d: "M190,146 H250 V240 H190 Z", fill: true, delay: 150 },
+  { d: "M190,172 H250 M190,214 H250 M202,182 H238 V204 H202 Z", w: 0.6, c: "var(--ink-soft)", delay: 600 },
+  // dish, feed, mast
+  { d: "M220,146 V128", delay: 800 },
+  { d: "M186,128 Q220,96 254,128 Q220,140 186,128 Z", fill: true, delay: 900 },
+  { d: "M220,128 L220,106 M213,113 L220,106 L227,113", w: 0.75, delay: 1100 },
+  // thruster and a whip antenna
+  { d: "M208,240 L203,254 H237 L232,240", delay: 900 },
+  { d: "M246,240 L270,268", w: 0.75, delay: 1000 },
+];
+export function Satellite() {
+  const [ref, seen] = useInView<HTMLDivElement>(0.1);
+  return (
+    <div ref={ref} data-inview={seen}>
+      <Svg vw={440} vh={300} role="img" aria-label="Line drawing of a generic satellite on its orbit: a box-shaped body with two solar panel wings and a dish antenna.">
+        <g transform="rotate(-10 220 193)">
+          {SAT_PARTS.map((p, k) => (
+            <path key={k} d={p.d} pathLength={1} fill={p.fill ? "var(--paper)" : "none"} stroke={p.c ?? "var(--ink)"} strokeWidth={p.w ?? 1.1} strokeLinejoin="round" strokeLinecap="round"
+              className="rps-draw" style={{ transitionDelay: `${p.delay}ms` }} />
+          ))}
+          <circle cx="270" cy="268" r="2.2" fill="var(--ink)" />
+        </g>
+      </Svg>
     </div>
   );
 }

@@ -92,7 +92,7 @@ function Detail({ r, rows, prov }: { r: MethodRow; rows: MethodRow[]; prov: Prov
   return (
     <div key={r.id} className="rpd-fade">
       <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>{FAMILY[r.family].name} · Mission {r.mission}{k ? ` · ${k}` : ""}</p>
-      <h3 className={`${SERIF} mt-1 text-[22px] leading-[1.2] font-[450]`}>{r.method.replace("Nystroem", "Nyström")}</h3>
+      <h4 className={`${SERIF} mt-1 text-[22px] leading-[1.2] font-[450]`}>{r.method.replace("Nystroem", "Nyström")}</h4>
       <p className={`${SANS} mt-2 text-[13.5px] leading-[1.5] text-[var(--ink-soft)]`}>{HOW[r.method]}</p>
       <dl className="mt-5 grid grid-cols-3 border-t border-[var(--ink)]">
         {([["PR-AUC", r.prAuc.toFixed(3)], ["ROC-AUC", r.rocAuc.toFixed(3)], ["Event F1", r.eventF1?.toFixed(3) ?? "—"]] as const).map(([a, b], i) => (

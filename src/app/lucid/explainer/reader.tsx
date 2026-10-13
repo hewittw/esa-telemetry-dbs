@@ -14,17 +14,17 @@ const RATIO = 1600 / 2071;
 
 /** What each page holds, and where on the site it is argued. */
 export const PAGE_NOTES: Record<number, { t: string; back?: { href: string; label: string } }[]> = {
-  1: [{ t: "Title, abstract, §1 Introduction: the questions Q1 and Q2.", back: { href: "#top", label: "The finding" } }],
-  2: [{ t: "Division of labour. §2 Dataset: channels, subsystems, groups, labels.", back: { href: "#background", label: "01 Background" } }, { t: "§3 Baselines: K-Means and PCA.", back: { href: "#methods", label: "02 What we did" } }],
-  3: [{ t: "§3 Nyström-KPCA. Figure 1: K-Means PR curve, t-SNE.", back: { href: "#methods", label: "02 What we did" } }, { t: "§4 GMM: PCA-30, K by BIC.", back: { href: "#bic", label: "BIC figure" } }],
-  4: [{ t: "§5 The three VAEs. §6 begins: Q1, yes.", back: { href: "#methods", label: "02 What we did" } }],
-  5: [{ t: "Table 1: every method, both missions.", back: { href: "#table", label: "Table 1" } }, { t: "§6 Results. §7 Conclusions.", back: { href: "#conclusions", label: "04 Conclusions" } }],
+  1: [{ t: "Title, abstract, §1 Introduction: the questions Q1 and Q2.", back: { href: "#context", label: "01 Context" } }],
+  2: [{ t: "Division of labour. §2 Dataset: channels, subsystems, groups, labels.", back: { href: "#data", label: "02 Dataset & setup" } }, { t: "§3 Baselines: K-Means and PCA.", back: { href: "#methods", label: "03 Methods" } }],
+  3: [{ t: "§3 Nyström-KPCA. Figure 1: K-Means PR curve, t-SNE.", back: { href: "#methods", label: "03 Methods" } }, { t: "§4 GMM: PCA-30, K by BIC.", back: { href: "#bic", label: "How many modes?" } }],
+  4: [{ t: "§5 The three VAEs. §6 begins: Q1, yes.", back: { href: "#structure", label: "Is there structure?" } }],
+  5: [{ t: "Table 1: every method, both missions.", back: { href: "#table", label: "Table 1" } }, { t: "§6 Results. §7 Conclusions.", back: { href: "#conclusions", label: "05 Conclusions" } }],
   6: [{ t: "References." }],
-  7: [{ t: "Figure 3: timeline failure on the longest Mission 1 fault.", back: { href: "#fault", label: "Fault figure" } }],
+  7: [{ t: "Figure 3: timeline failure on the longest Mission 1 fault.", back: { href: "#fault", label: "The long fault" } }],
   8: [{ t: "Figure 4: t-SNE on raw and PCA inputs." }],
-  9: [{ t: "Figure 5: Nyström-KPCA sweep and PR curves (0.334, 0.164).", back: { href: "#pr", label: "PR figure" } }],
-  10: [{ t: "Figure 6: PCA scatter and PR curves (0.322, 0.317).", back: { href: "#pr", label: "PR figure" } }],
-  11: [{ t: "Figure 7: TransformerVAE latent maps, K = 16 and 18.", back: { href: "#results", label: "03 Results" } }],
+  9: [{ t: "Figure 5: Nyström-KPCA sweep and PR curves (0.334, 0.164).", back: { href: "#pr", label: "Precision and recall" } }],
+  10: [{ t: "Figure 6: PCA scatter and PR curves (0.322, 0.317).", back: { href: "#pr", label: "Precision and recall" } }],
+  11: [{ t: "Figure 7: TransformerVAE latent maps, K = 16 and 18.", back: { href: "#bic", label: "How many modes?" } }],
 };
 
 const Ctx = createContext<(p: number) => void>(() => {});
