@@ -10,8 +10,8 @@ export const N_PAGES = 11;
 export const PAGES: { n: number; t: string; key?: boolean }[] = [
   { n: 1, t: "Title · abstract · introduction" },
   { n: 2, t: "Dataset · baseline methods" },
-  { n: 3, t: "Fig. 1 · K-Means PR curve + t-SNE", key: true },
-  { n: 4, t: "GMM · the three VAEs" },
+  { n: 3, t: "Kernel PCA · Fig. 1 · GMM", key: true },
+  { n: 4, t: "The three VAEs · results" },
   { n: 5, t: "Table 1 · all 13 results", key: true },
   { n: 6, t: "References" },
   { n: 7, t: "Fig. 3 · timeline failure", key: true },

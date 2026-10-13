@@ -77,7 +77,7 @@ export function CountUp({ value, digits = 0, pad = 0, ms = 800 }: { value: numbe
 
 /* Copy of the board's WordReveal (read-only), with colour keys: words listed in `keys` render
    Teal, the same Teal as the group-level marks in the figures, so prose and plots share one key. */
-export function KeyedReveal({ lead, text, keys = [] }: { lead: string; text: string; keys?: string[] }) {
+export function KeyedReveal({ lead, text, keys = [] }: { lead?: string; text: string; keys?: string[] }) {
   const ref = useRef<HTMLParagraphElement>(null);
   const words = text.split(" ");
   const keyed = new Set<number>();
@@ -115,8 +115,8 @@ export function KeyedReveal({ lead, text, keys = [] }: { lead: string; text: str
     };
   }, [words.length]);
   return (
-    <p ref={ref} className="text-[clamp(22px,2.3vw,34px)] font-medium leading-[1.08] tracking-[-0.02em]" aria-label={`${lead} ${text}`}>
-      <span aria-hidden className="text-(--is-steel)">{lead} </span>
+    <p ref={ref} className="text-[clamp(22px,2.3vw,34px)] font-medium leading-[1.08] tracking-[-0.02em]" aria-label={lead ? `${lead} ${text}` : text}>
+      {lead ? <span aria-hidden className="text-(--is-steel)">{lead} </span> : null}
       {words.map((w, i) => (
         <span key={i} aria-hidden className="transition-[opacity] duration-300 ease-out" style={{ color: keyed.has(i) ? "var(--is-teal)" : "var(--is-frost)", opacity: i < lit ? 1 : 0.42 }}>
           {w}{" "}

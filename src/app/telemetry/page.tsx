@@ -14,11 +14,11 @@ const dot = Doto({ subsets: ["latin"], variable: "--font-is-dot", weight: ["600"
 export const metadata: Metadata = {
   title: "Latent structure in ESA satellite telemetry · Hewitt Watkins",
   description:
-    "An interactive findings explorer: ESA telemetry has real latent structure at the operational-group level (18–29 modes), not the subsystem level (4–5), and that multi-modality is why global detectors fail.",
+    "ESA satellite telemetry has latent structure at the operational-group level (18–29 modes), not the subsystem level (4–5); multi-modality is the bottleneck for every global model.",
 };
 
 // Table 1 provenance, straight from results.json's verification fields (cross-checked against
-// the notebooks and saved score files): Verified / Near / Recomputed / Not saved.
+// the notebooks and saved score files): Verified / Near / Mixed / Not saved.
 function provenance(c: ReturnType<typeof curves>): Record<string, Prov> {
   const out: Record<string, Prov> = {};
   for (const r of results.table1.rows) {
@@ -36,6 +36,7 @@ function provenance(c: ReturnType<typeof curves>): Record<string, Prov> {
 
 export default function TelemetrySite() {
   const c = curves();
+  const h = results.headline;
   const data = {
     rows: tableRows(),
     curves: c,
@@ -44,6 +45,11 @@ export default function TelemetrySite() {
     tree: tree(),
     strands: { 1: strands(1), 2: strands(2) },
     prov: provenance(c),
+    // the data panel's facts per mission (report §2); the labelled share is the PR curves' positive rate
+    facts: {
+      1: { channels: h.missions["1"].channels, train: h.missions["1"].trainingTimesteps, hz: h.missions["1"].sampleRateHz, subsystems: h.missions["1"].subsystems, groups: h.missions["1"].groups, pos: c.pos[1] },
+      2: { channels: h.missions["2"].channels, train: h.missions["2"].trainingTimesteps, hz: h.missions["2"].sampleRateHz, subsystems: h.missions["2"].subsystems, groups: h.missions["2"].groups, pos: c.pos[2] },
+    },
   };
   return (
     <div className={`${display.variable} ${mono.variable} ${dot.variable} is-root min-h-screen w-full`}>

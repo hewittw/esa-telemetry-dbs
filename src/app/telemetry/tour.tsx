@@ -1,19 +1,20 @@
 "use client";
 
-// The 60-second tour for the two-minute reader: five stops, one line each, 12s per stop.
+// The 60-second tour for the two-minute reader: the hero + the five sections, one line each, 10s per stop.
 // It only scrolls the page (no scroll-jacking): Esc, Exit, or any scroll of your own ends it,
 // and focus goes back to whatever started it. It is a secondary control, never the green one.
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { BTN, Br, FR, LABEL, MONO, TRANS } from "../design-systems/intense-space/ui";
 
 export const STOPS = [
-  { id: "top", t: "The finding", c: "Telemetry runs in 18–29 operating modes, not 4–5 subsystems. That is why global detectors fail." },
-  { id: "structure-split", t: "Structure", c: "Same channels, two bundlings. BIC's K lands beside the operational groups, not the subsystems." },
-  { id: "methods-ladder", t: "Methods", c: "Five families on two missions: GMM leads on Mission 1, the VAEs pass it on Mission 2." },
-  { id: "evidence-threshold", t: "Threshold", c: "Pick an alarm threshold on a real PR curve and watch the false alarms pile up." },
-  { id: "paper", t: "Paper", c: "Every number traces to a page. Read the paper here, or download the PDF." },
+  { id: "top", t: "The finding", c: "18–29 operating modes, not 4–5 subsystems. Each mode has its own normal." },
+  { id: "background", t: "Background", c: "Two ESA missions, 76 and 100 channels, with anomaly labels from ESA engineers." },
+  { id: "method", t: "Method", c: "Five methods, simpler to richer, scored by PR-AUC because anomalies are rare." },
+  { id: "results", t: "Results", c: "BIC picks K* = 21 and 29: group-level granularity, not subsystem-level." },
+  { id: "conclusions", t: "Conclusions", c: "GMM leads Mission 1, the VAEs Mission 2; multi-modality stays the bottleneck." },
+  { id: "paper", t: "Paper", c: "Read all 11 pages here, or download the PDF." },
 ];
-const DWELL = 12000;
+const DWELL = 10000;
 const pad = (n: number) => String(n).padStart(2, "0");
 
 type Tour = { on: boolean; start: () => void; stop: (refocus?: boolean) => void };
@@ -114,7 +115,7 @@ export function TourProvider({ children, fallbackFocus }: { children: ReactNode;
             <p className="mt-2 text-[16px] leading-[1.45] text-(--is-frost)" aria-live="polite">
               {STOPS[step].c}
             </p>
-            <div className="mt-3 grid grid-cols-5 gap-1" aria-hidden>
+            <div className="mt-3 grid grid-cols-6 gap-1" aria-hidden>
               {STOPS.map((s, i) => (
                 <span key={s.id} className="relative h-[2px] overflow-hidden bg-(--is-line)">
                   <span

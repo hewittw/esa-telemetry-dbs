@@ -118,7 +118,7 @@ export function FiberField({ strands, mission }: { strands: Strand[]; mission: 1
         onClick={() => setPaused((p) => !p)}
         aria-pressed={paused}
         aria-label={paused ? "Play the fiber field" : "Pause the fiber field"}
-        className={`${MONO} ${TRANS} absolute right-3 top-3 z-20 min-h-8 rounded-[3px] border border-(--is-line) bg-(--is-void)/80 px-2.5 text-[10px] uppercase tracking-[0.18em] text-(--is-frost) hover:border-(--is-frost) active:bg-(--is-charcoal) aria-pressed:border-(--is-frost) aria-pressed:bg-(--is-frost) aria-pressed:text-(--is-void) ${FR} motion-reduce:hidden`}
+        className={`${MONO} ${TRANS} absolute right-3 top-3 z-20 sm:right-6 xl:right-10 min-h-8 rounded-[3px] border border-(--is-line) bg-(--is-void)/80 px-2.5 text-[10px] uppercase tracking-[0.18em] text-(--is-frost) hover:border-(--is-frost) active:bg-(--is-charcoal) aria-pressed:border-(--is-frost) aria-pressed:bg-(--is-frost) aria-pressed:text-(--is-void) ${FR} motion-reduce:hidden`}
       >
         {paused ? "[ ▶ Play ]" : "[ ❚❚ Pause ]"}
       </button>

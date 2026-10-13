@@ -13,7 +13,7 @@ export type Prov = { s: "verified" | "near" | "recomputed" | "unsaved"; note: st
 export const PROV: Record<Prov["s"], { i: string; w: string; c: string }> = {
   verified: { i: "✓", w: "Verified", c: "text-(--is-frost)" },
   near: { i: "≈", w: "Near", c: "text-(--is-frost)" },
-  recomputed: { i: "↻", w: "Recomputed", c: "text-(--is-frost)" },
+  recomputed: { i: "↻", w: "Mixed", c: "text-(--is-frost)" },
   unsaved: { i: "–", w: "Not saved", c: "text-(--is-steel)" },
 };
 
@@ -29,7 +29,9 @@ const RANDOM: Record<M, number> = { 1: 0.111, 2: 0.047 };
 const PLATEAU = 0.322;
 
 /* ---------------- panel: hairline + corner ticks, bracketed tag, optional paper link ---------------- */
-export function Panel({ id, code, title, page, pageLabel, className = "", children }: { id?: string; code: string; title: string; page?: number; pageLabel?: string; className?: string; children: ReactNode }) {
+// Every figure has the same three parts, like a drawing sheet: a tag row (code · title · page chip),
+// the figure, and one caption of ≤ 12 words in the title block at the bottom.
+export function Panel({ id, code, title, page, pageLabel, caption, className = "", children }: { id?: string; code: string; title: string; page?: number; pageLabel?: string; caption?: ReactNode; className?: string; children: ReactNode }) {
   const [ref, reveal] = useReveal<HTMLElement>();
   return (
     <section ref={ref} id={id} data-reveal={reveal} aria-labelledby={id ? `${id}-h` : undefined} className={`is-corners isx-fill isx-anchor relative flex min-w-0 flex-col rounded-[2px] border border-(--is-line) bg-(--is-panel) ${className}`}>
@@ -47,6 +49,11 @@ export function Panel({ id, code, title, page, pageLabel, className = "", childr
       <RevealCtx.Provider value={reveal}>
         <div className="flex flex-1 flex-col gap-5 p-4 sm:p-5">{children}</div>
       </RevealCtx.Provider>
+      {caption ? (
+        <p className="border-t border-(--is-line) px-4 py-3 text-[13px] leading-snug text-(--is-steel) sm:px-5">
+          {caption}
+        </p>
+      ) : null}
     </section>
   );
 }
@@ -96,7 +103,7 @@ const at = (x: number, y: number, cls: string, txt: ReactNode, align: "l" | "r" 
 );
 
 /* ===================== S.01 · before / after: subsystems vs operational groups ===================== */
-export function Compare({ tree, m, k }: { tree: Tree; m: M; k: number }) {
+export function Compare({ tree, m }: { tree: Tree; m: M }) {
   const t = tree[m];
   const { chans, groups } = useMemo(() => {
     const chans: { sub: number; group: number }[] = [];
@@ -130,14 +137,26 @@ export function Compare({ tree, m, k }: { tree: Tree; m: M; k: number }) {
     setP(Math.round(Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100))));
   };
   return (
-    <Panel id="structure-split" code="S.01" title={`Same ${t.nChannels} channels, two ways to bundle them`} page={5} pageLabel="Discussion" className="lg:col-span-12">
+    <Panel
+      id="results-split"
+      code="R.02"
+      title={`Same ${t.nChannels} channels, two bundlings`}
+      page={5}
+      pageLabel="Discussion"
+      className="lg:col-span-5"
+      caption={
+        <>
+          Each line is one channel, bundled into <span className="text-(--is-steel)">{nSub} subsystems</span> or <span className="text-(--is-teal)">{nGrp} groups</span>.
+        </>
+      }
+    >
       <div className={`${LABEL} -mb-3 flex justify-between gap-3`}>
         <span className="text-(--is-steel)">← {nSub} subsystems</span>
-        <span className="text-right text-(--is-teal)">{nGrp} operational groups →</span>
+        <span className="text-right text-(--is-teal)">{nGrp} groups →</span>
       </div>
       <div
         ref={box}
-        className="relative touch-pan-y select-none overflow-hidden rounded-[2px] border border-(--is-line) bg-(--is-void)"
+        className="relative flex touch-pan-y select-none flex-col overflow-hidden rounded-[2px] border border-(--is-line) bg-(--is-void) lg:flex-1"
         onPointerDown={(e) => {
           drag.current = true;
           (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
@@ -147,7 +166,7 @@ export function Compare({ tree, m, k }: { tree: Tree; m: M; k: number }) {
         onPointerUp={() => (drag.current = false)}
         onPointerCancel={() => (drag.current = false)}
       >
-        <div className="is-regdots relative aspect-[4/3] cursor-ew-resize sm:aspect-[760/230]">
+        <div className="is-regdots relative aspect-[4/3] cursor-ew-resize sm:aspect-[760/230] lg:aspect-auto lg:min-h-[300px] lg:flex-1">
           <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="isx-wipe-down absolute inset-x-0 top-[6%] h-[80%] w-full" aria-hidden>
             <g fill="none" stroke="#CFD9E0" strokeOpacity="0.7">
               {chans.map((c, i) => (
@@ -206,9 +225,6 @@ export function Compare({ tree, m, k }: { tree: Tree; m: M; k: number }) {
           </div>
         </div>
       </div>
-      <p className="max-w-[72ch] text-[16px] leading-[1.45] text-(--is-frost)">
-        BIC&apos;s K = {k} sits beside the <span className="text-(--is-teal)">{nGrp} operational groups</span>, not the <span className="text-(--is-steel)">{nSub} subsystems</span>; drag the divider to compare.
-      </p>
     </Panel>
   );
 }
@@ -228,11 +244,23 @@ export function BicPicker({ bic, m }: { bic: Bic; m: M }) {
   const delta = p.bic - d.points.find((x) => x.k === d.selectedK)!.bic;
   const zone = k <= d.subsystems ? "subsystem" : k >= d.groups - 2 && k <= 30 ? "group" : "between";
   return (
-    <Panel id="structure-bic" code="S.02" title="How many modes? BIC vs K" page={5} pageLabel="Discussion" className="lg:col-span-7">
+    <Panel
+      id="results-bic"
+      code="R.01"
+      title="How many modes? BIC vs K"
+      page={5}
+      pageLabel="Discussion"
+      className="lg:col-span-7"
+      caption={
+        <>
+          BIC is lowest at K* = {d.selectedK}: the <span className="text-(--is-teal)">group</span> scale, not the <span className="text-(--is-steel)">subsystem</span> scale.
+        </>
+      }
+    >
       <Frame
         className="aspect-[4/3] sm:aspect-[16/9] lg:aspect-[2/1]"
         onPoint={(fx) => setK(Math.round(2 + fx * 28))}
-        foot={["↑ BIC, lower = better", "K = 2 – 30 →"]}
+        foot={["↑ BIC · penalised fit, lower = better", "K = 2 – 30 →"]}
         labels={
           <>
             {at(X(d.subsystems) + 1.5, 8, "text-(--is-steel)", `${d.subsystems} subsystems`)}
@@ -259,18 +287,8 @@ export function BicPicker({ bic, m }: { bic: Bic; m: M }) {
             BIC {(p.bic / 1e6).toFixed(3)}M{" "}
             {k === d.selectedK ? <Status kind="best">Minimum · K* = {k}</Status> : <span className="text-(--is-steel)">· +{(delta / 1e6).toFixed(3)}M vs K* = {d.selectedK}</span>}
           </p>
-          <p className="text-[13px] leading-snug text-(--is-steel)">
-            {zone === "subsystem" ? (
-              <>
-                At the <span className="text-(--is-steel)">subsystem</span> scale the fit is {(delta / 1e6).toFixed(2)}M worse.
-              </>
-            ) : zone === "group" ? (
-              <>
-                At the <span className="text-(--is-teal)">group</span> scale, BIC bottoms out.
-              </>
-            ) : (
-              "Between the two scales, BIC is still falling."
-            )}
+          <p className={`${LABEL} ${zone === "group" ? "text-(--is-teal)" : "text-(--is-steel)"}`}>
+            {zone === "subsystem" ? "Subsystem scale" : zone === "group" ? "Group scale" : "Between the scales"} · K* = BIC&apos;s pick
           </p>
         </div>
         <Button variant="ghost" className="max-sm:col-span-2 max-sm:-ml-2 max-sm:justify-self-start" onClick={() => setK(d.selectedK)} disabled={k === d.selectedK}>
@@ -316,7 +334,19 @@ export function Zoom({ tree, m }: { tree: Tree; m: M }) {
     </span>
   );
   return (
-    <Panel id="structure-zoom" code="S.03" title="What a group is" page={2} pageLabel="Dataset" className="lg:col-span-5">
+    <Panel
+      id="background-zoom"
+      code="B.02"
+      title="Mission › subsystem › group › channel"
+      page={2}
+      pageLabel="Dataset"
+      className="lg:col-span-7"
+      caption={
+        <>
+          ESA subdivides each <span className="text-(--is-steel)">subsystem</span> into finer <span className="text-(--is-teal)">operational groups</span>.
+        </>
+      }
+    >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Segmented
           label="Zoom level"
@@ -381,9 +411,6 @@ export function Zoom({ tree, m }: { tree: Tree; m: M }) {
           </div>
         ) : null}
       </div>
-      <p className="text-[13px] leading-snug text-(--is-steel)">
-        ESA splits each <span className="text-(--is-steel)">subsystem</span> into <span className="text-(--is-teal)">operational groups</span> of channels that work together; click a block to go closer.
-      </p>
     </Panel>
   );
 }
@@ -416,7 +443,15 @@ export function Ladder({ rows, m, onOpen }: { rows: Row[]; m: M; onOpen: (r: Row
   const top = topSet(rows);
   const grid = "grid grid-cols-[5.5rem_1fr_7.25rem] sm:grid-cols-[7.5rem_1fr_7.5rem]";
   return (
-    <Panel id="methods-ladder" code="M.01" title="PR-AUC by method · Mission 1 vs 2" page={5} pageLabel="Table 1" className="lg:col-span-12 xl:col-span-5">
+    <Panel
+      id="results-ladder"
+      code="R.03"
+      title="PR-AUC by method · Mission 1 vs 2"
+      page={5}
+      pageLabel="Table 1"
+      className="lg:col-span-12 xl:col-span-5"
+      caption="Linear plateau 0.322; GMM leads Mission 1, the VAEs Mission 2."
+    >
       <div className={`${MONO} flex flex-wrap gap-x-5 gap-y-1 text-[11px] uppercase tracking-[0.1em]`}>
         <span className={m === 1 ? "text-(--is-frost)" : "text-(--is-steel)"}>
           <span aria-hidden>○ </span>Mission 1
@@ -482,9 +517,6 @@ export function Ladder({ rows, m, onOpen }: { rows: Row[]; m: M; onOpen: (r: Row
         </span>
         <span className="pr-1 text-right">M1 → M2</span>
       </div>
-      <p className="mt-auto text-[16px] leading-[1.45] text-(--is-frost)">
-        GMM leads on Mission 1&apos;s real faults; the VAEs pass it on Mission 2&apos;s rare events.
-      </p>
     </Panel>
   );
 }
@@ -520,7 +552,15 @@ export function ResultsTable({ rows, m, prov, onOpen }: { rows: Row[]; m: M; pro
   ];
   const sortBy = (k: Key) => (k === key ? setAsc((a) => !a) : (setKey(k), setAsc(k === "label" || k === "family")));
   return (
-    <Panel id="methods-table" code="M.02" title={`Table 1 · Mission ${m}`} page={5} pageLabel="Table 1" className="lg:col-span-12 xl:col-span-7">
+    <Panel
+      id="results-table"
+      code="R.04"
+      title={`Table 1 · Mission ${m}`}
+      page={5}
+      pageLabel="Table 1"
+      className="lg:col-span-12 xl:col-span-7"
+      caption="Table 1 as printed, each row checked against our notebooks."
+    >
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Method family">
           {(["baseline", "parametric", "generative"] as const).map((f) => (
@@ -626,7 +666,7 @@ export function ResultsTable({ rows, m, prov, onOpen }: { rows: Row[]; m: M; pro
       </div>
       <p className={`${MONO} mt-auto text-[10px] uppercase leading-[1.7] tracking-[0.1em] text-(--is-steel)`}>
         <span className="text-(--is-teal)">◆ Top PR-AUC</span> = best row on the mission · <span className="text-(--is-frost)">◇ Best VAE</span> = the paper&apos;s bold ·{" "}
-        <span className="text-(--is-frost)">✓</span> verified · <span className="text-(--is-frost)">≈</span> near · <span className="text-(--is-frost)">↻</span> recomputed · – not saved, against our notebooks
+        <span className="text-(--is-frost)">✓</span> verified · <span className="text-(--is-frost)">≈</span> near · <span className="text-(--is-frost)">↻</span> mixed (two runs) · – not saved, against our notebooks
       </p>
     </Panel>
   );
@@ -744,7 +784,15 @@ export function Threshold({ curves, m }: { curves: Curves; m: M }) {
   const X = (r: number) => r * 100;
   const Y = (p: number) => (1 - p) * 100;
   return (
-    <Panel id="evidence-threshold" code="E.01" title="Set the alarm threshold" page={5} pageLabel="Table 1 AP" className="lg:col-span-12">
+    <Panel
+      id="results-threshold"
+      code="R.05"
+      title="Set the alarm threshold"
+      page={5}
+      pageLabel="Table 1 AP"
+      className="lg:col-span-12"
+      caption="Precision against recall at every alarm threshold, from saved test scores."
+    >
       <div className="flex flex-wrap items-center gap-3">
         <div className="min-w-[220px] flex-1 sm:max-w-[320px]">
           <label htmlFor="isx-run" className="sr-only">
@@ -814,9 +862,6 @@ export function Threshold({ curves, m }: { curves: Curves; m: M }) {
           </div>
         </div>
       </div>
-      <p className="text-[16px] leading-[1.45] text-(--is-frost)">
-        Catching more faults costs a flood of false alarms; drag along the curve to feel the trade.
-      </p>
     </Panel>
   );
 }
@@ -864,7 +909,15 @@ export function Timeline({ tl, m }: { tl: Timelines; m: M }) {
   };
   const label = (s: { id: string; method: string }) => NAMES[s.id] ?? short(s.method);
   return (
-    <Panel id="evidence-timeline" code="E.02" title="Scrub the whole test set" page={7} pageLabel="Timeline failure" className="lg:col-span-12">
+    <Panel
+      id="results-timeline"
+      code="R.06"
+      title="Scrub the whole test set"
+      page={7}
+      pageLabel="Fig. 3"
+      className="lg:col-span-12"
+      caption={m === 1 ? "Fig. 3: global methods go blind once the satellite settles into a fault." : "Mission 2 labels are ≈95% rare operational events, not true failures."}
+    >
       <div className="flex flex-wrap items-center gap-3">
         <div className="w-full sm:w-[260px]">
           <label htmlFor="isx-series" className="sr-only">
@@ -916,11 +969,6 @@ export function Timeline({ tl, m }: { tl: Timelines; m: M }) {
           <dd>{fault ? <Status kind="fault">Labelled fault · {Math.round(b.a * 100)}%</Status> : <Status kind="nominal" />}</dd>
         </div>
       </dl>
-      <p className="text-[16px] leading-[1.45] text-(--is-frost)">
-        {m === 1
-          ? "A long fault becomes the new normal: in Fig. 3, K-Means spikes as the 967-hour fault begins, then goes quiet."
-          : "Magenta marks the labelled events: on Mission 2, 613 of 644 are rare operational events, not true failures."}
-      </p>
     </Panel>
   );
 }
