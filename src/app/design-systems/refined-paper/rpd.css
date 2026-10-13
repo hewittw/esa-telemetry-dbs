@@ -1,0 +1,102 @@
+/* Refined paper design system: page-scoped CSS. Every selector starts at .rpd-root and every
+   class is prefixed rpd- (CSS Modules are off in this Turbopack setup, and imported CSS persists
+   across client navigations). Tokens are the mood board's, unchanged. */
+
+.rpd-root {
+  --paper: #f6f2ea;
+  --mount: #fbf8f2;
+  --parchment: #ece6d8;
+  --band: #e8dcc2;
+  --ink: #211f1b;
+  --ink-soft: #45403a;
+  --muted: #69625a;
+  --rule: #d9d1c1;
+  --rule-strong: #b9af9c;
+  --accent: #b0401c;
+  --accent-hover: #962f10;
+  --accent-press: #7e2609;
+  --accent-ink: #a53b19;
+  --accent-wash: #f6e3d6;
+  --prussian: #2d5b88;
+  --ochre: #8c5e10;
+  --sage: #4f7350;
+  --graphite: #716a5f;
+  --oxblood: #6a3e35;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --lift: 0 18px 40px -24px rgba(33, 31, 27, 0.45);
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .13 0 0 0 0 .12 0 0 0 0 .1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.rpd-root ::selection { background: #e9d3c4; }
+.rpd-root .rpd-serif { font-family: var(--rp-serif-face), Georgia, serif; font-optical-sizing: auto; }
+.rpd-root .rpd-sans { font-family: var(--rp-sans-face), system-ui, sans-serif; }
+.rpd-root .rpd-mono { font-family: var(--rp-mono-face), ui-monospace, monospace; }
+.rpd-root [id] { scroll-margin-top: 72px; }
+@media (min-width: 1100px) { .rpd-root [id] { scroll-margin-top: 28px; } }
+
+/* SVG labels stay a true 11px whatever the figure's rendered width (--rpd-k = viewBox units per CSS px). */
+.rpd-root svg text { font-size: calc(11px * var(--rpd-k, 1)); }
+.rpd-root svg text.rpd-t-sm { font-size: calc(10.5px * var(--rpd-k, 1)); }
+.rpd-root svg text.rpd-t-lg { font-size: calc(13px * var(--rpd-k, 1)); }
+
+/* Range: a 1px ink track and a round paper thumb (round is reserved for thumbs and transport). */
+.rpd-root .rpd-range { appearance: none; -webkit-appearance: none; height: 24px; background: transparent; cursor: pointer; border-radius: 12px; }
+.rpd-root .rpd-range::-webkit-slider-runnable-track { height: 1px; background: linear-gradient(to right, var(--ink) 0 var(--p, 0%), var(--rule-strong) var(--p, 0%) 100%); }
+.rpd-root .rpd-range::-moz-range-track { height: 1px; background: var(--rule-strong); }
+.rpd-root .rpd-range::-moz-range-progress { height: 1px; background: var(--ink); }
+.rpd-root .rpd-range::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -7.5px; border-radius: 50%; background: var(--paper); border: 1.5px solid var(--ink); transition: transform 200ms var(--ease), background-color 200ms; }
+.rpd-root .rpd-range::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--paper); border: 1.5px solid var(--ink); }
+.rpd-root .rpd-range:hover::-webkit-slider-thumb { transform: scale(1.15); }
+.rpd-root .rpd-range:active::-webkit-slider-thumb { background: var(--ink); }
+.rpd-root .rpd-range:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.rpd-root .rpd-range:disabled { cursor: not-allowed; }
+.rpd-root .rpd-range:disabled::-webkit-slider-thumb { border-style: dashed; border-color: var(--rule-strong); transform: none; }
+
+/* Figures draw their lines in once, when they enter view. */
+.rpd-root .rpd-line { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1800ms var(--ease); }
+.rpd-root [data-inview="false"] .rpd-line { stroke-dashoffset: 1; }
+.rpd-root .rpd-fade { animation: rpd-fade 300ms var(--ease) both; }
+.rpd-root .rpd-rise { animation: rpd-rise 300ms var(--ease) both; }
+@keyframes rpd-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rpd-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Skeleton: a slow parchment sweep, never a flashing pulse. */
+.rpd-root .rpd-skel { position: relative; overflow: hidden; background: var(--parchment); border-radius: 2px; }
+.rpd-root .rpd-skel::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(251, 248, 242, 0.85), transparent); animation: rpd-sweep 1600ms var(--ease) infinite; }
+@keyframes rpd-sweep { to { transform: translateX(100%); } }
+
+/* Toast timer: a hairline that runs down while the toast waits to leave. */
+.rpd-root .rpd-timer { transform-origin: left; animation: rpd-timer var(--d, 5000ms) linear forwards; }
+.rpd-root .rpd-toast:hover .rpd-timer, .rpd-root .rpd-toast:focus-within .rpd-timer { animation-play-state: paused; }
+@keyframes rpd-timer { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+/* Modal: scrim + sheet. */
+.rpd-root .rpd-scrim { animation: rpd-fade 300ms var(--ease) both; background: rgba(33, 31, 27, 0.38); }
+.rpd-root .rpd-sheet { animation: rpd-rise 300ms var(--ease) both; }
+
+/* Giant stat reveal: numerals rise in once. */
+.rpd-root .rpd-reveal [data-d] { opacity: 0; transform: translateY(0.12em); transition: opacity 900ms var(--ease), transform 900ms var(--ease); }
+.rpd-root .rpd-reveal[data-inview="true"] [data-d] { opacity: 1; transform: none; }
+
+/* Accordion: grid-rows trick for height without measuring. */
+.rpd-root .rpd-acc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms var(--ease); }
+.rpd-root .rpd-acc[data-open="true"] { grid-template-rows: 1fr; }
+.rpd-root .rpd-acc > div { overflow: hidden; }
+
+/* Scroll cue arrow nudges once, then rests. */
+.rpd-root .rpd-cue { animation: rpd-cue 1800ms var(--ease) 2 both; }
+@keyframes rpd-cue { 50% { transform: translateY(4px); } }
+
+/* Thin scrollbars inside contained scrollers. */
+.rpd-root .rpd-scroll { scrollbar-width: thin; scrollbar-color: var(--rule-strong) transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rpd-root *, .rpd-root *::before, .rpd-root *::after { transition-duration: 1ms !important; transition-delay: 0ms !important; animation-duration: 1ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  .rpd-root [data-inview="false"] .rpd-line { stroke-dashoffset: 0; }
+  .rpd-root .rpd-reveal [data-d] { opacity: 1; transform: none; }
+  .rpd-root .rpd-skel::after { animation: none !important; display: none; }
+  .rpd-root .rpd-timer { animation-duration: var(--d, 5000ms) !important; }
+}

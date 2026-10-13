@@ -56,3 +56,16 @@ If you can see the grain, it's too strong.
 - No vermilion on chips, links, or default chart lines.
 - No neon anomaly highlights, no dark mode by default, no scroll-jacking.
 - No third typeface or all-caps headlines.
+
+## Design system (`/design-systems/refined-paper`)
+Built from this board's tokens, unchanged; files in `src/app/design-systems/refined-paper/` (class prefix `rpd-`).
+- Extra tokens the components needed: Mount `#FBF8F2` (card/field fill), Ink-soft `#45403A` (ink hover),
+  accent hover `#962F10` / press `#7E2609`, accent wash `#F6E3D6` (the highlighted diagram node),
+  error wash `#F7EDE8`, lift `0 18px 40px −24px rgb(33 31 27 / .45)`.
+- Status words: sage = verified/improve (✓), ochre = near/mixed (!), oxblood = error/not saved/regress (✕),
+  always colour + icon + word. Vermilion is never an error colour.
+- Focus: `outline 2px solid Ink, offset 2px` on every control (`focus-visible` only).
+- Disabled: edge turns dashed, text Pencil. Selected: Parchment fill + Ink edge (chips add a tick).
+- Switch is a 40×22 paper-cut rectangle (3px), not a pill; round only for transport, thumbs, radios.
+- Every state in the section-5 matrix renders from the live control's own class string with `data-s` forcing the state.
+- Measured: lowest text pairing in use is Graphite on Paper 4.79:1; Pencil on Parchment 4.83:1; body 14.73:1.
