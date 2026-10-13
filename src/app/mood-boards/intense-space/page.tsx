@@ -40,31 +40,31 @@ type Artifact = {
   gen?: boolean;
   /** lg footprint on the 12-col grid: [cols, rows] */
   size: keyof typeof SIZE;
-  /** below lg: an aspect ratio, or "" for natural height */
+  /** below xl (and on touch screens): an aspect ratio, or "" for natural height */
   m?: string;
   wide?: boolean;
   credit?: string;
   note: Note;
-} & ({ img: string; alt: string; pos?: string } | { body: React.ReactNode });
+} & ({ img: string; alt: string; pos?: string; fit?: "contain" } | { body: React.ReactNode });
 
 // literal class strings so Tailwind sees them
 const SIZE = {
-  "8x6": "lg:col-span-8 lg:row-span-6",
-  "6x5": "lg:col-span-6 lg:row-span-5",
-  "6x4": "lg:col-span-6 lg:row-span-4",
-  "6x3": "lg:col-span-6 lg:row-span-3",
-  "6x2": "lg:col-span-6 lg:row-span-2",
-  "5x4": "lg:col-span-5 lg:row-span-4",
-  "4x5": "lg:col-span-4 lg:row-span-5",
-  "4x4": "lg:col-span-4 lg:row-span-4",
-  "4x3": "lg:col-span-4 lg:row-span-3",
-  "4x2": "lg:col-span-4 lg:row-span-2",
-  "3x5": "lg:col-span-3 lg:row-span-5",
-  "3x4": "lg:col-span-3 lg:row-span-4",
-  "3x3": "lg:col-span-3 lg:row-span-3",
-  "3x2": "lg:col-span-3 lg:row-span-2",
-  "8x2": "lg:col-span-8 lg:row-span-2",
-  "9x2": "lg:col-span-9 lg:row-span-2",
+  "8x6": "xl:pointer-fine:col-span-8 xl:pointer-fine:row-span-6",
+  "6x5": "xl:pointer-fine:col-span-6 xl:pointer-fine:row-span-5",
+  "6x4": "xl:pointer-fine:col-span-6 xl:pointer-fine:row-span-4",
+  "6x3": "xl:pointer-fine:col-span-6 xl:pointer-fine:row-span-3",
+  "6x2": "xl:pointer-fine:col-span-6 xl:pointer-fine:row-span-2",
+  "5x4": "xl:pointer-fine:col-span-5 xl:pointer-fine:row-span-4",
+  "4x5": "xl:pointer-fine:col-span-4 xl:pointer-fine:row-span-5",
+  "4x4": "xl:pointer-fine:col-span-4 xl:pointer-fine:row-span-4",
+  "4x3": "xl:pointer-fine:col-span-4 xl:pointer-fine:row-span-3",
+  "4x2": "xl:pointer-fine:col-span-4 xl:pointer-fine:row-span-2",
+  "3x5": "xl:pointer-fine:col-span-3 xl:pointer-fine:row-span-5",
+  "3x4": "xl:pointer-fine:col-span-3 xl:pointer-fine:row-span-4",
+  "3x3": "xl:pointer-fine:col-span-3 xl:pointer-fine:row-span-3",
+  "3x2": "xl:pointer-fine:col-span-3 xl:pointer-fine:row-span-2",
+  "8x2": "xl:pointer-fine:col-span-8 xl:pointer-fine:row-span-2",
+  "9x2": "xl:pointer-fine:col-span-9 xl:pointer-fine:row-span-2",
 } as const;
 
 function Tile({ a, n }: { a: Artifact; n: number }) {
@@ -77,23 +77,26 @@ function Tile({ a, n }: { a: Artifact; n: number }) {
       aria-describedby={id}
       className={`group is-corners relative flex flex-col overflow-hidden rounded-[2px] border border-(--is-line) bg-(--is-panel) transition-colors duration-300 hover:border-[#4a4f55] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-(--is-frost) ${SIZE[a.size]} ${a.wide ? "md:col-span-2" : ""}`}
     >
-      <div className={`relative min-h-0 flex-1 ${a.m ?? ""} lg:aspect-auto`}>
-        {"img" in a ? (
-          <Image
-            src={a.img}
-            alt={a.alt}
-            fill
-            sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
-            className="is-photo object-cover group-hover:scale-[1.03] group-focus:scale-[1.03]"
-            style={{ objectPosition: a.pos ?? "center" }}
-          />
-        ) : (
-          a.body
-        )}
-        {/* note: revealed on hover and keyboard focus; always shown on touch screens below lg */}
+      <div className="relative flex min-h-0 flex-1 flex-col">
+        <div className={`relative min-h-0 flex-none xl:pointer-fine:flex-1 ${a.m ?? ""} xl:pointer-fine:aspect-auto ${"fit" in a && a.fit === "contain" ? "bg-black" : ""}`}>
+          {"img" in a ? (
+            <Image
+              src={a.img}
+              alt={a.alt}
+              fill
+              sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
+              className={`is-photo group-hover:scale-[1.03] group-focus:scale-[1.03] ${a.fit === "contain" ? "object-contain p-4 max-xl:p-0 pointer-coarse:p-0" : "object-cover"}`}
+              style={{ objectPosition: a.pos ?? "center" }}
+            />
+          ) : (
+            a.body
+          )}
+        </div>
+        {/* note: on mouse/trackpad it slides over the piece on hover or keyboard focus;
+            on touch screens and below xl it sits in flow beneath the piece so it never covers it */}
         <div
           id={id}
-          className={`absolute inset-x-0 bottom-0 z-10 max-h-full translate-y-3 overflow-auto bg-(--is-void)/94 p-4 opacity-0 backdrop-blur-md transition-[opacity,translate] duration-300 ease-(--is-ease) group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none max-lg:pointer-coarse:static max-lg:pointer-coarse:translate-y-0 max-lg:pointer-coarse:opacity-100`}
+          className="absolute inset-x-0 bottom-0 z-10 max-h-full translate-y-3 overflow-auto bg-(--is-void)/94 p-4 opacity-0 backdrop-blur-md duration-300 ease-(--is-ease) group-hover:transition-[opacity,translate] group-focus:transition-[opacity,translate] group-focus-within:transition-[opacity,translate] group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none pointer-coarse:static pointer-coarse:flex-1 max-xl:flex-1 pointer-coarse:max-h-none pointer-coarse:translate-y-0 pointer-coarse:border-t pointer-coarse:border-(--is-line) pointer-coarse:bg-(--is-void) pointer-coarse:opacity-100 pointer-coarse:backdrop-blur-none max-xl:static max-xl:max-h-none max-xl:translate-y-0 max-xl:border-t max-xl:border-(--is-line) max-xl:bg-(--is-void) max-xl:opacity-100 max-xl:backdrop-blur-none"
         >
           <dl className="grid grid-cols-[3.6rem_1fr] gap-x-3 gap-y-2 text-[13px] leading-snug">
             <dt className={`${MONO} pt-px text-[10px] uppercase tracking-[0.16em] text-(--is-fiber)`}>Take</dt>
@@ -195,7 +198,7 @@ export default function IntenseSpaceBoard() {
         </div>
       ),
       note: {
-        take: "Scroll-scrubbed brightness: read words go Frost, upcoming words wait at 30%.",
+        take: "Scroll-scrubbed brightness: read words go Frost, upcoming words wait at 42%, and once lit they stay lit.",
         where: "The statement paragraph between the hero and the method comparison.",
         leave: "Scroll-jacking. The page scrolls normally and the text is readable without motion.",
       },
@@ -233,6 +236,7 @@ export default function IntenseSpaceBoard() {
       kind: "type",
       size: "6x2",
       m: "aspect-[5/1]",
+      wide: true,
       credit: "via icomat.co.uk",
       img: P + "via-icomat-word-reveal.jpg",
       alt: "Crop of ICOMAT's dark 'How we operate' paragraph mid-reveal: bright grey words followed by dimmed upcoming words.",
@@ -383,10 +387,11 @@ export default function IntenseSpaceBoard() {
       title: "Undetected, half in focus",
       kind: "type",
       size: "3x3",
-      m: "aspect-[3/2]",
+      m: "aspect-[152/46]",
       credit: "via planet.com",
-      img: P + "via-planet-undetected.jpg",
-      alt: "Crop of Planet's hero word: the letters UN blurred and faded, the D beside them sharp.",
+      img: P + "via-planet-undetected-hero.jpg",
+      fit: "contain",
+      alt: "Crop of Planet's hero on black: the word UNDETECTED with UN blurred and faded and DETECTED sharp, over the line Decision advantage with rapid change detection.",
       note: {
         take: "Blur as meaning: out of focus means not yet detected.",
         where: "Anomaly labels as the timeline scrubs past a fault.",
@@ -577,7 +582,7 @@ export default function IntenseSpaceBoard() {
     <main className={`${display.variable} ${mono.variable} ${dot.variable} is-root min-h-screen w-full`}>
       {/* top bar */}
       <header className={`${MONO} sticky top-0 z-30 border-b border-(--is-line) bg-(--is-void)/85 backdrop-blur-md`}>
-        <div className="mx-auto flex h-12 max-w-[1440px] items-center justify-between gap-4 px-4 text-[11px] uppercase tracking-[0.16em] sm:px-6">
+        <div className="mx-auto flex h-12 max-w-[1920px] items-center justify-between gap-4 px-4 text-[11px] uppercase tracking-[0.16em] sm:px-6">
           <Link
             href="/"
             className="rounded-[2px] px-1 py-1 text-(--is-frost) transition-colors duration-200 hover:text-(--is-fiber) active:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--is-frost)"
@@ -589,7 +594,7 @@ export default function IntenseSpaceBoard() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6">
+      <div className="mx-auto max-w-[1920px] px-4 sm:px-6">
         {/* registration marks on the 12-col rhythm */}
         <div aria-hidden className="mt-6 hidden h-1 grid-cols-12 gap-3 lg:grid">
           {Array.from({ length: 12 }).map((_, i) => (
@@ -616,13 +621,16 @@ export default function IntenseSpaceBoard() {
               <p className="text-(--is-steel)">
                 {collected} collected · {generated} generated · <span className="text-(--is-fiber)">✦</span> generated by your agent
               </p>
-              <p className="text-(--is-steel)">Hover or focus any piece for its note</p>
+              <p className="text-(--is-steel)">
+                <span className="max-xl:hidden pointer-coarse:hidden">Hover or focus any piece for its note</span>
+                <span className="hidden max-xl:inline pointer-coarse:inline">Each piece&apos;s note sits beneath it</span>
+              </p>
             </div>
           </div>
         </section>
 
         {/* mosaic */}
-        <section aria-label="Mood board artifacts" className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-flow-dense lg:auto-rows-[76px] lg:grid-cols-12">
+        <section aria-label="Mood board artifacts" className="grid grid-cols-1 gap-3 md:grid-flow-dense md:grid-cols-2 xl:pointer-fine:grid-flow-dense xl:pointer-fine:auto-rows-[clamp(76px,5.28vw,101px)] xl:pointer-fine:grid-cols-12">
           {artifacts.map((a, i) => (
             <Tile key={a.title} a={a} n={i + 1} />
           ))}

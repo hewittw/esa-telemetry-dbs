@@ -20,7 +20,7 @@ export function contrast(a: string, b: string) {
 export function DotoNumerals({ t }: { t: ReturnType<typeof table1> }) {
   return (
     <div className="flex h-full flex-col justify-between gap-3 p-5 pb-4">
-      <p className={`${MONO} text-[10px] uppercase tracking-[0.2em] text-(--is-steel)`}>[ PR-AUC · {t.best.method} · M{t.best.mission} ]</p>
+      <p className={`${MONO} text-[10px] uppercase tracking-[0.2em] text-(--is-steel)`}>[ PR-AUC · {t.best.method.replace("TransformerVAE", "TVAE")} · M{t.best.mission} ]</p>
       <p className={`${DOT} text-[clamp(60px,6vw,92px)] font-semibold leading-[0.8] text-(--is-frost)`}>
         {t.best.prAuc.toFixed(3)}
       </p>
@@ -55,7 +55,7 @@ export function Palette() {
         const onVoid = contrast(s.hex, "#0A0B0D");
         const ink = lum(s.hex) > 0.18 ? "#0A0B0D" : "#CFD9E0";
                 return (
-          <div key={s.hex} className={`${MONO} flex min-h-24 flex-col justify-between p-2.5 text-[9.5px] uppercase leading-tight tracking-[0.08em]`} style={{ background: s.hex, color: ink }}>
+          <div key={s.hex} className={`${MONO} flex min-h-24 flex-col justify-between p-2.5 text-[10px] uppercase leading-tight tracking-[0.06em]`} style={{ background: s.hex, color: ink }}>
             <span>{s.name}</span>
             <span>
               {s.hex}
@@ -130,13 +130,20 @@ export function ChannelTree({ tree }: { tree: ReturnType<typeof channelTree> }) 
   });
   return (
     <svg viewBox={`0 0 ${W} 430`} className="h-full w-full" role="img" aria-label="Mission 1 channel hierarchy drawn as steered fibers: 76 channels curve into 18 operational groups, which merge into 4 subsystems.">
-      <g className={`${MONO}`} fontSize="10" letterSpacing="1.6" fill="#8C979F">
+      {/* labels: two sets so they render at 10px+ both in a phone-width tile and a desktop tile */}
+      <g className={`${MONO} max-md:hidden`} fontSize="12.5" letterSpacing="1.3" fill="#8C979F">
         <text x="18" y="18">76 CHANNELS</text>
         <text x={W - 18} y="18" textAnchor="end">ESA MISSION 1</text>
         <text x="18" y={mid - 14}>18 GROUPS</text>
         <text x={W - 18} y={mid - 14} textAnchor="end" fill="#4BCFE0">GMM K* = 21 ≈ GROUPS</text>
-        <text x="18" y={bot + 30}>4 SUBSYSTEMS</text>
-        <text x={W - 18} y={bot + 30} textAnchor="end">ARI vs subsystems 0.047</text>
+        <text x="18" y={bot + 32}>4 SUBSYSTEMS</text>
+        <text x={W - 18} y={bot + 32} textAnchor="end">ARI VS SUBSYSTEMS 0.047</text>
+      </g>
+      <g className={`${MONO} md:hidden`} fontSize="26" letterSpacing="1" fill="#8C979F" stroke="#121316" strokeWidth="6" paintOrder="stroke">
+        <text x="12" y="24">76 CHANNELS</text>
+        <text x="12" y={mid - 16}>18 GROUPS</text>
+        <text x={W - 12} y={mid - 16} textAnchor="end" fill="#4BCFE0">K* = 21</text>
+        <text x="12" y={bot + 34}>4 SUBSYSTEMS</text>
       </g>
       <g fill="none" stroke="#CFD9E0" strokeWidth="0.8" strokeOpacity="0.55">
         {paths.map((p, i) => (
@@ -158,7 +165,7 @@ export function ChannelTree({ tree }: { tree: ReturnType<typeof channelTree> }) 
       {tree.subsystems.map((s, i) => (
         <g key={s.name}>
           <rect x={sX(i) - 4} y={bot - 4} width="8" height="8" fill="#37FD08" />
-          <text x={sX(i)} y={bot + 14} textAnchor="middle" fontSize="9" fill="#CFD9E0" className={MONO} letterSpacing="1">
+          <text x={sX(i)} y={bot + 15} textAnchor="middle" fontSize="12.5" fill="#CFD9E0" className={`${MONO} max-md:hidden`} letterSpacing="1">
             {s.name} · {s.n}
           </text>
         </g>
@@ -192,7 +199,7 @@ export function Controls() {
         <span className="rounded-full border border-(--is-line) px-3 py-1.5 text-(--is-steel)">Parametric</span>
         <span className="rounded-full border border-(--is-line) px-3 py-1.5 text-(--is-steel)">Baseline</span>
       </div>
-      <div className="grid grid-cols-5 gap-1.5 text-[8.5px] tracking-[0.08em]">
+      <div className="grid grid-cols-3 gap-1.5 text-[10px] tracking-[0.04em] min-[360px]:grid-cols-5">
         {states.map((s) => (
           <div key={s} className="flex flex-col gap-1.5">
             <span className={`whitespace-nowrap rounded-[3px] border px-1 py-1.5 text-center ${stateCls[s]}`}>Sort ↓</span>
@@ -233,13 +240,22 @@ export function BicTrace({ bic }: { bic: ReturnType<typeof bicSweeps> }) {
           <rect x={x(s.selectedK) - 3} y={y(0) - 3} width="6" height="6" fill={s.color} />
         </g>
       ))}
-      <g className={MONO} fontSize="10" letterSpacing="1.4" fill="#8C979F">
+      {/* labels: a full set for tablet/desktop tiles, a short large set for phone-width tiles */}
+      <g className={`${MONO} max-md:hidden`} fontSize="11" letterSpacing="1.3" fill="#8C979F">
         <text x="44" y="16">BIC (NORMALISED) · GMM SWEEP K = 2–30</text>
         <text x={x(4.5)} y="246" textAnchor="middle">SUBSYS 4–5</text>
         <text x={x(18)} y="246" textAnchor="middle">GROUPS 18</text>
         <text x={x(29)} y="246" textAnchor="middle">29</text>
         <text x={x(21)} y={y(0) - 12} textAnchor="middle" fill="#CFD9E0">M1 K*={bic.m1.selectedK}</text>
         <text x={x(29) - 6} y={y(0) - 26} textAnchor="end" fill="#4BCFE0">M2 K*={bic.m2.selectedK}</text>
+      </g>
+      <g className={`${MONO} md:hidden`} fontSize="26" letterSpacing="1" fill="#8C979F" stroke="#121316" strokeWidth="6" paintOrder="stroke">
+        <text x="44" y="22">BIC · K = 2–30</text>
+        <text x={x(4.5)} y="258" textAnchor="middle">4–5</text>
+        <text x={x(18)} y="258" textAnchor="middle">18</text>
+        <text x={x(29)} y="258" textAnchor="end">29</text>
+        <text x={x(21) - 10} y={y(0) - 16} textAnchor="end" fill="#CFD9E0">M1 {bic.m1.selectedK}</text>
+        <text x={x(29)} y={y(0) - 16} textAnchor="end" fill="#4BCFE0">M2 {bic.m2.selectedK}</text>
       </g>
     </svg>
   );
@@ -304,10 +320,10 @@ export function PrBundle({ curves }: { curves: ReturnType<typeof prBundle> }) {
         ))}
       </g>
       <rect x={px(0.005)} y={py(1)} width={px(0.16) - px(0.005)} height={py(0.62) - py(1)} fill="none" stroke="#4BCFE0" strokeWidth="1" />
-      <g className={MONO} fontSize="9" letterSpacing="1.2" fill="#8C979F">
-        <text x={px(0.005)} y={py(0.62) + 14} fill="#4BCFE0">[ HIGH-PRECISION AOI ]</text>
-        <text x="30" y={S - 10}>RECALL →</text>
-        <text x={S - 14} y={S - 10} textAnchor="end">M2 · 16 SAVED RUNS</text>
+      <g className={MONO} fontSize="14" letterSpacing="0.6" fill="#8C979F" stroke="#121316" strokeWidth="4" paintOrder="stroke">
+        <text x={px(0.005)} y={py(0.62) + 18} fill="#4BCFE0">[ HIGH-PRECISION AOI ]</text>
+        <text x="30" y={S - 8}>RECALL →</text>
+        <text x={S - 14} y={S - 8} textAnchor="end">M2 · 16 RUNS</text>
       </g>
     </svg>
   );
@@ -317,7 +333,7 @@ export function PrBundle({ curves }: { curves: ReturnType<typeof prBundle> }) {
 export function BlurTile() {
   return (
     <div className="flex h-full flex-col justify-between gap-3 p-5">
-      <p className={`${MONO} text-[10px] uppercase tracking-[0.2em] text-(--is-steel)`}>[ Score &gt; τ<sub>99</sub> ]</p>
+      <p className={`${MONO} text-[10px] uppercase tracking-[0.2em] text-(--is-steel)`}>[ Score &gt; τ99 ]</p>
       <p className="text-[clamp(40px,4.4vw,64px)] font-semibold uppercase leading-none tracking-[-0.03em] text-(--is-frost)">
         <BlurFocus word="Anomaly" />
       </p>

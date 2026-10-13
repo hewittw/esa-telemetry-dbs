@@ -27,15 +27,20 @@ Teal outlines one region or highlights one series. Always pair color with a word
 - Scale: 112 / 34 / 28 / 16 / 13 / 11 / 10 px.
 
 ## Spacing and shape
-- 12-column grid, 12px gutter, 76px row unit on desktop; 4px registration squares mark the columns.
+- 12-column grid, 12px gutter, row unit `clamp(76px, 5.28vw, 101px)` (76px at 1440, scales to 101px at 1920); page max width 1920px,
+  so 2560 screens get even void margins instead of a stretched mosaic. 4px registration squares mark the columns.
+- The mosaic only applies at xl (1280px+) with a fine pointer. Below xl, and on any touch screen, tiles stack in 1–2 columns and
+  each note sits in flow beneath its piece, never overlaid on it.
+- Figure labels render at 10px or more on screen: SVG figures carry two label sets (a short 26-unit set for phone-width tiles,
+  the full 11–12.5-unit set from 768px up), with a Panel-colored halo where a label crosses a trace.
 - More space between groups (40–80px) than inside a panel (16–20px padding).
 - Corners: 2–3px on panels and buttons; full round only for filter chips.
 - Borders: 1px Hairline panels with 4px corner ticks, like a drawing sheet. **No drop shadows.** Depth comes from Void → Panel → Charcoal.
 
 ## Motion
 - UI: 200–300ms, `cubic-bezier(0.2, 0.7, 0.1, 1)` (fast out, long settle), no bounce.
-- Reveals: notes slide up 12px and fade in 300ms; SVG traces draw in over 1.6–2.6s.
-- Signature: word-by-word scroll brightness (read = Frost, unread = 30%); per-letter blur-to-focus (14px → 0, 140ms stagger);
+- Reveals: notes slide up 12px and fade in 300ms (mouse only; hiding is instant); SVG traces draw in over 1.6–2.6s.
+- Signature: word-by-word scroll brightness (read = Frost, unread = 42%; once lit, words stay lit so a fast scroller never sees a dimmed finding); per-letter blur-to-focus (14px → 0, 140ms stagger);
   generative fiber field driven by real anomaly scores, shearing sideways, with a Pause control.
 - `prefers-reduced-motion`: canvas draws one static frame, traces render drawn, blur and blink stop, text is fully lit.
 
