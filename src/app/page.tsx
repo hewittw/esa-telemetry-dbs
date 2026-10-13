@@ -120,25 +120,43 @@ export default function Hub() {
       </section>
 
       <section className="mt-20">
-        <SectionHead n="03" title="The Site" note="Three finished finals, one per style" />
-        <ul className="mt-8 grid gap-4 md:grid-cols-3">
+        <SectionHead n="03" title="The Site" note="In the style Hewitt picked" />
+        <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-neutral-700">
+          Hewitt picked <strong className="font-medium text-neutral-900">{refinedPaper.name}</strong>. Three iterations
+          now compete on one question: which best brings the paper to life for a researcher who knows nothing about it?
+        </p>
+        <ul className="mt-6 grid gap-4 md:grid-cols-3">
           {[
-            { b: intenseSpace, href: "/telemetry", tag: "Final · agent's pick" },
-            { b: refinedPaper, href: "/finalists/refined-paper", tag: "Final" },
-            { b: whiteImmersion, href: "/finalists/white-immersion", tag: "Final" },
-          ].map(({ b, href, tag }, i) => (
-            <li key={href}>
+            { t: "A · The Essay", d: "One paced long read, figures inline where the text needs them.", href: "/lucid/essay" },
+            { t: "B · The Paper, Alive", d: "The paper's own sections, with interactive figures and margin notes.", href: "/lucid/paper" },
+            { t: "C · The Explainer", d: "The picked design, rebuilt for a newcomer: context first, plain titles.", href: "/lucid/explainer" },
+          ].map((v) => (
+            <li key={v.href}>
               <Link
-                href={href}
+                href={v.href}
                 className={`group flex h-full flex-col justify-between rounded-lg border border-neutral-900 px-5 py-5 transition-colors hover:bg-neutral-900 hover:text-white active:scale-[0.99] ${ring}`}
               >
                 <div>
-                  <p className="font-mono text-xs text-neutral-500 group-hover:text-neutral-300">
-                    0{i + 1} · {tag}
-                  </p>
-                  <p className="mt-2 text-[17px] font-medium tracking-tight">{b.name}</p>
+                  <p className="font-mono text-xs text-neutral-500 group-hover:text-neutral-300">{refinedPaper.name}</p>
+                  <p className="mt-2 text-[17px] font-medium tracking-tight">{v.t}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-600 group-hover:text-neutral-300">{v.d}</p>
                 </div>
-                <span className="mt-6 text-sm">Open the explorer →</span>
+                <span className="mt-6 text-sm">Open →</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <h3 className="mt-10 text-sm font-medium">Earlier finals, one per style</h3>
+        <ul className="mt-3 grid gap-x-6 divide-y divide-neutral-200 border-y border-neutral-200 md:grid-cols-3 md:divide-y-0">
+          {[
+            { b: intenseSpace, href: "/telemetry" },
+            { b: refinedPaper, href: "/finalists/refined-paper" },
+            { b: whiteImmersion, href: "/finalists/white-immersion" },
+          ].map(({ b, href }) => (
+            <li key={href}>
+              <Link href={href} className={`group flex items-center justify-between gap-4 py-3 text-sm ${ring}`}>
+                <span className="group-hover:underline">{b.name}</span>
+                <span className="font-mono text-xs text-neutral-500">final →</span>
               </Link>
             </li>
           ))}
@@ -147,10 +165,10 @@ export default function Hub() {
           <div className="md:col-span-7">
             <h3 className="text-sm font-medium">Our pick, and why</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-neutral-700">
-              <strong className="font-medium text-neutral-900">{intenseSpace.name}.</strong> An ML recruiter gets the
-              finding in one look, and the instrument aesthetic reads as engineering rigor; research peers get every
-              number on real data, with a link to the page of the paper that backs it. All three were finished to the
-              same standard so the final choice can be made side by side.
+              <strong className="font-medium text-neutral-900">{refinedPaper.name}.</strong> The paper is the subject, so
+              the site reads like a beautifully typeset journal page: a serif for the argument, ink-blue and ochre plot
+              lines named by matching words in the text, and one vermilion action. A researcher meeting this work for the
+              first time can learn it in order, and check every number against the page of the paper that backs it.
             </p>
             <h3 className="mt-6 text-sm font-medium">The browser check</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-neutral-700">

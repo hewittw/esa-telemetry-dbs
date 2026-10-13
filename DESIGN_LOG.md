@@ -156,3 +156,18 @@ Append as decisions happen, newest at the bottom.
   empty hero third. **white-immersion:** the finding becomes the first thing seen, one cyan action, normal scrolling
   instead of scroll-to-travel, selectable text, no overlaps on phones.
 - The final pick, and which route becomes the site linked from the hub, is Hewitt's decision tomorrow.
+
+## 2026-10-13 · Hewitt's pick: Lucid · Patient · Inked, and three iterations
+- **Hewitt picked refined-paper (Lucid · Patient · Inked)** after seeing all three finals live. This overrules the
+  agent's earlier pick of intense-space.
+- **Hewitt's critique:** titles like "Telemetry's structure sits at the level of operational groups" (or labels like
+  "S1 4 gr") "mean nothing" to someone who doesn't know the project. The site should **use UI to bring the paper to
+  life**, and that means explaining more. "We have the room."
+- **New brief (`docs/lucid-spec.md`):** the hero is the paper's title, an ink line drawing of a satellite on the left,
+  and one sentence on the goal. The first section explains the course (TTIC 31220 Unsupervised Learning), ESA,
+  telemetry, the ESA Anomaly Dataset and why it's novel, then the gap (detectors fail on it, but *why*?). Then the
+  paper's arc, with interactive figures as subsections inside the paper's sections. The audience is a researcher
+  who knows nothing about the project (the grader).
+- **Three iterations:** A · The Essay, B · The Paper Alive, C · The Explainer (a better version of the current page).
+- **Decided with Hewitt:** a generic satellite drawn in ink, because the dataset anonymises the missions; no more work
+  on the older finals; the hub puts the three Lucid iterations first.
