@@ -1,0 +1,211 @@
+/* Intense Space design system, page-scoped. Every class starts with isd- (CSS Modules
+   are off in this Turbopack setup). Tokens come from the mood board's board.css (.is-root). */
+
+.is-root .isd-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.is-root .isd-range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(to right, var(--is-frost) 0 var(--p, 0%), var(--is-line) var(--p, 0%) 100%);
+}
+.is-root .isd-range::-moz-range-track {
+  height: 2px;
+  background: linear-gradient(to right, var(--is-frost) 0 var(--p, 0%), var(--is-line) var(--p, 0%) 100%);
+}
+.is-root .isd-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -6px;
+  border-radius: 1px;
+  background: var(--is-frost);
+  box-shadow: 0 0 0 3px var(--is-void);
+  transition: transform 200ms var(--is-ease), background-color 200ms var(--is-ease);
+}
+.is-root .isd-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 1px;
+  background: var(--is-frost);
+  box-shadow: 0 0 0 3px var(--is-void);
+}
+.is-root .isd-range:hover::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.is-root .isd-range:active::-webkit-slider-thumb {
+  transform: scale(0.9);
+  background: #ffffff;
+}
+.is-root .isd-range:disabled {
+  cursor: not-allowed;
+}
+.is-root .isd-range:disabled::-webkit-slider-thumb {
+  background: var(--is-charcoal);
+}
+
+/* toast: slide up 12px, fade; the hairline drains over the 4.2s lifetime */
+.is-root .isd-toast {
+  animation: isd-up 300ms var(--is-ease) both;
+}
+.is-root .isd-toast-bar {
+  animation: isd-drain 4200ms linear forwards;
+}
+@keyframes isd-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@keyframes isd-drain {
+  to {
+    transform: scaleX(0);
+  }
+}
+.is-root .isd-scrim {
+  animation: isd-fade 200ms var(--is-ease) both;
+}
+.is-root .isd-dialog,
+.is-root .isd-pop {
+  animation: isd-up 260ms var(--is-ease) both;
+}
+@keyframes isd-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* skeleton: a slow scanline sweep rather than a shimmer gradient */
+.is-root .isd-skel {
+  position: relative;
+  overflow: hidden;
+  background: #1a1c20;
+  border-radius: 2px;
+}
+.is-root .isd-skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(207, 217, 224, 0.07), transparent);
+  transform: translateX(-100%);
+  animation: isd-sweep 1.6s var(--is-ease) infinite;
+}
+@keyframes isd-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* loading readout: dot-matrix ellipsis */
+.is-root .isd-dots > span {
+  animation: isd-dot 1.2s steps(1) infinite;
+}
+.is-root .isd-dots > span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.is-root .isd-dots > span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes isd-dot {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+/* one-shot blur-to-focus (Planet), restarted by re-keying the element */
+.is-root .isd-focus > span {
+  display: inline-block;
+  animation: isd-focus 900ms var(--is-ease) both;
+}
+@keyframes isd-focus {
+  from {
+    filter: blur(14px);
+    opacity: 0.2;
+  }
+}
+
+/* accordion: grid-rows trick for a real height transition */
+.is-root .isd-acc {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms var(--is-ease);
+}
+.is-root .isd-acc[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.is-root .isd-acc > div {
+  overflow: hidden;
+}
+
+/* step progress bar for the Helion mechanism explainer */
+.is-root .isd-progress {
+  transform-origin: left;
+  animation: isd-grow var(--d, 5000ms) linear forwards;
+}
+.is-root .isd-progress[data-paused="true"] {
+  animation-play-state: paused;
+}
+@keyframes isd-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* hide scrollbars on the horizontal section index, keep it scrollable */
+.is-root .isd-noscroll {
+  scrollbar-width: none;
+}
+.is-root .isd-noscroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* grain + scanlines over Charcoal, hero only */
+.is-root .isd-grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.81  0 0 0 0 0.85  0 0 0 0 0.88  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-root .isd-toast,
+  .is-root .isd-scrim,
+  .is-root .isd-dialog,
+  .is-root .isd-pop,
+  .is-root .isd-focus > span {
+    animation: none;
+  }
+  .is-root .isd-skel::after,
+  .is-root .isd-dots > span {
+    animation: none;
+  }
+  .is-root .isd-acc {
+    transition: none;
+  }
+  .is-root .isd-progress {
+    animation: none;
+    transform: scaleX(1);
+  }
+  .is-root .isd-range::-webkit-slider-thumb {
+    transition: none;
+  }
+}
+
+@keyframes isd-slide {
+  to {
+    left: calc(100% - 16px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-root [style*="isd-slide"] {
+    animation-duration: 1ms !important;
+  }
+}

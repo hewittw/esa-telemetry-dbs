@@ -59,3 +59,22 @@ Imagery: real mission hardware and night scenes (NASA), each with a mono source 
 - Decorative random strands, stock space wallpaper, or drop shadows.
 - Scroll-jacking or blank canvases before JS: render static SVG first, then animate.
 - More than one loud color in one figure.
+
+## Design system (`/design-systems/intense-space`)
+Built from this board: same fonts (Host Grotesk 300–600, Fragment Mono, Doto 600), the board's `.is-root` tokens and
+`board.css` (corner ticks, registration dots, scanlines, draw-in), and its `FiberField` canvas. Page-scoped extras live in
+`ds.css` with an `isd-` prefix.
+- **Color roles, extended:** Magenta also marks a failed UI state (error toast, invalid input, "Couldn't load"), always with ■
+  and a word. Teal marks selected filter chips, the highlighted series and AOI boxes. Selected segmented / pressed toggles
+  invert to Frost fill with Void text (13.7:1). Disabled text `#5F676E` (exempt, 3.4:1).
+- **Measured text pairs:** Frost/Void 13.74, Frost/Panel 12.96, Frost/Charcoal 8.82, Steel/Void 6.60, Steel/Panel 6.23,
+  Void/Green 14.27, Teal/Void 10.60, Teal/Panel 10.00, Magenta/Void 5.87, Magenta/Panel 5.54. Steel/Charcoal 4.24 is banned.
+- **Type roles:** Display 600 clamp(42–112) / 0.9 / −4.5% · Opener 300 caps clamp(34–60), first line stepped 1.6em ·
+  Heading 600 24 / 1.05 · Body 400 16 / 1.45 · Caption 13 Steel · Label mono 11 caps 0.14em · Overline mono 10 caps 0.42em ·
+  Mono data 13 · Numeral Doto 600, three per view at most.
+- **States:** hover → border/text Frost; focus-visible → 2px Frost outline, 2px offset (1px inside fields/segmented);
+  pressed → Charcoal fill + 1px drop; selected → Frost fill (segmented, toggles, list rows get a 2px Frost left bar),
+  Teal outline (chips); disabled → Hairline border, `#5F676E` text, not-allowed cursor.
+- **Charts:** marks in SVG with non-scaling strokes; every label is HTML (never under 10px), axis names sit under the frame.
+- **Motion:** 200ms controls, 300ms reveals/accordion/toast, 260ms dialog rise, 4.2s toast life with a draining hairline,
+  5s per step in the mechanism explainer (Pause + Skip), all off or static under reduced motion.
