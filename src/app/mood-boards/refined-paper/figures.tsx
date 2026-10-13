@@ -268,7 +268,7 @@ export function PaperGrain() {
         </defs>
         <rect x="0" y="0" width="156" height="130" rx="2" fill="#F6F2EA" />
         <rect x="0" y="0" width="156" height="130" filter="url(#rp-grain)" opacity="0.35" />
-        <rect x="164" y="0" width="156" height="130" rx="2" fill="#F6F2EA" stroke="var(--rule)" strokeWidth="0.5" />
+        <rect x="164.25" y="0.25" width="155.5" height="129.5" rx="2" fill="#F6F2EA" stroke="var(--rule-strong)" strokeWidth="0.5" />
         <rect x="164" y="0" width="156" height="130" filter="url(#rp-grain)" opacity="0.045" />
       </svg>
       <div className="rp-mono mt-1.5 grid grid-cols-2 gap-2 text-[10.5px] text-[var(--muted)]">
@@ -300,8 +300,8 @@ export function BreakoutGrid() {
         <rect x="0.5" y="170" width="399" height="54" fill="var(--ink)" />
         <text x="10" y="184" fontSize="8" className="rp-mono" fill="#CFC7B8">full bleed, once per page</text>
         {bars(236, 4)}
-        <line x1="110" x2="290" y1="8" y2="8" stroke="var(--accent)" strokeWidth="0.75" />
-        <text x="296" y="8" dy="0.35em" fontSize="7.5" className="rp-mono" fill="var(--accent-ink)">text 680</text>
+        <line x1="110" x2="290" y1="8" y2="8" stroke="var(--ink)" strokeWidth="0.75" />
+        <text x="296" y="8" dy="0.35em" fontSize="7.5" className="rp-mono" fill="var(--muted)">text 680</text>
       </svg>
       <p className="rp-sans mt-3 border-t border-[var(--rule)] pt-2 text-[12px] leading-[1.45] text-[var(--muted)]">
         <span className="font-semibold text-[var(--ink)]">Figure 3.</span> Anomaly score over the Mission 1 test set. Bands mark the 89 labelled segments; the line is the median per bin.

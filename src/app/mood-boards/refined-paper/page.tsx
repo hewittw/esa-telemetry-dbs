@@ -109,51 +109,51 @@ export default function RefinedPaperBoard() {
 
   const A: Item[] = [
     {
-      title: "Herschel, Plate VII, 1805", kind: "Photo", source: "Phil. Trans.",
-      img: { src: `${IMG}/herschel-plate-vii.jpg`, w: 1600, h: 1278, alt: "Engraved plate from the Philosophical Transactions, 1805: William Herschel's figures 1 to 4, the same star-motion diagram repeated with labels for Lyra, Capella, Sirius and Arcturus." },
-      note: { take: "One diagram repeated as Fig. 2, 3, 4: small multiples two centuries before Distill.", use: "The method-comparison strip: one panel per method, shared axes.", leave: "The copperplate script and the double-ruled border." },
+      title: "One plate, four figures", kind: "Photo", source: "Phil. Trans., 1805",
+      img: { src: `${IMG}/herschel-plate-vii.jpg`, w: 1600, h: 1278, alt: "Engraved journal plate from 1805: the same thin-line diagram drawn four times side by side, each labelled Fig. 1 to Fig. 4 in small italic script." },
+      note: { take: "The same drawing repeated at one scale, so the eye compares the differences and nothing else.", use: "The method-comparison strip: one panel per method on shared axes.", leave: "The copperplate script and the double-ruled border." },
       credit: { text: "William Herschel, Philosophical Transactions vol. 95, Plate VII (1805). Public domain, via Wikimedia Commons.", href: "https://commons.wikimedia.org/wiki/File:Philosophical_Transactions_-_Volume_95_-_Plate_VII.png" },
     },
     {
       title: "Paper, ink, one vermilion", kind: "Color", gen: true, body: <PaletteCard />,
-      note: { take: "Paper, not white. Ink, not black. A single warm accent.", use: "Every surface of the site; vermilion only on the primary action.", leave: "Any second accent. Plot inks name lines, never buttons." },
+      note: { take: "Warm paper instead of white, warm ink instead of black, one accent, each with its contrast ratio.", use: "Every surface of the explorer; vermilion only on “Read the paper”.", leave: "A second accent. Plot inks name lines, never buttons." },
     },
     {
-      title: "Words keyed to the figure", kind: "Interface", source: "via ciechanow.ski",
-      img: { src: `${IMG}/via-ciechanowski.jpg`, w: 760, h: 620, alt: "Crop of Bartosz Ciechanowski's GPS article: a paragraph where 'yellow figurine' is set in the same yellow as the figurine in the isometric figure below." },
-      note: { take: "Nouns set in the colour of their mark, so the paragraph is the legend.", use: "Findings prose that names GMM, K-Means and the anomaly bands.", leave: "The saturated green landscape and the blue masthead." },
+      title: "Words set in their figure’s colour", kind: "Interface", source: "via ciechanow.ski",
+      img: { src: `${IMG}/via-ciechanowski.jpg`, w: 760, h: 620, alt: "Web page crop: a short paragraph in which two words are set in yellow, the same yellow as a small marker in the isometric figure directly below." },
+      note: { take: "A noun set in the colour of its mark, so the paragraph does the legend’s job.", use: "The findings prose that names GMM, K-Means and the anomaly bands.", leave: "The saturated green and the bright yellow; ours are printing inks." },
       credit: { text: "Screenshot crop of “GPS” by Bartosz Ciechanowski (ciechanow.ski/gps).", href: "https://ciechanow.ski/gps/" },
     },
     {
       title: "Newsreader with IBM Plex", kind: "Type", gen: true, body: <TypePairing />,
-      note: { take: "Serif for the argument, sans for controls, mono for numbers.", use: "Prose and headings / chips and labels / axis ticks and PR-AUC values.", leave: "A third display face, or all-caps headlines." },
+      note: { take: "A serif for the argument, a sans for controls, a mono for numbers.", use: "Prose and headings; chips and labels; axis ticks and PR-AUC values.", leave: "A third display face, or all-caps headlines." },
     },
     {
-      title: "Plotting by hand, 1956", kind: "Photo", source: "NASA",
-      img: { src: `${IMG}/plotting-data-points.jpg`, w: 1280, h: 960, alt: "A NACA computer draws curves through plotted data points with a pencil and French curve on a backlit drafting table." },
-      note: { take: "A curve drawn patiently through points, lit from beneath.", use: "Line weight and the slow draw-in when a figure enters view.", leave: "The black-and-white film look." },
+      title: "A curve through points, lit from below", kind: "Photo", source: "NASA, 1956",
+      img: { src: `${IMG}/plotting-data-points.jpg`, w: 1280, h: 960, alt: "A woman draws a smooth pencil curve through plotted points on a backlit drafting table, a French curve beside her hand." },
+      note: { take: "One even pencil weight, drawn slowly left to right through the points.", use: "Line weight (1.5px) and the 1.6s draw-in when a figure enters view.", leave: "The black-and-white film look." },
       credit: { text: "NASA Glenn Research Center, “Computer Plotting Data Points in the Engine Research Building” (1956), GRC-1956-C-42046. Public domain.", href: "https://images.nasa.gov/details/GRC-1956-C-42046" },
     },
     {
-      title: "Colour-keyed prose, our PR curves", kind: "Figure", gen: true,
+      title: "Colour-keyed prose over our PR curves", kind: "Color", gen: true,
       body: <ColorKeyedProse gmm={prM1.gmm} kmeans={prM1.kmeans} positiveRate={prM1.positiveRate} />,
-      note: { take: "The legend dissolves into the sentence.", use: "The intro paragraph above each results figure.", leave: "More than three keyed words per paragraph." },
+      note: { take: "Prussian and ochre do two jobs: they draw the lines and they name them in the sentence.", use: "The paragraph above each results figure, so the chart needs no legend box.", leave: "More than three keyed words in a paragraph." },
     },
     {
-      title: "Slide-rule scales", kind: "Photo", source: "Wikimedia",
-      img: { src: `${IMG}/slide-rule-scales.jpg`, w: 1600, h: 978, alt: "Close-up of a Faber-Castell slide rule: fine black and red tick scales with a clear cursor and a single hairline." },
-      note: { take: "Hairline ticks, numerals at two sizes, red reserved for one scale.", use: "Axis ticks and the range-slider track.", leave: "Ticks everywhere. Our axes keep three or four." },
+      title: "Hairline scales, one red register", kind: "Photo", source: "Wikimedia",
+      img: { src: `${IMG}/slide-rule-scales.jpg`, w: 1600, h: 978, alt: "Close-up of a slide rule: rows of fine black tick scales, one scale printed in red, numerals at two sizes, a clear cursor with a single hairline." },
+      note: { take: "Hairline ticks, numerals at two sizes, red kept to a single scale.", use: "Axis ticks and the threshold slider’s track and cursor.", leave: "Ticks everywhere. Our axes keep three or four." },
       credit: { text: "Slashme, “Faber Castell 67 54 Darmstadt slide rule” (CC0), via Wikimedia Commons.", href: "https://commons.wikimedia.org/wiki/File:Faber_Castell_67_54_Darmstadt_slide_rule_1.jpg" },
     },
     {
       title: "Step player: the BIC sweep", kind: "Interface", gen: true, interactive: true,
       body: <div className="bg-[var(--paper)] p-4"><BicStepPlayer {...bic} /></div>,
-      note: { take: "Distill's play / step / scrub transport; the ghost curve stays put so K keeps its place.", use: "The latent-structure section: watch BIC fall to K = 21.", leave: "Autoplay on load. Motion starts when the reader asks." },
+      note: { take: "Play, step and scrub, with a ghost of the full curve so every K keeps its place.", use: "The latent-structure section: the reader steps BIC down to K = 21.", leave: "Autoplay on load. Motion starts when the reader asks." },
     },
     {
-      title: "Attitude responses, 1964", kind: "Photo", source: "NASA",
-      img: { src: `${IMG}/gemini-attitude-diagram.jpg`, w: 1280, h: 1024, alt: "NASA line drawing of the Gemini capsule shown three times, labelled pitch, roll and yaw, each with a curved arrow." },
-      note: { take: "One object drawn three ways, labelled in plain words.", use: "Comparing how GMM and the VAEs carve the same telemetry.", leave: "The heavy filled arrows." },
+      title: "One object, three labelled views", kind: "Photo", source: "NASA, 1964",
+      img: { src: `${IMG}/gemini-attitude-diagram.jpg`, w: 1280, h: 1024, alt: "Technical line drawing: the same capsule drawn three times, each with a curved arrow and a one-word label, pitch, roll and yaw." },
+      note: { take: "The same outline drawn three ways, each named with one plain word.", use: "Showing how GMM and the VAEs carve the same telemetry window.", leave: "The heavy filled arrows and the all-caps title." },
       credit: { text: "NASA, “Diagrams of Spacecraft Responses to Orbit Attitude Control Thrust” (1964), S64-03507. Public domain.", href: "https://images.nasa.gov/details/s64-03507" },
     },
     {
@@ -167,7 +167,7 @@ export default function RefinedPaperBoard() {
           <div className="pt-14"><CitationChip /></div>
         </div>
       ),
-      note: { take: "Distill's bracketed citation, opened by hover, focus or tap.", use: "Every claim that points at Table 1 of the report.", leave: "Pop-ups that cover the line being read." },
+      note: { take: "A bracketed superscript that opens on hover, focus or tap, above the line, not over it.", use: "Every claim that points at Table 1 of the report.", leave: "Pop-ups that cover the sentence being read." },
     },
   ];
 
@@ -184,15 +184,15 @@ export default function RefinedPaperBoard() {
         <AnomalyTimeline {...tl} />
       </>
     ),
-    note: { take: "A thin ink line over parchment bands; the truth sits behind the score.", use: "The scrubbable timeline, full width, once per page.", leave: "Neon highlights. Anomalies don't need to shout." },
+    note: { take: "A thin ink line over parchment bands; the truth sits behind the score, not on top of it.", use: "The scrubbable timeline: the page’s one full-width figure.", leave: "Neon highlights. Anomalies don’t need to shout." },
   };
 
   const B: Item[] = [
     {
-      title: "Parchment nodes, one orange path", kind: "Interface", source: "via transformer-circuits.pub",
-      img: { src: `${IMG}/via-anthropic.jpg`, w: 1200, h: 544, alt: "Crop of Anthropic's 'On the Biology of a Large Language Model': a grid of cards, each holding a small circuit diagram of parchment boxes joined by brown arrows, with one highlighted in orange." },
-      note: { take: "Stacked parchment boxes, thin brown edges, one highlighted path.", use: "The GMM component diagram and the method-pipeline figure.", leave: "The twelve-card grid as a landing page." },
-      credit: { text: "Screenshot crop of “On the Biology of a Large Language Model”, Anthropic (transformer-circuits.pub, 2025).", href: "https://transformer-circuits.pub/2025/attribution-graphs/biology.html" },
+      title: "The pigment behind the accent", kind: "Color", source: "Wikimedia",
+      img: { src: `${IMG}/vermilion-pigment.jpg`, w: 800, h: 800, alt: "Close-up of loose vermilion pigment powder, a dense warm red with soft shadows between the grains." },
+      note: { take: "A red with body: matte, warm, slightly dusty, never glossy or neon.", use: "#B0401C, the raw pigment pulled toward brick so white text on it holds 5.8:1.", leave: "The full saturation. Straight from the jar it would shout over the data." },
+      credit: { text: "Stephhzz, “Vermillon pigment” (CC BY-SA 3.0), via Wikimedia Commons. Cropped.", href: "https://commons.wikimedia.org/wiki/File:Vermillon_pigment.jpg" },
     },
     {
       title: "GMM components as a circuit", kind: "Figure", gen: true,
@@ -204,32 +204,32 @@ export default function RefinedPaperBoard() {
           </p>
         </div>
       ),
-      note: { take: "Subsystems feed components, components land on groups; the high-anomaly component is the one accent path.", use: "The ‘latent structure’ explainer, from real Mission 1 counts.", leave: "Showing all 21 components at once." },
+      note: { take: "Parchment nodes with a 3px stacked edge, oxblood hairlines, and the one vermilion path.", use: "The latent-structure explainer, drawn from real Mission 1 counts.", leave: "All 21 components at once. Six tell the story." },
     },
     {
-      title: "Drafting room, 1964", kind: "Photo", source: "NASA",
-      img: { src: `${IMG}/drafting-room.jpg`, w: 1280, h: 1005, alt: "A large NASA Marshall drafting room in 1964, rows of tilted drafting tables under even fluorescent light." },
-      note: { take: "Rows of equal tables in even light: a grid where every panel matters as much as the next.", use: "The five-method comparison grid.", leave: "The brown carpet and the clutter." },
+      title: "Rows of equal tables", kind: "Photo", source: "NASA, 1964",
+      img: { src: `${IMG}/drafting-room.jpg`, w: 1280, h: 1005, alt: "A large drafting room: rows of identical tilted tables at equal spacing under even overhead light." },
+      note: { take: "Identical units at equal pitch under even light: a grid where no panel outranks another.", use: "The five-method comparison grid, equal widths, one gutter.", leave: "The brown carpet and the clutter." },
       credit: { text: "NASA Marshall Space Flight Center, Saturn Apollo Program drafting room (1964), 6401974. Public domain.", href: "https://images.nasa.gov/details/6401974" },
     },
     {
       title: "Type roles", kind: "Type", gen: true, body: <TypeScale />,
-      note: { take: "Six roles, each with one size and weight, set in our own content.", use: "The design system's type ramp, unchanged on the site.", leave: "In-between sizes. If it isn't on the ramp, it isn't used." },
+      note: { take: "Six roles, each one size and one weight, set in our own content.", use: "The design system’s type ramp, unchanged on the site.", leave: "In-between sizes. If it isn’t on the ramp, it isn’t used." },
     },
     {
       title: "Threshold slider", kind: "Interface", gen: true, interactive: true,
       body: <div className="bg-[var(--paper)] p-4"><ThresholdSlider points={prM1.gmm.points} positiveRate={prM1.positiveRate} label="GMM, Mission 1" /></div>,
-      note: { take: "One control and a readout written as a sentence.", use: "The method detail panel: drag recall, read precision.", leave: "Several sliders at once." },
+      note: { take: "One control and a readout written as a sentence; the crosshair follows the thumb.", use: "The method detail panel: drag recall, read precision.", leave: "Several sliders at once." },
     },
     {
       title: "Sticky contents", kind: "Interface", gen: true, interactive: true,
       body: <div className="bg-[var(--paper)] p-3"><TocFragment /></div>,
-      note: { take: "Anthropic's sticky left contents with § numbers; the current section turns bold.", use: "The long-read view at 1024px and up.", leave: "On phones, a sidebar. It collapses to one Contents button." },
+      note: { take: "A narrow left contents with § numbers; the current section turns bold as you scroll.", use: "The long-read view at 1024px and up.", leave: "A sidebar on phones. There it collapses to one Contents button." },
     },
     {
-      title: "X-1A flight record, 1953", kind: "Photo", source: "NASA",
-      img: { src: `${IMG}/x1a-flight-data.jpg`, w: 1025, h: 1280, alt: "NASA photo of the X-1A in flight with its flight data traces overlaid: stacked strip charts of Mach, altitude and acceleration sharing one time axis." },
-      note: { take: "Stacked strip charts sharing one time axis, labels at the left.", use: "The multi-channel telemetry view under the timeline.", leave: "The photo underlay. Data stays on paper." },
+      title: "Strip charts on one time axis", kind: "Photo", source: "NASA, 1953",
+      img: { src: `${IMG}/x1a-flight-data.jpg`, w: 1025, h: 1280, alt: "A photo with stacked strip-chart traces overlaid: several thin line channels on a shared grid and one horizontal time axis, labels at the left." },
+      note: { take: "Channels stacked on a shared time axis, labels at the left, one grid for all.", use: "The multi-channel view under the anomaly timeline.", leave: "The photo underlay. Data stays on paper." },
       credit: { text: "NASA, “X-1A in flight with flight data superimposed” (1953), E-24911. Public domain.", href: "https://images.nasa.gov/details/E-24911" },
     },
   ];
@@ -244,52 +244,52 @@ export default function RefinedPaperBoard() {
         <SmallMultiples {...m2} />
       </>
     ),
-    note: { take: "Same scale, same ink, side by side; the eye compares without a legend.", use: "The ‘compare methods’ view, toggled between missions.", leave: "Overlaying all curves on one chart." },
+    note: { take: "Same scale, same ink, side by side; the eye compares without a legend.", use: "The compare-methods view, toggled between missions.", leave: "Overlaying all curves on one chart." },
   };
 
   const C: Item[] = [
     {
-      title: "Transport and dataset picker", kind: "Interface", source: "via distill.pub",
-      img: { src: `${IMG}/via-distill.jpg`, w: 425, h: 490, alt: "Crop of Distill's t-SNE article controls: a grid of dataset thumbnails, round pause and restart buttons, a step counter, and three sliders." },
-      note: { take: "Round transport buttons, a step counter, thumbnails as a picker.", use: "The step player and the mission toggle.", leave: "The steel-blue fill. Ours are ink." },
+      title: "Round transport, quiet sliders", kind: "Interface", source: "via distill.pub",
+      img: { src: `${IMG}/via-distill.jpg`, w: 425, h: 490, alt: "Web interface crop: a grid of small thumbnail buttons with one selected, two round icon buttons, a step counter, and three thin labelled sliders." },
+      note: { take: "Round icon buttons beside a live step counter; thin sliders labelled with their value.", use: "The step player’s transport and the mission picker.", leave: "The steel-blue fill. Ours are ink on paper." },
       credit: { text: "Screenshot crop of “How to Use t-SNE Effectively”, Wattenberg, Viégas & Johnson, Distill (2016).", href: "https://distill.pub/2016/misread-tsne/" },
     },
     {
       title: "The one primary action", kind: "Interface", gen: true, interactive: true, body: <PrimaryAction />,
-      note: { take: "Vermilion for one action per view; everything else is ink and underline.", use: "“Read the paper” in the site header and hero.", leave: "Vermilion on chips, links or charts' default state." },
+      note: { take: "Vermilion for one action per view; everything else is ink and underline.", use: "“Read the paper” in the site header and hero.", leave: "Vermilion on chips, links or a chart’s default state." },
     },
     {
-      title: "A locked forme", kind: "Photo", source: "Wikimedia",
-      img: { src: `${IMG}/letterpress-forme.jpg`, w: 700, h: 630, alt: "Metal type locked in a letterpress forme on a wooden hand press, a sonnet set in reverse." },
-      note: { take: "The quiet grid of sorts and the generous leading.", use: "Body-text rhythm: 19px on 30px, 680px measure.", leave: "The dark wood and the weight of the metal." },
+      title: "Type locked in a forme", kind: "Photo", source: "Wikimedia",
+      img: { src: `${IMG}/letterpress-forme.jpg`, w: 700, h: 630, alt: "Metal type locked in a letterpress forme, set in reverse, lines evenly spaced with generous leading." },
+      note: { take: "Even lines of sorts with generous leading: the measure is fixed and nothing floats.", use: "Body-text rhythm: 19px on 30px, 680px measure.", leave: "The dark wood and the weight of the metal." },
       credit: { text: "Thomas Quine, “Early letterpress with lead type” (CC BY 2.0), via Wikimedia Commons.", href: "https://commons.wikimedia.org/wiki/File:Early_letterpress_with_lead_type_(25792503796).jpg" },
     },
     {
-      title: "ESOC control room, 1960s", kind: "Photo", source: "ESA",
-      img: { src: `${IMG}/esoc-1960s.jpg`, w: 1020, h: 663, alt: "ESA's ESOC main control room in Darmstadt in the 1960s: low consoles, large projection screens and a mission emblem on the wall." },
-      note: { take: "The agency whose telemetry we study, at its first consoles: low, calm, functional.", use: "The data-provenance note about the ESA datasets.", leave: "The blue duotone." },
+      title: "Low consoles, one big display", kind: "Photo", source: "ESA, 1960s",
+      img: { src: `${IMG}/esoc-1960s.jpg`, w: 1020, h: 663, alt: "A 1960s control room: low consoles with small dials in the foreground and large plain projection screens on the far wall." },
+      note: { take: "Small dials kept low, one large plain display above them: detail below, overview on top.", use: "The explorer’s layout: the timeline on top, method readouts in a row beneath.", leave: "The blue duotone." },
       credit: { text: "ESA, “ESOC Main Control Room in the Sixties” (CC BY-SA 3.0 IGO), via Wikimedia Commons.", href: "https://commons.wikimedia.org/wiki/File:ESOC_Main_Control_Room_In_The_Sixties_ESA306355.png" },
     },
     {
       title: "Paper grain and hairlines", kind: "Texture", gen: true, body: <PaperGrain />,
-      note: { take: "Fractal-noise grain at 4.5% and four rule weights.", use: "The page ground and section dividers.", leave: "Grain you can see. If it's visible, it's too strong." },
+      note: { take: "Fractal-noise grain at 4.5% and four rule weights.", use: "The page ground and the section dividers.", leave: "Grain you can see. If it’s visible, it’s too strong." },
     },
     {
-      title: "Narrative left, chart right", kind: "Interface", source: "via r2d3.us",
-      img: { src: `${IMG}/via-r2d3.jpg`, w: 1310, h: 640, alt: "Crop of R2D3's 'A Visual Introduction to Machine Learning': a light Helvetica title and paragraph on the left, a scatterplot matrix of green and navy dots on the right." },
-      note: { take: "A light text column beside one persistent chart that morphs as you scroll.", use: "The method pipeline: raw channels, to PCA, to GMM components.", leave: "Cropping the chart off-screen on phones." },
-      credit: { text: "Screenshot crop of “A Visual Introduction to Machine Learning”, Yee & Chu, R2D3 (2015).", href: "https://r2d3.us/visual-intro-to-machine-learning-part-1/" },
+      title: "Laid lines, held to the light", kind: "Texture", source: "Wikimedia",
+      img: { src: `${IMG}/laid-paper-paris-1746.jpg`, w: 1200, h: 480, alt: "Backlit close-up of old laid paper: fine horizontal laid lines crossed by faint vertical chain lines at wide, even intervals, warm cream with a few flecks." },
+      note: { take: "A fine texture plus a wide, faint rhythm of chain lines: structure you feel before you see.", use: "The Paper ground, #F6F2EA: warm cream, with grain kept fine and even across the page.", leave: "The foxing and the stains. Our grain is even." },
+      credit: { text: "MeeshKapiche, “Antique Laid Paper, Paris 1746” (CC BY-SA 4.0), via Wikimedia Commons. Cropped.", href: "https://commons.wikimedia.org/wiki/File:Antique_Laid_Paper,_Paris_1746.jpg" },
     },
     {
-      title: "Railroad curve, Keuffel & Esser", kind: "Photo", source: "Wikimedia",
-      img: { src: `${IMG}/railroad-curve-k-e.jpg`, w: 1600, h: 373, alt: "A clear acrylic drafting curve on white, one long arc with a small engraved K+E label at its centre." },
-      note: { take: "One clear arc and a tiny engraved label: restraint at Apple's level.", use: "Easing curves and the 3px corner radius.", leave: "The plastic glare." },
+      title: "One clear arc, one small label", kind: "Photo", source: "Wikimedia",
+      img: { src: `${IMG}/railroad-curve-k-e.jpg`, w: 1600, h: 373, alt: "A clear acrylic drafting curve on white: one long shallow arc with a tiny engraved label at its centre." },
+      note: { take: "A single long arc and a tiny engraved label: restraint in one gesture.", use: "The reveal easing, cubic-bezier(.22,.61,.36,1), and the 3px corner.", leave: "The plastic glare." },
       credit: { text: "Central Intelligence Agency, “French Curve Drafting Set”. Public domain, via Wikimedia Commons.", href: "https://commons.wikimedia.org/wiki/File:French_Curve_Drafting_Set_(30844678906).jpg" },
     },
     {
-      title: "A computer at work, 1951", kind: "Photo", source: "NASA",
-      img: { src: `${IMG}/computer-slide-rule.jpg`, w: 1280, h: 960, alt: "A NACA computer reads a slide rule beside a Friden calculator, a ruled data sheet in front of her." },
-      note: { take: "Careful work over ruled sheets: exact, unhurried.", use: "The voice of captions and footnotes.", leave: "Sepia nostalgia. The site is new; only its manners are old." },
+      title: "Ruled sheet, slide rule, calculator", kind: "Photo", source: "NASA, 1951",
+      img: { src: `${IMG}/computer-slide-rule.jpg`, w: 1280, h: 960, alt: "A woman reads a slide rule beside a desk calculator, a ruled data sheet in front of her." },
+      note: { take: "Three instruments, each with one job, on a ruled sheet: precise, unhurried.", use: "The voice of captions and footnotes: short, exact, numbers in mono.", leave: "Sepia nostalgia. The site is new; only its manners are old." },
       credit: { text: "NASA Glenn Research Center, “NACA Computer at the Lewis Flight Propulsion Laboratory” (1951), GRC-1951-C-27174. Public domain.", href: "https://images.nasa.gov/details/GRC-1951-C-27174" },
     },
     {
@@ -335,7 +335,7 @@ export default function RefinedPaperBoard() {
             <p>
               <span className="text-[var(--ink)]">✦</span> generated by your agent ({generated}) · {total - generated} collected
             </p>
-            <p>After Ciechanowski, R2D3, Distill, Anthropic, Apple</p>
+            <p>After Ciechanowski, Distill, Apple and the drafting table</p>
           </div>
         </div>
       </header>
