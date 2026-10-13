@@ -6,7 +6,7 @@ description: Check pages in a real browser and report what's broken, with screen
 # Verify UI in a Real Browser
 
 1. Make sure the dev server is running (`npm run dev`). Use next-devtools MCP to read compile and runtime errors first.
-2. With Playwright MCP, open each changed route at **390**, **1440**, and **320** px widths.
+2. Run `node scripts/matrix.mjs <url> screenshots/<name>` for EVERY screen size: phones 320/375/390/430 (touch), 844x390 landscape, iPad 768/1024, 1280/1440/1920/2560. View each screenshot. (Single shots: `scripts/shot.mjs`.)
 3. Try every interaction: click, filter, open and close panels/modals, and Tab through every control
    (a focus ring must be visible). Check hover and pressed states.
 4. Check the console for errors and warnings (Playwright console messages). Never use chrome-devtools MCP or Claude in Chrome.
