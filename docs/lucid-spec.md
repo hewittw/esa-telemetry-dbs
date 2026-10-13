@@ -46,7 +46,7 @@ looks like", "How many operating modes does the data contain?"), and gloss every
 ## Keep (all already working in the seed)
 One vermilion action per view; one global mission control; page chips → reader; Table 1 with provenance; the
 reader + Download PDF; draw-in motion (never half-drawn; reduced motion = final); the authorship footer
-("Designed & built by Hewitt Watkins"; the paper citation Rhea Madhogarhia & Hewitt Watkins; who did what); the 9 design
+("Designed & built by Hewitt Watkins"; the paper citation Rhea Madhogarhia & Hewitt Watkins; NO who-built-what anywhere); the 9 design
 requirements; all 11 screen sizes; states on every control; contrast ≥ 4.5:1.
 
 ## The three versions (each tries to do the above *best*, in its own way)
