@@ -146,3 +146,13 @@ Append as decisions happen, newest at the bottom.
     paper citation kept accurate).
   - **Hewitt decided:** the project, the audience, the reference groupings for each direction, the public repo, the report viewer.
 - Full notes: `docs/talking-points.md`.
+
+## 2026-10-13 · Two more finalists (the user's call)
+- The user decided to keep going overnight and asked for **two more finished sites in the other two styles**, so they
+  can choose their favourite in the morning rather than accept the agent's pick.
+- `/finalists/refined-paper` and `/finalists/white-immersion` are refined to the same bar as `/telemetry` (accent audit,
+  one global mission control, page chips + provenance, a guided tour, draw-in motion, a simplicity pass, the authorship footer).
+- Each also fixes the weaknesses that lost the comparison. **refined-paper:** 11.8k → ≤ 7k px, and a live figure in the
+  empty hero third. **white-immersion:** the finding becomes the first thing seen, one cyan action, normal scrolling
+  instead of scroll-to-travel, selectable text, no overlaps on phones.
+- The final pick, and which route becomes the site linked from the hub, is Hewitt's decision tomorrow.
