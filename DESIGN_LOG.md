@@ -91,3 +91,25 @@ Append as decisions happen, newest at the bottom.
   Alignment, What's Clickable, Choosing a Direction, and the Full Design System 1–6 overview, plus all 18
   Parts-of-an-Interface elements labelled with the slide's names.
 - **Consistency fix:** "best" badges now say what they mean (highest PR-AUC = GMM on M1; best VAE as bolded in the paper = TVAE).
+
+## 2026-10-13 · Design systems built, independently verified, deployed
+| System | Standard | Novel (from) | Telemetry | Principles |
+|---|---|---|---|---|
+| intense-space | 30 | 10 (ICOMAT, Helion, Planet, NASA Eyes) | 8 | L1–L9 |
+| refined-paper | 28 | 10 (Ciechanowski, R2D3, Distill, transformer-circuits, Apple) | 8 | L1–L9 |
+| white-immersion | 32 | 9 (Igloo, Skyviewer) | 9 | L1–L9 |
+- Each has the handout's sections 1–6 (colour roles with *computed* contrast, type roles, spacing/shape, components,
+  a forced 6-state matrix built from the live class strings, empty/loading/error/success with a simulator), all 18
+  Parts-of-an-Interface elements under the slide's names, and every component live and keyboard-accessible.
+- **The user's spec:** ≥ 20 standard + 5–10 novel from the inspiration sites + 5–10 satellite-specific components.
+  The telemetry pieces run on the real data: an alarm-threshold operating point that recomputes precision/recall/
+  F1 live from a PR curve, a mission switcher, a BIC-vs-K picker, a timeline scrubber over fault segments, a sortable Table 1.
+- **Verifier catches:** Tailwind v4 `outline-none` + `focus-visible:outline-2` renders *no* ring (needs
+  `outline-solid`); the ≡ menu had no arrow keys; recomputed HVAE/TVAE M2 curves (0.450/0.452) read as Table 1 values
+  (0.434/0.438) and are now labelled "recomputed · Table 1: …"; empty holes at 1440; magenta made strictly "failure + a word".
+- **Decided:** "Best" means two different things. **Top PR-AUC** = GMM on M1 (0.384), TVAE on M2 (0.438);
+  **Best VAE (bolded in the paper)** = TVAE. Both badges say which one they are.
+- **Decided (white-immersion):** a scannable scroll library *inside* an immersive frame (HUD, fly-to, tour, atlas,
+  real deep zoom) rather than a full pan/zoom canvas. A UI library has to be linkable, keyboard-usable, and readable at 320px.
+- **User request:** "Designed & built by Hewitt Watkins" plus an About section on the hub; the paper keeps its accurate
+  two-author citation. The final report PDF is added for an in-site viewer and download.
