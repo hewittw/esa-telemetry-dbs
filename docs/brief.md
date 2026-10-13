@@ -31,3 +31,11 @@ Very modern and clean: SpaceX, Apple. Incredible motion, all-new figures, precis
 | | | | `/mood-boards/` | `/design-systems/` |
 
 **Picked:** _TBD_, and why (this goes on the hub too).
+
+## Required on the final site (the user's requests)
+- **Authorship:** say clearly that the site is Hewitt Watkins's project (designed and built by Hewitt), while the paper
+  keeps its accurate citation (Madhogarhia & Watkins; Hewitt did GMM + VAEs, Rhea did the baselines).
+- **Report viewer + download:** a striking, in-style viewer for the final PDF: page images in `public/paper/pages/`
+  (p-01…p-11 at 1600px, thumb-01…11), keyboard/swipe paging, zoom, a page strip, deep links to the pages that back each
+  finding (e.g. Table 1 on p.5, Fig. 7 on p.11), and a clear **Download PDF** action
+  (`/paper/esa-telemetry-latent-structure.pdf`, `download` attribute). No PDF.js or new packages.

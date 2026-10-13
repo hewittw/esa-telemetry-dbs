@@ -71,8 +71,11 @@ export default function Hub() {
         ESA Telemetry
       </h1>
       <p className="mt-5 max-w-2xl text-lg leading-relaxed text-neutral-600">
-        Three visual directions for an interactive explorer of our paper,{" "}
-        <em>Uncovering Latent Structure in ESA Satellite Telemetry</em> (Madhogarhia &amp; Watkins).
+        Three visual directions for an interactive explorer of the paper{" "}
+        <em>Uncovering Latent Structure in ESA Satellite Telemetry</em>.
+      </p>
+      <p className="mt-4 font-mono text-xs uppercase tracking-[0.16em] text-neutral-500">
+        Designed &amp; built by Hewitt Watkins
       </p>
 
       <section className="mt-20" aria-labelledby="mb">
@@ -110,6 +113,21 @@ export default function Hub() {
         >
           Fifteen reference studies →
         </Link>
+      </section>
+      <section className="mt-20" aria-labelledby="about">
+        <SectionHead n="—" title="About this site" note="Authorship" />
+        <div id="about" className="mt-6 grid gap-6 text-[15px] leading-relaxed text-neutral-700 md:grid-cols-2">
+          <p>
+            This site is <strong className="font-medium text-neutral-900">Hewitt Watkins&apos;s project</strong>:
+            the research, the three mood boards, the three design systems, and the explorer were directed,
+            designed, and built by Hewitt for MPCS 51238 <em>Design, Build, Ship</em> (UChicago, Autumn 2026).
+          </p>
+          <p className="text-neutral-600">
+            The paper it presents was written for TTIC 31220 (Spring 2026) by Rhea Madhogarhia and Hewitt
+            Watkins. Hewitt implemented the GMM and VAE experiments; Rhea implemented the K-Means, PCA, and
+            Kernel PCA baselines.
+          </p>
+        </div>
       </section>
     </main>
   );
