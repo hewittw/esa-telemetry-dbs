@@ -101,12 +101,12 @@
   color: var(--wi-ink);
   transition: box-shadow 160ms var(--wi-ease), background 160ms var(--wi-ease), transform 120ms var(--wi-ease);
 }
-button.circle { cursor: pointer; }
-button.circle:hover, .wi-cHover { box-shadow: inset 0 0 0 1px var(--wi-ink); }
-button.circle:focus-visible, .wi-cFocus { outline: 2px solid var(--wi-ink); outline-offset: 3px; }
-button.circle:active, .wi-cPress { transform: scale(0.94); background: #e9edf2; }
-button.circle[aria-pressed="true"], .wi-cSel { background: var(--wi-ink); color: #fff; border-color: var(--wi-ink); }
-button.circle:disabled, .wi-cDis { color: #8a94a1; border-style: dashed; background: transparent; cursor: not-allowed; transform: none; box-shadow: none; }
+button.wi-circle { cursor: pointer; }
+button.wi-circle:hover, .wi-cHover { box-shadow: inset 0 0 0 1px var(--wi-ink); }
+button.wi-circle:focus-visible, .wi-cFocus { outline: 2px solid var(--wi-ink); outline-offset: 3px; }
+button.wi-circle:active, .wi-cPress { transform: scale(0.94); background: #e9edf2; }
+button.wi-circle[aria-pressed="true"], .wi-cSel { background: var(--wi-ink); color: #fff; border-color: var(--wi-ink); }
+button.wi-circle:disabled, .wi-cDis { color: #8a94a1; border-style: dashed; background: transparent; cursor: not-allowed; transform: none; box-shadow: none; }
 
 .wi-textBtn {
   font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;
@@ -121,6 +121,9 @@ button.circle:disabled, .wi-cDis { color: #8a94a1; border-style: dashed; backgro
 .wi-segDot { width: 7px; height: 7px; border-radius: 99px; border: 1px solid var(--wi-ink); }
 .wi-seg[aria-pressed="true"] { background: rgba(255, 255, 255, 0.72); color: var(--wi-ink); box-shadow: inset 0 0 0 1px var(--wi-ink); }
 .wi-seg[aria-pressed="true"] .wi-segDot { background: var(--wi-ink); }
+.wi-seg[aria-pressed="true"]:hover { background: #fff; box-shadow: inset 0 0 0 1.5px var(--wi-ink); }
+/* HUD text sits over the moving field: a frost backing keeps it legible */
+.wi-hudText { width: fit-content; background: rgba(244, 246, 248, 0.82); padding: 2px 6px; margin-left: -6px; }
 
 /* primary action: the one cyan thing */
 .wi-pill {

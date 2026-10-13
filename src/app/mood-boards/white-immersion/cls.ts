@@ -14,6 +14,7 @@ export const s = {
   glass: "wi-glass",
   gridCard: "wi-gridCard",
   hint: "wi-hint",
+  hudText: "wi-hudText",
   label: "wi-label",
   line: "wi-line",
   link: "wi-link",

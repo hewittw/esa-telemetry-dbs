@@ -21,6 +21,15 @@ const getLay = (): Lay =>
 
 type Cam = { x: number; y: number; z: number };
 
+// Overview zoom. Desktop fits the whole 6000 × 3000 world. Portrait screens fit its height instead, so the
+// four rows fill the screen and the outer columns run off both edges (an honest "there is more, drag").
+const fitFor = (w: number, h: number, L: Lay) => {
+  const all = Math.min((w - 150) / 5800, (h - 250) / 2700);
+  if (L === "desk") return all;
+  if (L === "short") return Math.max(0.17, all);
+  return Math.min(0.27, Math.max(0.17, (h - 300) / 2700));
+};
+
 export function Immersion({ data }: { data: BoardData }) {
   const pos = useMemo(() => layout(), []);
   const [mode, setMode] = useState<"field" | "grid">("field");
@@ -88,6 +97,7 @@ function Field(p: FieldProps) {
   const dirty = useRef(true);
   const dragged = useRef(false);
   const fromPointer = useRef(false);
+  const introDone = useRef(false);
   const overlayRef = useRef(overlay);
   overlayRef.current = overlay;
   const reducedRef = useRef(reduced);
@@ -125,8 +135,7 @@ function Field(p: FieldProps) {
 
   const fitZoom = useCallback(() => {
     const { w, h } = size.current;
-    const f = Math.min((w - 150) / 5800, (h - 250) / 2700);
-    return layRef.current === "desk" ? f : Math.max(0.17, f);
+    return fitFor(w, h, layRef.current);
   }, []);
 
   const flyTo = useCallback((t: Cam, onDone?: () => void) => {
@@ -162,7 +171,7 @@ function Field(p: FieldProps) {
     // keep the card clear of the note panel (left on desktop, bottom sheet on phones)
     const L = layRef.current;
     const box = L === "sheet"
-      ? { l: 12, r: w - 64, t: 124, b: h * 0.56 - 84 }
+      ? { l: 12, r: w - 64, t: 72, b: h * 0.56 - 84 }
       : L === "short"
         ? { l: 344, r: w - 70, t: 64, b: h - 64 }
         : { l: 420, r: w - 96, t: 96, b: h - 110 };
@@ -174,6 +183,7 @@ function Field(p: FieldProps) {
 
   const select = useCallback((i: number | null, opts: { fly?: boolean; focus?: boolean } = {}) => {
     setSel(i);
+    introDone.current = true;
     if (i === null) return;
     if (opts.focus) cardRefs.current[i]?.focus({ preventScroll: true });
     if (opts.fly !== false) flyTo(targetFor(i));
@@ -195,15 +205,22 @@ function Field(p: FieldProps) {
       apply();
     };
     size.current = { w: st.clientWidth, h: st.clientHeight };
-    const f = Math.min((size.current.w - 150) / 5800, (size.current.h - 250) / 2700);
-    const nz = getLay() === "desk" ? f : Math.max(0.17, f);
-    cam.current = { x: 0, y: -20 / nz, z: nz };
+    const L = getLay();
+    layRef.current = L;
+    const nz = fitFor(size.current.w, size.current.h, L);
+    const home = { x: 0, y: -20 / nz, z: nz };
+    // intro: open close on the title (legible), then pull back to the vast field, so the very first
+    // thing a visitor sees is the camera moving: this is a space you can zoom through.
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const iz = Math.max(nz * 1.25, Math.min(0.42, (size.current.w - (L === "desk" ? 32 : 112)) / 1180));
+    cam.current = still ? home : { x: 0, y: -10, z: iz };
     setZoomText(cam.current.z.toFixed(2) + "×");
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(st);
-    return () => ro.disconnect();
-  }, [apply, setZoomText]);
+    const id = still ? 0 : window.setTimeout(() => { if (!introDone.current) { introDone.current = true; flyTo(home); } }, 650);
+    return () => { ro.disconnect(); window.clearTimeout(id); };
+  }, [apply, setZoomText, flyTo]);
 
   /* background: the snowfield of data, drifting shards, optional coordinate grid */
   useEffect(() => {
@@ -308,7 +325,7 @@ function Field(p: FieldProps) {
       cam.current = clampCam({ x: wx - (sx - w / 2) / z, y: wy - (sy - h / 2) / z, z });
       apply();
     };
-    const interrupt = () => { cancelAnimationFrame(anim.current); cancelAnimationFrame(inertia); touchRef.current(true); setTouring(false); };
+    const interrupt = () => { introDone.current = true; cancelAnimationFrame(anim.current); cancelAnimationFrame(inertia); touchRef.current(true); setTouring(false); };
     const down = (e: PointerEvent) => {
       if (e.button !== 0 || (e.target as HTMLElement).closest("[data-hud]")) return;
       pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -447,11 +464,11 @@ function Field(p: FieldProps) {
           <Link href="/" className={`${s.glass} ${s.textBtn} inline-flex items-center`}>← Hub</Link>
           <button type="button" className={`${s.glass} ${s.textBtn} sm:hidden`} onClick={p.onGrid}>Grid</button>
         </div>
-        <h1 className={`${lay === "short" ? "mt-2" : "mt-4"} font-[family-name:var(--wi-display)] text-[13px] leading-snug tracking-[0.06em] text-[var(--wi-ink)] sm:text-[15px]`}>
+        <h1 className={`${s.hudText} ${lay === "short" ? "mt-2" : "mt-4"} ${lay === "sheet" && sel !== null ? "hidden" : ""} font-[family-name:var(--wi-display)] text-[13px] leading-snug tracking-[0.06em] text-[var(--wi-ink)] sm:text-[15px]`}>
           {MOOD.split(" · ").map((w, i) => <span key={w} className="block sm:inline">{i > 0 && <span className="hidden sm:inline"> · </span>}{w}</span>)}
         </h1>
-        <p className={`mt-2 hidden text-[11px] font-light leading-relaxed text-[var(--wi-ink)] ${lay === "short" ? "" : "sm:block"}`}>{COUNT_LINE}</p>
-        <p className={`mt-0.5 hidden text-[11px] font-light text-[var(--wi-muted)] ${lay === "short" ? "" : "sm:block"}`}>✦ generated by your agent · {GEN} of {N}</p>
+        <p className={`${s.hudText} mt-2 hidden text-[11px] font-light leading-relaxed text-[var(--wi-ink)] ${lay === "short" ? "" : "sm:block"}`}>{COUNT_LINE}</p>
+        <p className={`${s.hudText} mt-0.5 hidden text-[11px] font-light text-[var(--wi-muted)] ${lay === "short" ? "" : "sm:block"}`}>✦ generated by your agent · {GEN} of {N}</p>
       </div>
 
       <div ref={worldRef} className={s.world} data-has-sel={sel !== null}>
@@ -566,7 +583,10 @@ function Field(p: FieldProps) {
         style={{ opacity: p.touched || sel !== null ? 0 : 1 }}
         aria-hidden="true"
       >
-        <span className="bg-[rgba(244,246,248,0.85)] px-2 py-1">{coarse ? "Drag · pinch · tap an artifact" : "Drag to pan · scroll to zoom · click any artifact"}</span>
+        <span className={`${s.glass} inline-flex items-center gap-2.5 px-3 py-2`}>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 1.5v13M1.5 8h13M5.5 4 8 1.5 10.5 4M5.5 12 8 14.5 10.5 12M4 5.5 1.5 8 4 10.5M12 5.5 14.5 8 12 10.5" /></svg>
+          <span className="whitespace-nowrap">{coarse ? "Drag · pinch · tap a card" : "Drag to pan · scroll to zoom · click any artifact"}</span>
+        </span>
       </div>
 
       {/* ---------- bottom: credits, primary tour pill, grid ---------- */}
@@ -613,7 +633,7 @@ function CircleBtn({ label, onClick, pressed, small, children }: { label: string
 
 function Note({ a, i }: { a: Artifact; i: number }) {
   const row = (k: string, v: string) => (
-    <div className="grid grid-cols-[52px_1fr] gap-3">
+    <div className="grid grid-cols-1 gap-0.5 min-[360px]:grid-cols-[52px_1fr] min-[360px]:gap-3">
       <dt className="pt-[3px] text-[10.5px] font-light uppercase tracking-[0.12em] text-[var(--wi-muted)]">{k}</dt>
       <dd className="text-[13px] leading-[1.6] text-[var(--wi-ink)]">{v}</dd>
     </div>

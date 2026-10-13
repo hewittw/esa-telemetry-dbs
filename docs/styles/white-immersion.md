@@ -40,6 +40,7 @@ Rule: white on white has no contrast, so separation comes from Rime hairlines an
 ## Interaction model
 - Pan (drag / one finger), zoom (wheel / pinch / ± circles), fit (0), coordinate-grid toggle, guided tour vs free explore.
 - Tab or ← → steps through objects. Focus flies the camera, draws Ink corner brackets, and opens the note.
+- First view: the camera opens close on the title, then pulls back to the field (skipped under reduced motion). Desktop fits the whole world; portrait screens fit its height so the outer columns run off the edges. A frosted hint chip (move glyph + "Drag · pinch · tap a card") holds until the first interaction.
 - Notes never cover the object: a side panel on desktop and phone landscape, a bottom sheet with the object flown above it on phones and tablet portrait.
 
 ## Do
