@@ -79,6 +79,29 @@ export default function Decisions() {
         <span>Design &amp; Decisions</span>
       </nav>
 
+      <section aria-label="A note from the designer" className="mt-12 max-w-3xl border-l-2 border-neutral-900 pl-6">
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-neutral-500">A note from the designer</p>
+        <div className="mt-4 space-y-4 text-xl leading-relaxed text-neutral-800 md:text-[22px]">
+          <p>
+            Going in, I expected to want the most creative, edge-pushing science site I could make. The final site
+            took a different form: a minimalist, architectural style. I&apos;ve come to think it&apos;s the least
+            distracting way to present complex information well.
+          </p>
+          <p>
+            I like the contrast between a quiet style and the intense concepts and findings it carries, and I find
+            that restraint pairs well with the theory behind space. Crazy that it all started with the colors on{" "}
+            <Link
+              href="/mood-boards/refined-paper"
+              className={`underline decoration-neutral-400 underline-offset-4 hover:decoration-neutral-900 ${ring}`}
+            >
+              my water bottle
+            </Link>
+            .
+          </p>
+        </div>
+        <p className="mt-4 text-sm text-neutral-500">Hewitt Watkins</p>
+      </section>
+
       <header className="mt-16 max-w-3xl">
         <h1 className="text-5xl font-semibold leading-[0.95] tracking-[-0.035em] md:text-6xl">
           Every choice, and why.
