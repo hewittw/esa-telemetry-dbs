@@ -12,8 +12,8 @@
 .rps-root .rps-in { opacity: 0; transform: translateY(8px); animation: rps-in 700ms var(--ease) forwards; }
 @keyframes rps-in { to { opacity: 1; transform: none; } }
 
-/* Figures draw their lines in once, on entering view: 900ms ease-out (pathLength = 1). */
-.rps-root [data-inview] .rps-draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 900ms var(--ease), opacity 200ms ease-out, stroke-width 200ms ease-out; }
+/* Figures draw their lines in once, on entering view: 1.8s, the system curve (pathLength = 1). */
+.rps-root [data-inview] .rps-draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1800ms var(--ease), opacity 200ms ease-out, stroke-width 200ms ease-out; }
 .rps-root [data-inview="true"] .rps-draw { stroke-dashoffset: 0; }
 
 /* The method ladder: each stair rises once, left to right. */

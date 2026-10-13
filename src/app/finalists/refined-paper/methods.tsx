@@ -13,13 +13,15 @@ import { PageRef } from "./reader";
 
 const POS = { 1: 0.111, 2: 0.0468 } as const;
 const MAX = 0.5;
-const SECTION_PAGE = { baseline: [3, "§3"], parametric: [3, "§4"], generative: [4, "§5"] } as const;
+const SECTION_PAGE = { baseline: [2, "§3"], parametric: [3, "§4"], generative: [4, "§5"] } as const;
+// Nyström-KPCA is described on p. 3; K-Means and PCA on p. 2.
+const pageOf = (r: MethodRow) => (r.method.startsWith("Nystroem") ? ([3, "§3"] as const) : SECTION_PAGE[r.family]);
 
 const HOW: Record<string, string> = {
   "K-Means": "MiniBatch K-Means with K swept 2–10; silhouette picks K = 2 (0.388). The score is distance to the nearest centroid.",
   "PCA Recon": "PCA keeping d = 33 components, 95% of the variance. The score is reconstruction error.",
   "PCA + K-Means": "K-Means in the 33-dimensional PCA space. The score is centroid distance.",
-  "Nystroem-KPCA Dist": "An RBF kernel map from 300 Nyström components (γ = 0.1/n), then K-Means. Centroid distance edges past the plateau.",
+  "Nystroem-KPCA Dist": "An RBF kernel map from 300 Nyström components (γ = 0.1/n), scored by centroid distance: a marginal, fragile gain.",
   "Nystroem-KPCA Feat-Recon": "The same kernel map scored by reconstruction error in feature space, which collapses to 0.164.",
   GMM: "A full-covariance Gaussian mixture on PCA-30, K chosen by BIC on an 800K-row sample. The score is negative log-likelihood.",
   CapacityVAE: "A Conv1D encoder [64, 128, 256] on 32-step windows of nominal telemetry, with denoising and a capacity-controlled KL term.",
@@ -31,7 +33,7 @@ export type Prov = { s: "verified" | "near" | "recomputed" | "unsaved"; note: st
 const PROV = {
   verified: { Icon: IconCheck, color: "var(--sage)", word: "Verified" },
   near: { Icon: IconWarn, color: "var(--ochre)", word: "Near" },
-  recomputed: { Icon: IconWarn, color: "var(--ochre)", word: "Recomputed" },
+  recomputed: { Icon: IconWarn, color: "var(--ochre)", word: "Mixed" },
   unsaved: { Icon: IconDash, color: "var(--muted)", word: "Not saved" },
 } as const;
 function ProvTag({ p }: { p: Prov }) {
@@ -86,7 +88,7 @@ function Detail({ r, rows, prov }: { r: MethodRow; rows: MethodRow[]; prov: Prov
   const peers = rows.filter((x) => x.mission === r.mission).sort((a, b) => b.prAuc - a.prAuc);
   const rank = peers.findIndex((x) => x.id === r.id) + 1;
   const k = r.latentK != null ? `${r.family === "generative" ? "latent " : ""}K = ${r.latentK}` : r.d != null ? `d = ${r.d}` : null;
-  const [pg, sec] = SECTION_PAGE[r.family];
+  const [pg, sec] = pageOf(r);
   return (
     <div key={r.id} className="rpd-fade">
       <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>{FAMILY[r.family].name} · Mission {r.mission}{k ? ` · ${k}` : ""}</p>

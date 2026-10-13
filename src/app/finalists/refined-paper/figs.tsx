@@ -6,7 +6,8 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
 import type { Bic, PrSet, Twin } from "../../design-systems/refined-paper/data";
 import { Svg, path, useInView } from "../../design-systems/refined-paper/fig";
-import { FOCUS, IconPause, IconPlay, IconStep, MONO, SANS, SERIF, btnTransport, btnTransportMain, caption } from "../../design-systems/refined-paper/kit";
+import { IconPause, IconPlay, IconStep, MONO, SANS, SERIF, btnTransport, btnTransportMain, caption } from "../../design-systems/refined-paper/kit";
+import { Segmented } from "../../design-systems/refined-paper/ui";
 import { PageRef } from "./reader";
 
 export type M = 1 | 2;
@@ -101,8 +102,7 @@ export function ChannelField({ ch, stage, label }: { ch: Ch[]; stage: 0 | 1 | 2;
 export function HeroField({ ch, m }: { ch: Ch[]; m: M }) {
   const [stage, setStage] = useState<1 | 2>(1);
   useEffect(() => {
-    if (reduced()) { setStage(2); return; }
-    const t = setTimeout(() => setStage(2), 420);
+    const t = setTimeout(() => setStage(2), reduced() ? 0 : 420);
     return () => clearTimeout(t);
   }, []);
   const subs = new Set(ch.map((c) => c.s)).size, groups = new Set(ch.map((c) => c.g)).size;
@@ -113,9 +113,11 @@ export function HeroField({ ch, m }: { ch: Ch[]; m: M }) {
   );
 }
 
-/** §01: the sticky graphic. Three short steps scroll past; the field follows. */
+/** §01: three steps, one field. Desktop: a sticky graphic with the steps scrolling past it.
+    Phones and tablets: the same field with a three-way stepper under it (no sticky, no long scroll). */
 export function ChannelSteps({ ch, m }: { ch: Ch[]; m: M }) {
   const [step, setStep] = useState<0 | 1 | 2>(0);
+  const [tap, setTap] = useState<0 | 1 | 2>(0);
   const refs = useRef<(HTMLDivElement | null)[]>([]);
   useEffect(() => {
     const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && setStep(+(e.target as HTMLElement).dataset.step! as 0 | 1 | 2)), { rootMargin: "-45% 0px -45% 0px" });
@@ -128,26 +130,44 @@ export function ChannelSteps({ ch, m }: { ch: Ch[]; m: M }) {
     [`${subs} subsystems`, <>ESA files them under {subs} <b className="font-semibold text-[var(--ochre)]">subsystems</b>: physical units such as power or attitude control.</>],
     [`${groups} groups`, <>Each subsystem divides into finer <b className="font-semibold text-[var(--prussian)]">operational groups</b>, such as battery charging.</>],
   ];
+  const cap = m === 1 ? <>Mission 1 labels: genuine system faults, marked by ESA engineers.</> : <>Mission 2 labels: ≈95% rare operational events, not failures.</>;
+  const label = (k: number) => `Mission ${m} channels. Step ${k + 1}: ${STEPS[k][0]}.`;
   return (
-    <div className="grid gap-x-10 lg:grid-cols-12">
-      <div className="sticky top-14 z-[1] -mx-5 self-start bg-[var(--paper)] px-5 pt-3 pb-2 md:-mx-10 md:px-10 lg:top-[88px] lg:order-2 lg:col-span-7 lg:mx-0 lg:bg-transparent lg:px-0 lg:pt-0">
-        <Figure cap={<>Step {step + 1} of 3 · Mission {m}.</>} chip={<PageRef p={2}>§2</PageRef>}>
-          <div className="mx-auto max-w-[520px] lg:max-w-none [&_svg]:max-h-[30vh] lg:[&_svg]:max-h-none">
-            <ChannelField ch={ch} stage={step} label={`Mission ${m} channels. Step ${step + 1}: ${STEPS[step][0]}.`} />
+    <>
+      {/* phones + tablets */}
+      <div className="lg:hidden">
+        <Figure cap={cap} chip={<PageRef p={2}>§2</PageRef>}>
+          <div className="mx-auto max-w-[520px]">
+            <ChannelField ch={ch} stage={tap} label={label(tap)} />
+          </div>
+          <div className="mt-5">
+            <Segmented size="sm" label="Step through the channel hierarchy" value={tap} onChange={setTap} options={(["Channels", "Subsystems", "Groups"] as const).map((t, k) => ({ value: k as 0 | 1 | 2, label: t }))} />
+          </div>
+          <div key={tap} className="rpd-fade mt-4 min-h-[6.5rem]" aria-live="polite">
+            <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>{String(tap + 1).padStart(2, "0")} · {STEPS[tap][0]}</p>
+            <p className={`${SERIF} mt-1.5 max-w-[34ch] text-[19px] leading-[1.4]`}>{STEPS[tap][1]}</p>
           </div>
         </Figure>
       </div>
-      <div className="lg:order-1 lg:col-span-5">
-        {STEPS.map(([t, body], k) => (
-          <div key={t} ref={(el) => { refs.current[k] = el; }} data-step={k} className={`flex min-h-[42vh] items-center py-6 transition-colors duration-300 lg:min-h-[36vh] ${step === k ? "" : "text-[var(--muted)] [&_b]:!text-[var(--muted)]"}`}>
-            <div>
-              <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>{String(k + 1).padStart(2, "0")} · {t}</p>
-              <p className={`${SERIF} mt-2 max-w-[26ch] text-[22px] leading-[1.4] sm:text-[25px]`}>{body}</p>
+      {/* desktop: sticky graphic */}
+      <div className="hidden gap-x-10 lg:grid lg:grid-cols-12">
+        <div className="sticky top-[88px] order-2 col-span-7 self-start">
+          <Figure cap={cap} chip={<PageRef p={2}>§2</PageRef>}>
+            <ChannelField ch={ch} stage={step} label={label(step)} />
+          </Figure>
+        </div>
+        <div className="order-1 col-span-5">
+          {STEPS.map(([t, body], k) => (
+            <div key={t} ref={(el) => { refs.current[k] = el; }} data-step={k} className={`flex min-h-[34vh] items-center py-6 transition-colors duration-300 ${step === k ? "" : "text-[var(--muted)] [&_b]:!text-[var(--muted)]"}`}>
+              <div>
+                <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>{String(k + 1).padStart(2, "0")} · {t}</p>
+                <p className={`${SERIF} mt-2 max-w-[26ch] text-[25px] leading-[1.4]`}>{body}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -187,7 +207,6 @@ export function BicPlayer({ m, sweeps }: { m: M; sweeps: Bic[] }) {
   const [i, setI] = useState(n - 1);
   const [playing, setPlaying] = useState(false);
   const [ref, seen] = useInView<HTMLDivElement>(0.3);
-  useEffect(() => { setI(n - 1); setPlaying(false); }, [m, n]);
   useEffect(() => {
     if (!playing) return;
     const t = setInterval(() => setI((v) => (v >= n - 1 ? (setPlaying(false), v) : v + 1)), 320);
@@ -291,7 +310,7 @@ export function PrDrag({ m, sets }: { m: M; sets: PrSet[] }) {
         {[0, 0.5, 1].map((v) => (
           <g key={v} className={MONO} fill="var(--muted)">
             <text x={x(v)} y={y(0)} dy="1.4em" textAnchor="middle">{v}</text>
-            <text x={x(0) - 7} y={y(v)} dy="0.35em" textAnchor="end">{v}</text>
+            {v !== 0.5 && <text x={x(0) - 7} y={y(v)} dy="0.35em" textAnchor="end">{v}</text>}
           </g>
         ))}
         <text x={x(1)} y={y(0)} dy="2.7em" textAnchor="end" className={MONO} fill="var(--muted)">recall</text>
@@ -377,8 +396,8 @@ export function FaultScrub({ twin }: { twin: Twin }) {
 
 /* ================================================================== 02 · the method ladder */
 const LADDER = [
-  { n: "K-Means", d: "Global clustering, K swept 2–10.", p: 3, sec: "§3", by: 0 },
-  { n: "PCA", d: "Linear compression: 33 components hold 95% of variance.", p: 3, sec: "§3", by: 0 },
+  { n: "K-Means", d: "Global clustering, K swept 2–10.", p: 2, sec: "§3", by: 0 },
+  { n: "PCA", d: "Linear compression: 33 components hold 95% of variance.", p: 2, sec: "§3", by: 0 },
   { n: "Nyström-KPCA", d: "A non-linear, kernel boundary.", p: 3, sec: "§3", by: 0 },
   { n: "GMM", d: "Full-covariance mixture; BIC picks K.", p: 3, sec: "§4", by: 1 },
   { n: "Three VAEs", d: "Capacity, Hierarchical, Transformer: learned latent codes.", p: 4, sec: "§5", by: 1 },

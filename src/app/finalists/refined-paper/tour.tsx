@@ -7,12 +7,12 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import { FOCUS, IconCross, MONO, SANS, SERIF, btnQuiet, btnSecondary } from "../../design-systems/refined-paper/kit";
 
 export const STOPS = [
-  { id: "top", t: "The finding", c: "Telemetry’s structure sits at 18–29 operational groups, not 4–5 subsystems." },
+  { id: "top", t: "The finding", c: "Structure sits at the operational-group level (18–29 modes), not 4–5 subsystems." },
   { id: "background", t: "Background", c: "Each subsystem divides into finer operational groups. Which level does the data follow?" },
   { id: "methods", t: "What we did", c: "Five methods, each richer than the last, all scored by PR-AUC." },
   { id: "results", t: "Results", c: "BIC picks K = 21 and 29: beside the groups, far from the subsystems." },
-  { id: "conclusions", t: "Conclusions", c: "Each mode has its own normal. That is why global detectors fail." },
-  { id: "paper", t: "The paper", c: "Every number traces to a page. Read it here, or download the PDF." },
+  { id: "conclusions", t: "Conclusions", c: "Each mode has its own normal: the bottleneck for global models." },
+  { id: "paper", t: "The paper", c: "The paper, page by page, with the PDF." },
 ];
 const DWELL = 10000;
 

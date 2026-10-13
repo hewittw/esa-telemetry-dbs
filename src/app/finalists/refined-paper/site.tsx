@@ -49,7 +49,7 @@ function Inner({ data }: { data: SiteData }) {
         <Hero m={m} ch={data.ch[m]} />
 
         <Section id="background" title="Dozens of channels, watched by hand."
-          lead={<>Engineers monitor 76+ channels manually or with threshold alarms. Kotowski et al. (2024) showed detectors keep raising false alarms, but not why. <PageRef p={2}>§1</PageRef></>}
+          lead={<>Engineers monitor 76+ channels manually or with threshold alarms. Kotowski et al. (2024) showed detectors keep raising false alarms, but not why. <PageRef p={1}>§1</PageRef></>}
           extra={
             <dl className="mt-8 grid gap-6 border-t border-[var(--rule)] pt-5 sm:grid-cols-2">
               {[["Q1", "Is there latent structure aligned with the subsystems?"], ["Q2", "Does learning it improve detection?"]].map(([q, t]) => (
@@ -64,7 +64,7 @@ function Inner({ data }: { data: SiteData }) {
         </Section>
 
         <Section id="methods" title="Five methods, each richer than the last."
-          lead={<>The baselines test whether structure exists at all; a mixture model and three VAEs then learn it.</>}>
+          lead={<>Baselines test whether structure exists at all; a mixture model and three VAEs then learn it. All are scored by PR-AUC.</>}>
           <Ladder />
           <dl className="mt-8 grid gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
@@ -82,14 +82,14 @@ function Inner({ data }: { data: SiteData }) {
         </Section>
 
         <Section id="results" title="Structure at the group level, not the subsystem level."
-          lead={<>BIC picks 21 and 29 modes, beside the 18 and 29 groups. Mode-aware models clear the linear 0.322 plateau.</>}>
+          lead={<>BIC picks 21 and 29 modes, beside 18 and 29 groups. Linear methods plateau at PR-AUC 0.322; GMM reaches 0.384 on Mission 1.</>}>
           <div className="space-y-24 lg:space-y-28">
             <div id="bic" tabIndex={-1} className="grid gap-x-10 gap-y-16 outline-none lg:grid-cols-12">
               <Figure title="Modes BIC selects" cap="K*: the component count BIC selects." chip={<PageRef p={5}>§6</PageRef>} className="lg:col-span-5">
                 <GiantK m={m} bic={data.bic} />
               </Figure>
               <Figure title={`BIC against K · Mission ${m}`} cap="BIC bottoms out beside the groups." chip={<PageRef p={3}>§4</PageRef>} className="lg:col-span-7">
-                <BicPlayer m={m} sweeps={data.bic} />
+                <BicPlayer key={m} m={m} sweeps={data.bic} />
               </Figure>
             </div>
             <div id="table" tabIndex={-1} className="outline-none">
@@ -97,10 +97,10 @@ function Inner({ data }: { data: SiteData }) {
               <MethodExplorer rows={data.rows} prov={data.prov} m={m} />
             </div>
             <div className="grid gap-x-10 gap-y-20 lg:grid-cols-12">
-              <Figure id="pr" title={`Precision against recall · Mission ${m}`} cap="Drag the line; both curves sink toward random." chip={<PageRef p={3}>Fig. 1a</PageRef>} className="lg:col-span-6">
+              <Figure id="pr" title={`Precision against recall · Mission ${m}`} cap={m === 1 ? "GMM holds more precision than K-Means through mid recall." : "TransformerVAE holds precision to recall 0.3; GMM drops sooner."} chip={m === 1 ? <PageRef p={3}>Fig. 1a</PageRef> : <PageRef p={5}>Table 1</PageRef>} className="lg:col-span-6">
                 <PrDrag m={m} sets={data.pr} />
               </Figure>
-              <Figure id="fault" title="Why global detectors fail" cap="967 hours: K-Means spikes at onset, then loses the fault." chip={<PageRef p={7}>Fig. 3</PageRef>} className="lg:col-span-6">
+              <Figure id="fault" title="Why global detectors fail" cap="967-hour fault: both scores spike at onset, then sink back." chip={<PageRef p={7}>Fig. 3</PageRef>} className="lg:col-span-6">
                 {m === 2 && <p className={`${SANS} -mt-3 mb-3 text-[12px] text-[var(--muted)]`}>Mission 1’s longest genuine fault; Mission 2’s labels are mostly rare events.</p>}
                 <FaultScrub twin={data.twin} />
               </Figure>
@@ -220,14 +220,14 @@ function Header({ m, setM }: { m: M; setM: (m: M) => void }) {
 function Hero({ m, ch }: { m: M; ch: Ch[] }) {
   const open = useReader();
   return (
-    <section id="top" aria-labelledby="rps-h1" className="grid items-center gap-x-12 gap-y-14 pt-14 pb-6 sm:pt-20 lg:min-h-[min(calc(100svh-160px),720px)] lg:grid-cols-12 lg:py-12">
+    <section id="top" aria-labelledby="rps-h1" className="grid items-center gap-x-12 gap-y-12 pt-12 sm:pt-20 lg:grid-cols-12 lg:pt-16">
       <div className="lg:col-span-7">
         <p className={`${eyebrow} rps-in`}>ESA satellite telemetry · Madhogarhia &amp; Watkins · 2026</p>
-        <h1 id="rps-h1" tabIndex={-1} className={`${SERIF} rps-in mt-6 max-w-[15ch] text-[clamp(2.6rem,5.2vw,4.75rem)] leading-[1.03] font-light tracking-[-0.03em] outline-none`} style={{ animationDelay: "80ms" }}>
-          Telemetry’s structure lives in <span className="text-[var(--prussian)]">operational groups</span>, not <span className="text-[var(--ochre)]">subsystems</span>.
+        <h1 id="rps-h1" tabIndex={-1} className={`${SERIF} rps-in mt-6 max-w-[16ch] text-[clamp(2.5rem,4.9vw,4.5rem)] leading-[1.03] font-light tracking-[-0.03em] outline-none`} style={{ animationDelay: "80ms" }}>
+          Telemetry’s structure sits at the level of <span className="text-[var(--prussian)]">operational groups</span>, not <span className="text-[var(--ochre)]">subsystems</span>.
         </h1>
         <p className={`${SERIF} rps-in mt-7 max-w-[32ch] text-[22px] leading-[1.4]`} style={{ animationDelay: "220ms" }}>
-          18–29 modes, not 4–5. Each mode has its own normal, so one global detector keeps raising false alarms.
+          18–29 modes, not 4–5. Each mode has its own normal: the bottleneck for every global detector.
         </p>
         <div className="rps-in mt-10 flex flex-wrap items-center gap-3" style={{ animationDelay: "360ms" }}>
           <button type="button" className={`${btnPrimary} h-11 px-5 text-[15px]`} onClick={() => open(1)}>Read the paper <IconArrow /></button>
@@ -263,7 +263,7 @@ function PaperSection() {
           </dl>
           <p className="mt-3"><PageRef p={2}>Division of labour</PageRef></p>
         </div>
-        <ol className="grid grid-cols-3 gap-x-3 gap-y-5 min-[520px]:grid-cols-4 lg:col-span-8 lg:grid-cols-6" aria-label="Pages of the paper">
+        <ol className="grid grid-cols-4 gap-x-2.5 gap-y-4 sm:gap-x-3 sm:gap-y-5 lg:col-span-8 lg:grid-cols-6" aria-label="Pages of the paper">
           {Array.from({ length: PAGES }, (_, k) => k + 1).map((p) => (
             <li key={p}>
               <button type="button" onClick={() => open(p)} aria-label={`Open page ${p}: ${PAGE_NOTES[p][0].t}`} className={`${FOCUS} group block w-full rounded-[2px] text-left`}>
