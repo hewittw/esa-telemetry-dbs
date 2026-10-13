@@ -105,3 +105,60 @@ export function table1() {
     others: [pick("GMM", 1), pick("GMM", 2), pick("TransformerVAE", 1), pick("HierarchicalVAE", 2)],
   };
 }
+
+// Labelled-fault share per mission, as 300 slices (fraction of each slice inside a labelled segment),
+// plus the exact share over the whole test set. Drives the color-budget study.
+export function faultShare() {
+  const one = (t: typeof timelinesM1 | typeof timelinesM2) => {
+    const bins = (t.series[0].bins as Bin[]).map((b) => b[3]);
+    const n = 300;
+    const step = bins.length / n;
+    const slices = Array.from({ length: n }, (_, i) => {
+      const c = bins.slice(Math.floor(i * step), Math.floor((i + 1) * step));
+      return round(c.reduce((a, b) => a + b, 0) / c.length, 2);
+    });
+    const covered = (t.anomalySegments as number[][]).reduce((a, [s, e]) => a + (e - s), 0);
+    return { slices, share: covered / t.nTest, segments: t.nAnomalySegments, nTest: t.nTest };
+  };
+  return { m1: one(timelinesM1), m2: one(timelinesM2) };
+}
+
+// Mission 2 GMM score strip with its five highest, well-separated windows (areas of interest),
+// each flagged by whether it overlaps a labelled fault.
+export function aoiWindows() {
+  const gmm = timelinesM2.series.find((s) => s.runId === "gmm_m2")!;
+  const bins = gmm.bins as Bin[];
+  const n = 300;
+  const step = Math.floor(bins.length / n);
+  const slices = Array.from({ length: n }, (_, i) => {
+    const c = bins.slice(i * step, (i + 1) * step);
+    return {
+      start: c[0][0],
+      score: c.reduce((a, b) => a + b[1], 0) / c.length,
+      anomaly: c.reduce((a, b) => a + b[3], 0) / c.length,
+    };
+  });
+  const lo = Math.min(...slices.map((s) => s.score));
+  const hi = Math.max(...slices.map((s) => s.score));
+  const order = slices.map((_, i) => i).sort((a, b) => slices[b].score - slices[a].score);
+  const picks: number[] = [];
+  for (const i of order) {
+    if (picks.every((j) => Math.abs(i - j) >= 24)) picks.push(i);
+    if (picks.length === 5) break;
+  }
+  picks.sort((a, b) => a - b);
+  const sliceLen = bins[step][0] - bins[0][0];
+  return {
+    nTest: timelinesM2.nTest,
+    strip: slices.map((s) => round((s.score - lo) / (hi - lo))),
+    windows: picks.map((i) => {
+      const w = slices.slice(Math.max(0, i - 2), i + 3);
+      return {
+        at: i,
+        from: slices[Math.max(0, i - 2)].start,
+        to: slices[Math.min(n - 1, i + 2)].start + sliceLen,
+        fault: w.some((s) => s.anomaly > 0.05),
+      };
+    }),
+  };
+}

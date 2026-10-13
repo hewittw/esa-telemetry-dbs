@@ -1,5 +1,5 @@
 // Agent-generated artifacts (✦). Server components: plain SVG + HTML built from our data.
-import type { bicSweeps, channelTree, hudSpark, prBundle, table1 } from "./data";
+import type { aoiWindows, bicSweeps, channelTree, faultShare, hudSpark, prBundle, table1 } from "./data";
 import { BlurFocus } from "./blur-focus";
 
 export const MONO = "font-(family-name:--font-is-mono)";
@@ -370,6 +370,89 @@ export function RegGrid() {
         </p>
         <p className={`${MONO} self-end text-[10px] uppercase tracking-[0.16em] text-(--is-frost)`}>12 col · 4 px marks</p>
       </div>
+    </div>
+  );
+}
+
+/* ---------- Color budget: magenta is rationed by the data ---------- */
+export function ColorBudget({ f }: { f: ReturnType<typeof faultShare> }) {
+  const rows = [
+    { id: "M1", ...f.m1 },
+    { id: "M2", ...f.m2 },
+  ];
+  const chips: [string, string][] = [
+    ["#0A0B0D", "Void · ground"],
+    ["#CFD9E0", "Frost · text"],
+    ["#4BCFE0", "Teal · 1 outline"],
+    ["#37FD08", "Green · 1 action"],
+  ];
+  return (
+    <div className={`${MONO} flex h-full flex-col justify-between gap-2.5 p-4 text-[10px] uppercase tracking-[0.14em]`}>
+      <p className="text-(--is-steel)">[ Magenta area = labelled-fault time · 300 slices ]</p>
+      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-1.5">
+        {rows.map((r) => (
+          <div key={r.id} className="contents">
+            <span className="text-(--is-steel)">{r.id}</span>
+            <svg viewBox="0 0 300 1" preserveAspectRatio="none" className="h-4 w-full" role="img" aria-label={`Mission ${r.id.slice(1)} test set as 300 slices on charcoal; magenta fills each slice by its share of labelled-fault time, ${(r.share * 100).toFixed(1)}% overall.`} shapeRendering="crispEdges">
+              <rect width="300" height="1" fill="#333333" />
+              {r.slices.map((a, i) => (a > 0 ? <rect key={i} x={i} width="1" height="1" fill="#E04FD6" fillOpacity={Math.min(1, a)} /> : null))}
+            </svg>
+            <span className="text-right text-(--is-frost)">
+              <span className="text-(--is-fault)">■</span> {(r.share * 100).toFixed(1)}%
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-(--is-line) pt-2 text-(--is-steel)">
+        {chips.map(([hex, label]) => (
+          <span key={label} className="inline-flex items-center gap-1.5">
+            <span aria-hidden className="inline-block size-2 border border-(--is-line)" style={{ background: hex }} />
+            {label}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- AOI windows: numbered entry points on the score strip ---------- */
+export function AoiStrip({ aoi }: { aoi: ReturnType<typeof aoiWindows> }) {
+  const n = aoi.strip.length;
+  const H = 100;
+  const pts = aoi.strip.map((v, i) => `${((i / (n - 1)) * 600).toFixed(1)} ${(H - 6 - v * (H - 16)).toFixed(1)}`);
+  const half = 4; // slices either side of the peak
+  const fmt = (v: number) => `${(v / 1e6).toFixed(2)}M`;
+  return (
+    <div className={`${MONO} flex h-full flex-col gap-3 p-4 text-[10px] uppercase tracking-[0.14em]`}>
+      <div className="flex items-baseline justify-between gap-3 text-(--is-steel)">
+        <span>[ M2 · GMM score · {fmt(aoi.nTest)} steps ]</span>
+        <span className="text-(--is-teal)">5 windows</span>
+      </div>
+      <div className="relative min-h-16 flex-1">
+        <svg viewBox={`0 0 600 ${H}`} preserveAspectRatio="none" className="absolute inset-0 h-full w-full" role="img" aria-label="Mission 2 GMM anomaly score across the test set as a Frost trace, with its five highest windows boxed in teal and numbered 01 to 05.">
+          <path d={`M0 ${H} L${pts.join(" L")} L600 ${H} Z`} fill="#CFD9E0" fillOpacity="0.08" />
+          <path d={`M${pts.join(" L")}`} fill="none" stroke="#CFD9E0" strokeOpacity="0.85" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+          {aoi.windows.map((w) => {
+            const x0 = ((w.at - half) / (n - 1)) * 600;
+            const x1 = ((w.at + half) / (n - 1)) * 600;
+            return <rect key={w.at} x={x0} y="2" width={x1 - x0} height={H - 4} fill="none" stroke="#4BCFE0" strokeWidth="1" vectorEffect="non-scaling-stroke" />;
+          })}
+        </svg>
+        {aoi.windows.map((w, k) => (
+          <span key={w.at} aria-hidden className="absolute -top-0.5 -translate-x-1/2 bg-(--is-panel) px-0.5 text-(--is-teal)" style={{ left: `${(w.at / (n - 1)) * 100}%` }}>
+            {String(k + 1).padStart(2, "0")}
+          </span>
+        ))}
+      </div>
+      <ol className="grid grid-cols-5 border-t border-(--is-line) normal-case tracking-[0.04em]">
+        {aoi.windows.map((w, k) => (
+          <li key={w.at} className="flex flex-col gap-0.5 border-l border-(--is-line) pl-2 pt-2 first:border-l-0 first:pl-0">
+            <span className="text-(--is-frost)">{String(k + 1).padStart(2, "0")}</span>
+            <span className="truncate text-(--is-steel)">{fmt(w.from)}</span>
+            <span className={w.fault ? "text-(--is-frost)" : "text-(--is-steel)"}>{w.fault ? <><span className="text-(--is-fault)">■</span> fault</> : "— none"}</span>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

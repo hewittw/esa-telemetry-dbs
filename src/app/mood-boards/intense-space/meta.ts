@@ -15,7 +15,7 @@ export const board: MoodBoardMeta = {
     { hex: "#4BCFE0", name: "Survey Teal" },
   ],
   artifactCount: 28,
-  generatedCount: 14,
+  generatedCount: 16,
   preview: "/mood-boards/intense-space/preview.jpg",
   references: ["icomat", "planet", "nasa-eyes", "helion"],
 };
