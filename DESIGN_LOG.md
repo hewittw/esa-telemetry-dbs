@@ -79,3 +79,15 @@ Append as decisions happen, newest at the bottom.
 - Rejected: CSS Modules (this Turbopack setup routes all .css through Tailwind), so we use page-scoped
   prefixed classes instead.
 - Deployed from a clean git worktree of HEAD so in-progress design-system files never ship half-built.
+
+## 2026-10-13 · The user's review: design, not content; show the lecture's concepts
+- The user loves the boards' creative pieces. **Pushback:** too many reference-website screenshots, and captions that
+  explained those sites' subject matter. "We are interested in design and UI, not the other websites' content."
+- **Change:** each board keeps ≤ 2 website crops; the rest become ✦ data-driven UI/type/color/texture pieces or
+  physical-world design references. Every note is rewritten to name the design move and where it goes in our explorer.
+  Color and texture each get ≥ 2 artifacts (the verifiers found color thin).
+- **Change:** every design system gains a **Principles** section that rebuilds the Week 2 slides in its own style
+  on our telemetry content: What You See, Emphasize by De-emphasizing, Type Roles, Color Roles, Accent Color,
+  Alignment, What's Clickable, Choosing a Direction, and the Full Design System 1–6 overview, plus all 18
+  Parts-of-an-Interface elements labelled with the slide's names.
+- **Consistency fix:** "best" badges now say what they mean (highest PR-AUC = GMM on M1; best VAE as bolded in the paper = TVAE).
