@@ -129,3 +129,20 @@ Append as decisions happen, newest at the bottom.
   the primary action; one global M1/M2 switch; colour-keyed words and footnote page chips from refined-paper; a short
   guided tour from white-immersion; figures that draw in on scroll; empty panels at 1440 filled.
 - All three versions stay linked from the hub as the candidates, so the process is visible.
+
+## 2026-10-13 · Be ready to explain (talking points)
+- **Style:** Charged · Fibrous · Instrumented. Recruiters get the claim in one look and the instrument feel signals rigor;
+  peers get every number on real data with a page link to the paper. Chosen over white-immersion (hierarchy and
+  affordance cost) and refined-paper (too long for a two-minute reader).
+- **What people see first:** the 112px finding, "operating modes" in the same teal as the group marks in the figures.
+- **How they know what to click:** bracketed buttons whose brackets spread on hover, ⟷ handles, crosshair charts,
+  page chips ending in ↗.
+- **What each state tells them:** hover border, 2px focus ring, pressed drop, selected fill, dimmed disabled, plus
+  designed empty/loading/error/success states.
+- **How the agent was used:** a slim AGENTS.md + on-demand docs + a verify-ui skill; parallel research, build, and
+  *separate* verifier agents.
+  - **Hewitt pushed back on:** logged-in Chrome (Playwright only); testing every screen size (the 11-viewport matrix);
+    design not other sites' content; including every lecture element; authorship ("Designed & built by Hewitt Watkins",
+    paper citation kept accurate).
+  - **Hewitt decided:** the project, the audience, the reference groupings for each direction, the public repo, the report viewer.
+- Full notes: `docs/talking-points.md`.
