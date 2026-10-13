@@ -12,8 +12,7 @@ import {
 } from "./kit";
 import { ToastProvider, XScroll } from "./ui";
 import {
-  AccordionDemo, BadgeDemo, BannerDemo, ButtonsDemo, CardModalDemo, CheckboxDemo, ChipsListDemo, ColorAloneDemo, EmphasisDemo, EmptyState,
-  FocusDemo, HeroSpecimen, InputDemo, LinkDemo, MenusDemo, MotionDemo, RadioDemo, SegmentedDemo, SelectDemo, SkeletonDemo, SliderDemo, SwitchDemo,
+  AccordionDemo, BadgeDemo, BannerDemo, ButtonsDemo, CardModalDemo, CheckboxDemo, ChipsListDemo, EmptyState, HeroSpecimen, InputDemo, LinkDemo, MenusDemo, MotionDemo, RadioDemo, SegmentedDemo, SelectDemo, SkeletonDemo, SliderDemo, SwitchDemo,
   TabsDemo, ToastDemo, TooltipDemo, UiStates,
 } from "./demos";
 import {
@@ -21,6 +20,8 @@ import {
 } from "./novel";
 import { AlertBudget, EventCard, MissionSwitch, PrViewer, ResultsTable, SpecCard, SubVsGroup, TimelineScrubber } from "./telemetry";
 import { SectionIndex, type IndexItem } from "./index-nav";
+import { AccentDemo, AlignmentDemo, ClickableDemo, ColorRolesApplied, DirectionDemo, FullSystem, LouderQuieter, TypeRolesCard, WhatYouSee } from "./principles";
+import { PartsSheet } from "./parts";
 
 const serif = Newsreader({ subsets: ["latin"], axes: ["opsz"], style: ["normal", "italic"], variable: "--rp-serif-face" });
 const sans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--rp-sans-face" });
@@ -35,13 +36,15 @@ export const metadata: Metadata = {
 const sid = (n: string, id?: string) => id ?? `s-${n.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 const sub = (list: [string, string, string?][]) => list.map(([n, t, id]) => ({ id: sid(n, id), n, t }));
 const INDEX: IndexItem[] = [
+  { id: "overview", n: "L9", t: "On one screen", tier: 1 },
   { id: "color", n: "1", t: "Color roles", tier: 1 },
   { id: "type", n: "2", t: "Type roles", tier: 1 },
   { id: "space", n: "3", t: "Spacing & shape", tier: 1 },
   { id: "components", n: "4", t: "Components", tier: 1, subs: sub([["4.1–4.2", "Buttons"], ["4.3", "Link"], ["4.4", "Text input"], ["4.5", "Select"], ["4.6", "Checkbox"], ["4.7", "Radio"], ["4.8", "Switch"], ["4.9", "Tabs"], ["4.10", "Segmented"], ["4.11", "Slider"], ["4.12", "Chips, list, detail", "cmp-list"], ["4.15", "Card + modal", "s-4-15-4-16"], ["4.17", "Badge"]]) },
   { id: "states", n: "5", t: "Control states", tier: 1 },
   { id: "ui-states", n: "6", t: "UI states", tier: 1 },
-  { id: "parts", n: "P", t: "Parts of an interface", tier: 2, subs: sub([["P1", "Hero", "p-hero"], ["P4", "Menus", "p-menus"], ["P9", "Toast", "p-toast"], ["P10", "Banner", "p-banner"], ["P13", "Tooltip", "p-tooltip"], ["P15", "Accordion", "p-accordion"], ["P12", "Skeleton", "p-skeleton"], ["P16", "Empty state", "p-empty"], ["P17", "Focus ring", "p-focus"], ["P18", "Colour alone", "p-color"], ["P19", "De-emphasis", "p-emphasis"]]) },
+  { id: "parts", n: "P", t: "Parts of an interface", tier: 2, subs: sub([["P0", "All 18 parts", "p-sheet"], ["P1", "Hero", "p-hero"], ["P4", "Menus", "p-menus"], ["P9", "Toast", "p-toast"], ["P10", "Banner", "p-banner"], ["P13", "Tooltip", "p-tooltip"], ["P15", "Accordion", "p-accordion"], ["P12", "Skeleton", "p-skeleton"], ["P16", "Empty state", "p-empty"]]) },
+  { id: "principles", n: "L", t: "Principles", tier: 2, subs: sub([["L1", "What you see", "l1"], ["L2", "De-emphasis", "l2"], ["L3", "Type roles", "l3"], ["L4", "Color roles", "l4"], ["L5", "Accent color", "l5"], ["L6", "Alignment", "l6"], ["L7", "What’s clickable", "l7"], ["L8", "Direction", "l8"], ["L9", "Full system", "overview"]]) },
   { id: "novel", n: "N", t: "Novel", tier: 2, subs: sub([["N1", "Keyed drag"], ["N2", "Twin scrubber", "nv-twin"], ["N3", "Scrollytelling", "nv-scrolly"], ["N4", "Step player", "nv-bic"], ["N5", "Small multiples"], ["N6", "Citations"], ["N7", "Sticky contents"], ["N8", "Findings grid"], ["N9", "Node diagram"], ["N10", "Giant stat"]]) },
   { id: "telemetry", n: "T", t: "Telemetry", tier: 2, subs: sub([["T1", "Alert budget", "tm-alert"], ["T2", "Mission switcher"], ["T3", "Spec card"], ["T4", "PR curves", "tm-pr"], ["T5", "Timeline", "tm-timeline"], ["T6", "Subsystems vs groups"], ["T7", "Event card"], ["T8", "Results table", "tm-table"]]) },
 ];
@@ -49,11 +52,11 @@ const INDEX: IndexItem[] = [
 /* ------------------------------------------------------------------ layout helpers */
 function Section({ id, n, title, lead, children }: { id: string; n: string; title: string; lead: ReactNode; children: ReactNode }) {
   return (
-    <section id={id} aria-labelledby={`${id}-h`} className="border-t border-[var(--ink)] pt-8 pb-24 md:pb-32">
+    <section id={id} aria-labelledby={`${id}-h`} className="border-t border-[var(--ink)] pt-8 pb-16 md:pb-24">
       <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>{n}</p>
       <h2 id={`${id}-h`} className={`${SERIF} mt-2 text-[clamp(2rem,4.2vw,2.75rem)] leading-[1.08] font-[450] tracking-[-0.01em] text-[var(--ink)]`}>{title}</h2>
       <p className={`${SERIF} mt-4 max-w-[60ch] text-[18px] leading-[1.6] text-[var(--ink)] sm:text-[19px]`}>{lead}</p>
-      <div className="mt-12">{children}</div>
+      <div className="mt-10">{children}</div>
     </section>
   );
 }
@@ -84,7 +87,7 @@ function NovelTag({ site }: { site: string }) {
   );
 }
 
-const grid2 = "grid gap-x-12 gap-y-16 xl:grid-cols-2";
+const grid2 = "grid gap-x-12 gap-y-12 xl:grid-cols-2";
 
 /* ------------------------------------------------------------------ section 1 data */
 const PAPER = "#F6F2EA";
@@ -156,7 +159,7 @@ export default function RefinedPaperSystem() {
   const gmm = getGmm();
   const channels = getChannels();
   const cats = getCatalogue();
-  const counts = { standard: 31, novel: 10, telemetry: 8 };
+  const counts = { standard: 28, novel: 10, telemetry: 8, principles: 9 };
 
   return (
     <div className={`${serif.variable} ${sans.variable} ${mono.variable} rpd-root min-h-screen w-full`}>
@@ -170,7 +173,7 @@ export default function RefinedPaperSystem() {
               <span className="hidden text-[var(--muted)] sm:inline">Refined paper · Design system</span>
               <Link href="/mood-boards/refined-paper" className={`${link} py-1`}>Mood board →</Link>
             </nav>
-            <div className="pt-20 pb-16 md:pt-32 md:pb-24">
+            <div className="pt-16 pb-12 md:pt-24 md:pb-16">
               <p className={`${MONO} text-[12px] uppercase tracking-[0.08em] text-[var(--muted)]`}>Design system · refined paper</p>
               <h1 className={`${SERIF} mt-4 text-[clamp(2.75rem,7.6vw,7.5rem)] leading-[0.94] font-light tracking-[-0.03em] text-[var(--ink)]`}>
                 <span className="whitespace-nowrap">Lucid <span aria-hidden className="text-[var(--graphite)]">·</span></span>{" "}
@@ -184,7 +187,7 @@ export default function RefinedPaperSystem() {
                 <span className="font-medium text-[var(--accent-ink)]">one vermilion action</span>. Everything below is live, and every number is ours.
               </p>
               <div className={`${SANS} mt-12 grid gap-3 border-t border-[var(--rule)] pt-5 text-[13px] text-[var(--muted)] sm:grid-cols-3`}>
-                <p><span className={`${MONO} text-[var(--ink)]`}>{counts.standard}</span> standard · <span className={`${MONO} text-[var(--ink)]`}>{counts.novel}</span> novel · <span className={`${MONO} text-[var(--ink)]`}>{counts.telemetry}</span> telemetry</p>
+                <p><span className={`${MONO} text-[var(--ink)]`}>{counts.standard}</span> standard · <span className={`${MONO} text-[var(--ink)]`}>{counts.novel}</span> novel · <span className={`${MONO} text-[var(--ink)]`}>{counts.telemetry}</span> telemetry · <span className={`${MONO} text-[var(--ink)]`}>{counts.principles}</span> principles</p>
                 <p>Newsreader, IBM Plex Sans, IBM Plex Mono</p>
                 <p className="sm:text-right">Data: Madhogarhia &amp; Watkins, TTIC 31220</p>
               </div>
@@ -194,6 +197,16 @@ export default function RefinedPaperSystem() {
           <div className="grid gap-x-14 min-[1100px]:grid-cols-[12.5rem_minmax(0,1fr)]">
             <SectionIndex items={INDEX} />
             <main id="main" className="min-w-0 pt-6 min-[1100px]:pt-0">
+              {/* ============================================================ L9 overview, the handout's one-screen summary */}
+              <section id="overview" aria-labelledby="overview-h" className="pb-16 md:pb-24">
+                <header className="mb-6">
+                  <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>L9 · Principles</p>
+                  <h2 id="overview-h" className={`${SANS} mt-1.5 text-[15px] font-semibold text-[var(--ink)]`}>The full design system, on one screen</h2>
+                  <p className={`${SANS} mt-1.5 max-w-[66ch] text-[13px] leading-[1.5] text-[var(--muted)]`}>The handout’s summary layout: 1 color roles, 2 type roles, 3 spacing and shape, 4 components, 5 control states, 6 UI states. Every specimen uses the live class strings; each numbered heading jumps to its full section.</p>
+                </header>
+                <FullSystem />
+              </section>
+
               {/* ============================================================ 1 color */}
               <Section id="color" n="01" title="Color roles" lead={<>Six roles, each with one job. The page is paper, not white; the text is ink, not black. Vermilion appears once per view, on the primary action. Ratios below are computed from the hex values at build time.</>}>
                 <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[3px] border border-[var(--rule)] bg-[var(--rule)] md:grid-cols-3">
@@ -233,15 +246,18 @@ export default function RefinedPaperSystem() {
                   })}
                 </ul>
                 <h3 className={`${SANS} mt-14 text-[15px] font-semibold`}>Every text pairing in use, measured</h3>
-                <XScroll label="Text pairings and their contrast ratios" className="mt-4">
-                  <table className="w-full min-w-[520px] border-collapse">
+                <div className="mt-4 grid gap-x-10 gap-y-0 xl:grid-cols-2">
+                {[0, 1].map((h) => (
+                <div key={h} className="min-w-0">
+                <XScroll label={`Text pairings and their contrast ratios, part ${h + 1}`}>
+                  <table className="w-full min-w-[440px] border-collapse">
                     <thead className="border-y border-[var(--ink)]">
                       <tr className={`${SANS} text-left text-[12.5px] text-[var(--muted)]`}>
                         <th scope="col" className="sticky left-0 z-[1] bg-[var(--paper)] py-2 pr-4 font-medium">Pairing</th><th scope="col" className="py-2 font-medium">Specimen</th><th scope="col" className="py-2 text-right font-medium">Ratio</th><th scope="col" className="py-2 pl-4 font-medium">WCAG</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {PAIRS.map(([n, fg, bg, f]) => {
+                      {PAIRS.slice(h * 6, h * 6 + 6).map(([n, fg, bg, f]) => {
                         const r = contrast(fg, bg);
                         return (
                           <tr key={n} className="border-b border-[var(--rule)]">
@@ -255,13 +271,16 @@ export default function RefinedPaperSystem() {
                     </tbody>
                   </table>
                 </XScroll>
+                </div>
+                ))}
+                </div>
               </Section>
 
               {/* ============================================================ 2 type */}
               <Section id="type" n="02" title="Type roles" lead={<>Three families, each with a job: Newsreader carries the argument, IBM Plex Sans runs the controls, and IBM Plex Mono sets every number in tabular figures. Seven roles, nothing between them.</>}>
                 <div className="border-b border-[var(--rule)]">
                   {TYPE.map((t) => (
-                    <div key={t.role} className="grid gap-x-10 gap-y-3 border-t border-[var(--rule)] py-6 md:grid-cols-[13rem_minmax(0,1fr)]">
+                    <div key={t.role} className="grid gap-x-10 gap-y-3 border-t border-[var(--rule)] py-4 md:grid-cols-[13rem_minmax(0,1fr)]">
                       <div>
                         <p className={`${SANS} text-[14px] font-semibold`}>{t.role}</p>
                         <p className={`${MONO} mt-1 text-[11.5px] leading-[1.45] text-[var(--muted)]`}>{t.spec}</p>
@@ -323,10 +342,10 @@ export default function RefinedPaperSystem() {
                       </div>
                     </div>
                   </Spec>
-                  <Spec n="3.5" name="Motion" use="Controls answer in 200ms; reveals take 300ms on one curve; a figure draws its line once on entry." tokens="--ease cubic-bezier(.22,.61,.36,1) · 200 / 300 / 1800ms · prefers-reduced-motion → 1ms" className="xl:col-span-2">
+                  <Spec n="3.5" name="Motion" use="Controls answer in 200ms; reveals take 300ms on one curve; a figure draws its line once on entry." tokens="--ease cubic-bezier(.22,.61,.36,1) · 200 / 300 / 1800ms · prefers-reduced-motion → 1ms">
                     <MotionDemo />
                   </Spec>
-                  <Spec n="3.6" name="Grid and texture" use="A 680px text column; figures break out to the full content width; grain you should not be able to see." tokens="measure 62ch · content 1080 · grain fractalNoise .9 at 4.5%" className="xl:col-span-2">
+                  <Spec n="3.6" name="Grid and texture" use="A 680px text column; figures break out to the full content width; grain you should not be able to see." tokens="measure 62ch · content 1080 · grain fractalNoise .9 at 4.5%">
                     <div className="relative overflow-hidden rounded-[3px] border border-[var(--rule)] bg-[var(--mount)] p-5">
                       <div className="mx-auto max-w-[62ch] space-y-1.5">{[100, 96, 92, 60].map((w, i) => <div key={i} className="h-[5px] rounded-[1px] bg-[var(--rule-strong)]" style={{ width: `${w}%` }} />)}</div>
                       <div className="my-4 h-16 rounded-[2px] border border-[var(--oxblood)]/50 bg-[var(--parchment)]"><svg viewBox="0 0 400 60" preserveAspectRatio="none" className="h-full w-full" aria-hidden><path d="M8,46 C70,40 100,14 160,22 S270,44 392,12" fill="none" stroke="var(--prussian)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" /></svg></div>
@@ -416,20 +435,7 @@ export default function RefinedPaperSystem() {
 
               {/* ============================================================ 6 UI states */}
               <Section id="ui-states" n="06" title="UI states" lead={<>Empty says what is missing and offers the first move; loading keeps the layout with a skeleton; error says what happened, that nothing was lost, and offers Try again; success confirms in a word and an icon.</>}>
-                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" aria-hidden>
-                  {[
-                    ["Empty", <div key="e" className="grid h-full place-items-center rounded-[2px] border border-dashed border-[var(--rule-strong)] p-3 text-center"><span className={`${SERIF} text-[15px]`}>No runs scored yet</span></div>],
-                    ["Loading", <div key="l" className="space-y-2 p-1"><div className="rpd-skel h-3 w-4/5" /><div className="rpd-skel h-3 w-3/5" /><div className="rpd-skel h-3 w-2/3" /></div>],
-                    ["Error", <div key="x" className="h-full rounded-[2px] border border-[var(--oxblood)] bg-[#F7EDE8] p-3"><span className={`${SANS} inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[var(--oxblood)]`}><IconWarn size={11} />Couldn’t load</span><span className={`${SANS} mt-2 block text-[12px] underline`}>Try again</span></div>],
-                    ["Success", <div key="s" className="p-1"><span className={`${SANS} inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[var(--sage)]`}><IconCheck size={11} />Loaded 4 rows</span><div className="mt-2 border-t border-[var(--ink)]" />{[0.438, 0.434, 0.414].map((v) => <div key={v} className={`${MONO} flex justify-between border-b border-[var(--rule)] py-1 text-[12px]`}><span>M2</span><span>{v}</span></div>)}</div>],
-                  ].map(([n, el]) => (
-                    <div key={String(n)}>
-                      <div className="h-[7.5rem] rounded-[3px] border border-[var(--rule)] bg-[var(--mount)] p-2">{el}</div>
-                      <p className={`${caption} mt-2`}>{n as string}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-14">
+                <div>
                   <Spec n="6.1" name="State simulator" use="Pick a state, or simulate a fetch: odd attempts fail and even ones succeed, so Try again always recovers." tokens="skeleton parchment sweep 1.6s · error oxblood + #F7EDE8 · success sage + tick · aria-live polite, aria-busy while loading">
                     <UiStates rows={rows} />
                   </Spec>
@@ -437,20 +443,9 @@ export default function RefinedPaperSystem() {
               </Section>
 
               {/* ============================================================ Parts of an Interface */}
-              <Section id="parts" n="P" title="Parts of an interface" lead={<>Every element from the week 2 slide, named as the slide names it. Those already shown in section 4 link back; the rest are specimens here.</>}>
-                <ol className={`${SANS} grid gap-x-8 gap-y-1.5 text-[13.5px] sm:grid-cols-2 lg:grid-cols-3`}>
-                  {[
-                    ["Hero", "#p-hero"], ["Card", "#components"], ["Primary / secondary buttons", "#components"], ["Menu ≡ and more ⋮", "#p-menus"], ["Segmented control", "#components"], ["Switch / toggle", "#components"],
-                    ["Checkbox & radio", "#components"], ["Filter chips / tags", "#cmp-list"], ["Toast / snackbar", "#p-toast"], ["Banner", "#p-banner"], ["Badge", "#components"], ["Skeleton screen", "#p-skeleton"],
-                    ["Tooltip", "#p-tooltip"], ["Modal dialog + scrim", "#components"], ["Accordion", "#p-accordion"], ["Empty state", "#p-empty"], ["Keyboard focus ring", "#p-focus"], ["Don’t use colour alone", "#p-color"], ["Emphasise by de-emphasising", "#p-emphasis"],
-                  ].map(([t, h], i) => (
-                    <li key={t} className="flex items-baseline gap-2.5 border-b border-[var(--rule)] py-1.5">
-                      <span className={`${MONO} w-6 shrink-0 text-[11px] text-[var(--muted)]`}>{String(i + 1).padStart(2, "0")}</span>
-                      <a href={h} className={link}>{t}</a>
-                    </li>
-                  ))}
-                </ol>
-                <div className={`${grid2} mt-16`}>
+              <Section id="parts" n="P" title="Parts of an interface" lead={<>All 18 elements from the week 2 slide, each under the slide’s own name and subtitle and drawn from the live class strings. Every tile opens its full specimen: the eight below, or its entry in section 4.</>}>
+                <div id="p-sheet"><PartsSheet /></div>
+                <div className={`${grid2} mt-14`}>
                   <Spec id="p-hero" n="P1" name="Hero" use="The first screen of the site: the one-sentence finding, then exactly one vermilion action. The nav bar carries the ≡ and ⋮ menus." tokens="display Newsreader 300 · body 17 · primary + quiet · hairline nav" className="xl:col-span-2">
                     <HeroSpecimen />
                   </Spec>
@@ -475,21 +470,42 @@ export default function RefinedPaperSystem() {
                   <Spec id="p-empty" n="P16" name="Empty state" use="Says the status, teaches what would fill it, and offers the first move." tokens="dashed strong rule · Newsreader 20 title · Plex 13.5 body · secondary action">
                     <EmptyState title="No anomalies in this window" body="Between days 120 and 150 of the Mission 2 test set nothing is labelled. Widen the window or jump to the next labelled segment." action={<a href="#tm-timeline" className={`${btnSecondary} no-underline`}>Jump to the timeline <IconArrow /></a>} />
                   </Spec>
-                  <Spec id="p-focus" n="P17" name="Keyboard focus ring" use="Tab moves a visible ring through every control on the page, in reading order." tokens="outline 2px ink · offset 2px · focus-visible only">
-                    <FocusDemo />
+                </div>
+              </Section>
+
+              {/* ============================================================ Principles */}
+              <Section id="principles" n="L" title="Principles" lead={<>The week 2 lecture, rebuilt on our numbers in this style: what the eye finds first, quieting everything but one thing, the roles of type and color, alignment, affordances, and why this direction suits the people reading it. The overview card at the top of the page is L9.</>}>
+                <div className={grid2}>
+                  <Spec id="l1" n="L1" name="What you see" use="Four ways one number wins the eye. Each panel changes one variable only; the number is the same 0.438." tokens="size 17 → 44 · weight 300 → 700 · contrast paper on ink 14.7:1 · position first, above a rule" className="xl:col-span-2">
+                    <WhatYouSee />
                   </Spec>
-                  <Spec id="p-color" n="P18" name="Don’t use colour alone" use="Status is always colour + icon + word. Switch to greyscale: the meaning stays." tokens="sage ✓ verified · ochre ! near/mixed · oxblood ✕ not saved">
-                    <ColorAloneDemo rows={rows} />
+                  <Spec id="l2" n="L2" name="Emphasize by de-emphasizing" use="To make one thing stand out, make the rest quieter. The action is identical in both; only its neighbours changed." tokens="louder: bold, 1.5px ink boxes, an arrow · quieter: graphite numeral, pencil stats, hairlines">
+                    <LouderQuieter />
                   </Spec>
-                  <Spec id="p-emphasis" n="P19" name="Emphasise by de-emphasising" use="The primary wins because the others got quieter, not because it got louder." tokens="one accent per view · the rest quiet text buttons">
-                    <EmphasisDemo />
+                  <Spec id="l3" n="L3" name="Type roles" use="Five roles on one card, each a different job. Leader lines name the face and weight." tokens="Plex Sans 500 · Newsreader 450 · Newsreader 300 · Newsreader 400 · Plex Sans 400 Pencil">
+                    <TypeRolesCard />
+                  </Spec>
+                  <Spec id="l4" n="L4" name="Color roles, applied" use="Each color has one job. Pick a role to trace every place it lands; switch to greyscale to see status survive without color." tokens="Paper · Mount / Parchment · Ink · Pencil · Vermilion · status = color + icon + word">
+                    <ColorRolesApplied />
+                  </Spec>
+                  <Spec id="l5" n="L5" name="Accent color" use="Use it sparingly, for the main action. Spread across the screen, it stops meaning anything." tokens="vermilion #B0401C on the primary only · wash #F6E3D6 never on content">
+                    <AccentDemo />
+                  </Spec>
+                  <Spec id="l6" n="L6" name="Alignment" use="Line elements up to one edge so the card reads as one object. The guides show every left edge in use." tokens="guides dashed oxblood · 16px card padding · one shared left edge">
+                    <AlignmentDemo />
+                  </Spec>
+                  <Spec id="l7" n="L7" name="What’s clickable?" use="Where are the affordances? Compare the ambiguous page with the clear one, and reveal every clickable thing." tokens="links underlined · one vermilion button · clickable cards ink edge + Open · focus 2px ink +2">
+                    <ClickableDemo />
+                  </Spec>
+                  <Spec id="l8" n="L8" name="Choosing a direction" use="The same screen in this style and in a deliberately wrong one. The right direction depends on who reads it, and how." tokens="refined paper vs gamified candy · readers: ML recruiters skimming, research peers inspecting" className="xl:col-span-2">
+                    <DirectionDemo />
                   </Spec>
                 </div>
               </Section>
 
               {/* ============================================================ Novel */}
               <Section id="novel" n="N" title="Novel" lead={<>Ten components borrowed from the board’s reference sites and rebuilt on our data. Each card says what was borrowed and how it changed on the way to paper.</>}>
-                <div className="space-y-24">
+                <div className="space-y-16">
                   <Spec n="N1" name="Draggable figure, words keyed to lines" use="Drag the handle (or focus it and use ←/→). The sentence above recomputes; the coloured words are the legend." tokens="prussian GMM · ochre K-Means · graphite reference · handle ink 0.75 + paper rings"
                     tag={<NovelTag site="Ciechanowski, GPS" />} borrowed="Borrowed: nouns set in the colour of their mark, and a figure you move by hand. Transformed: the prose itself updates with the numbers under the handle.">
                     <div className="max-w-[760px]"><KeyedDrag set={pr[0]} /></div>
@@ -514,6 +530,7 @@ export default function RefinedPaperSystem() {
                     tag={<NovelTag site="Distill / transformer-circuits" />} borrowed="Borrowed: bracketed citations that open in place. Transformed: the reference list is the hovercard on wide screens, so nothing covers the text.">
                     <LinkedCitations />
                   </Spec>
+                  <div className={grid2}>
                   <Spec n="N7" name="Sticky contents, bold and grey" use="Chapters bold, appendices regular and grey; the current one in ink with a hairline bar. This page’s own index works the same way." tokens="Plex Sans 600 / 400 · ink / ink-soft / pencil · inset 2px ink"
                     tag={<NovelTag site="transformer-circuits" />} borrowed="Borrowed: the sticky two-tier TOC of a long paper. Transformed: a contained scroll-spy fragment, and the page rail at left.">
                     <div className="max-w-[760px]"><TocFragment /></div>
@@ -522,6 +539,7 @@ export default function RefinedPaperSystem() {
                     tag={<NovelTag site="transformer-circuits" />} borrowed="Borrowed: the hero grid of case-study cards that doubles as a table of contents. Transformed: our six findings, each linking into this page.">
                     <FindingsGrid />
                   </Spec>
+                  </div>
                   <Spec n="N9" name="Parchment node diagram, two tiers" use="A static inline diagram with one accent path, and an ‘Open explorer’ dialog to trace any of the 21 components." tokens="parchment nodes + offset · oxblood edges by share · accent path + #F6E3D6 node"
                     tag={<NovelTag site="transformer-circuits" />} borrowed="Borrowed: stacked parchment nodes, oxblood edges, one highlighted path, and a static figure with a deeper interactive tier. Transformed: subsystems → GMM components → groups on Mission 1.">
                     <div className="max-w-[860px]"><TwoTierDiagram gmm={gmm} /></div>
@@ -535,7 +553,7 @@ export default function RefinedPaperSystem() {
 
               {/* ============================================================ Telemetry */}
               <Section id="telemetry" n="T" title="Telemetry" lead={<>Components only our paper needs, each running on Table 1 or the saved score arrays. Where a curve comes from an earlier run than Table 1, it says so and gives the Table 1 number.</>}>
-                <div className="space-y-24">
+                <div className="space-y-16">
                   <Spec id="tm-alert" n="T1" name="Alert-budget threshold" use="Choose what share of timesteps to flag; precision, recall and F1 recompute from the PR curve." tokens="prussian curve · ink operating point · diamond = 99th-pct rule · Mono readouts">
                     <AlertBudget sets={pr} />
                   </Spec>
@@ -551,12 +569,14 @@ export default function RefinedPaperSystem() {
                   <Spec id="tm-timeline" n="T5" name="Mission timeline scrubber" use="Scrub the whole test set; jump between labelled anomalies; read the score and label at the cursor." tokens="ink median · rule max envelope · band segments · transport step buttons">
                     <TimelineScrubber timelines={tls} />
                   </Spec>
+                  <div className={grid2}>
                   <Spec n="T6" name="Subsystems vs groups, before and after" use="The 21 GMM components split by subsystem, then by group. The ARI says which fits." tokens="ink → rule shades by rank · 500ms width tween · Mono ARI">
                     <div className="max-w-[860px]"><SubVsGroup gmm={gmm} /></div>
                   </Spec>
                   <Spec n="T7" name="Anomaly event card" use="Event types per mission, each with count, share and duration." tokens="tabs per type · status colour + icon + word · Mono durations">
                     <div className="max-w-[860px]"><EventCard cats={cats} /></div>
                   </Spec>
+                  </div>
                   <Spec id="tm-table" n="T8" name="Results table with sort" use="Table 1, filterable by mission and sortable by PR-AUC, ROC-AUC or method." tokens="ink top rule · rule rows · strong rule between families · aria-sort headers">
                     <ResultsTable rows={rows} />
                   </Spec>

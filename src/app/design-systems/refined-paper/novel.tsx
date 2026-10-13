@@ -214,7 +214,7 @@ export function ScrollyChannels({ channels }: { channels: Channel[] }) {
       </div>
       <div className="lg:order-1">
         {TEXT.map(([t, body], k) => (
-          <div key={t} ref={(el) => { steps.current[k] = el; }} data-step={k} className={`flex min-h-[46vh] items-center py-8 transition-opacity duration-300 lg:min-h-[62vh] ${step === k ? "opacity-100" : "opacity-40"}`}>
+          <div key={t} ref={(el) => { steps.current[k] = el; }} data-step={k} className={`flex min-h-[38vh] items-center py-6 transition-opacity duration-300 lg:min-h-[40vh] ${step === k ? "opacity-100" : "opacity-40"}`}>
             <div>
               <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>{String(k + 1).padStart(2, "0")} · {t}</p>
               <p className={`${SERIF} mt-2 max-w-[30ch] text-[21px] leading-[1.45] text-[var(--ink)] sm:text-[24px]`}>{body}</p>
@@ -409,7 +409,7 @@ export function TocFragment() {
     if (root && el) root.scrollTo({ top: el.offsetTop - 16, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   };
   return (
-    <div ref={box} className="rpd-scroll relative h-[320px] overflow-y-auto rounded-[3px] border border-[var(--rule)] bg-[var(--mount)]">
+    <div ref={box} className="rpd-scroll relative h-[320px] xl:h-[600px] overflow-y-auto rounded-[3px] border border-[var(--rule)] bg-[var(--mount)]">
       <div className="grid grid-cols-[7.5rem_1fr] gap-4 p-4 sm:grid-cols-[10rem_1fr] sm:gap-6 sm:p-5">
         <nav aria-label="Paper contents" className="sticky top-0 self-start border-r border-[var(--rule)] pr-3">
           <ol className="space-y-1">
@@ -450,7 +450,7 @@ function MiniNodes({ labels, hot }: { labels: string[]; hot: number }) {
         <g key={i}>
           <rect x={x - 24 + 2.5} y={y - 11 + 2.5} width="48" height="22" rx="2" fill="var(--paper)" stroke={h ? "var(--accent)" : "var(--oxblood)"} strokeWidth="0.6" />
           <rect x={x - 24} y={y - 11} width="48" height="22" rx="2" fill={h && i > 0 ? "var(--accent-wash)" : "var(--parchment)"} stroke={h ? "var(--accent)" : "var(--oxblood)"} strokeWidth="0.75" />
-          <text x={x} y={y} dy="0.35em" textAnchor="middle" fontSize="10" className={MONO} fill="var(--ink)">{t}</text>
+          <text x={x} y={y} dy="0.35em" textAnchor="middle" style={{ fontSize: 12 }} className={MONO} fill="var(--ink)">{t}</text>
         </g>
       ))}
     </svg>
@@ -466,7 +466,7 @@ const FINDINGS = [
 ];
 export function FindingsGrid() {
   return (
-    <ul className="grid gap-4 min-[520px]:grid-cols-2 lg:grid-cols-3">
+    <div className="@container"><ul className="grid gap-4 @md:grid-cols-2 @4xl:grid-cols-3">
       {FINDINGS.map((f) => (
         <li key={f.t}>
           <a href={f.href} className={`${FOCUS} group flex h-full flex-col rounded-[3px] border border-[var(--rule)] bg-[var(--mount)] transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-[var(--ink)] active:translate-y-0`}>
@@ -479,7 +479,7 @@ export function FindingsGrid() {
           </a>
         </li>
       ))}
-    </ul>
+    </ul></div>
   );
 }
 

@@ -353,11 +353,15 @@ export function EventCard({ cats }: { cats: Catalogue[] }) {
 }
 
 /* ================================================================== T8 · results table with sort */
+const Diamond = () => <svg aria-hidden width="9" height="9" viewBox="0 0 9 9" className="mr-1.5 inline-block align-[0.05em]"><path d="M4.5.6 8.4 4.5 4.5 8.4.6 4.5z" fill="var(--ink)" /></svg>;
 type Key = "label" | "prAuc" | "rocAuc";
 export function ResultsTable({ rows }: { rows: MethodRow[] }) {
   const [m, setM] = useState<0 | 1 | 2>(0);
   const [sort, setSort] = useState<{ k: Key | null; dir: 1 | -1 }>({ k: null, dir: -1 });
+  // Two different marks, so this table and the GMM-first findings never disagree:
+  // bold = the paper's best VAE per mission (as Table 1 bolds it); diamond = highest PR-AUC per mission.
   const best = (r: MethodRow) => r.trendDirection === "best";
+  const top = (r: MethodRow) => r.prAuc === Math.max(...rows.filter((x) => x.mission === r.mission).map((x) => x.prAuc));
   const list = useMemo(() => {
     const l = rows.filter((r) => m === 0 || r.mission === m);
     if (!sort.k) return l;
@@ -384,7 +388,7 @@ export function ResultsTable({ rows }: { rows: MethodRow[] }) {
       </div>
       <div className="rpd-scroll mt-3 overflow-x-auto">
         <table className="w-full min-w-[330px] border-collapse">
-          <caption className={`${caption} caption-bottom pt-3 text-left`}>Table 1. Point-wise and event-wise performance. Bold: best per mission, as in the paper. GMM and VAEs use different fitting protocols from the 80/20 baseline split.</caption>
+          <caption className={`${caption} caption-bottom pt-3 text-left`}>Table 1. Point-wise and event-wise performance. <Diamond /> Highest PR-AUC per mission: GMM on Mission 1 (0.384), TransformerVAE on Mission 2 (0.438). Bold: the best VAE per mission, as the paper bolds it. GMM and VAEs use different fitting protocols from the 80/20 baseline split.</caption>
           <thead className="border-y border-[var(--ink)]">
             <tr>
               <Th k="label">Method</Th>
@@ -402,10 +406,10 @@ export function ResultsTable({ rows }: { rows: MethodRow[] }) {
                 <tr key={r.id} className={`border-b border-[var(--rule)] transition-colors duration-150 hover:bg-[var(--parchment)]/60 ${groupBreak ? "border-t border-t-[var(--rule-strong)]" : ""}`}>
                   <th scope="row" className={`${SANS} py-2.5 pr-3 text-left text-[13.5px] leading-snug font-medium`}>{r.label}</th>
                   <td className={`${SANS} hidden px-1.5 text-[13px] text-[var(--muted)] md:table-cell`}>{r.scoring}</td>
-                  <td className={`${MONO} px-0 text-right text-[13.5px] ${best(r) ? "font-semibold" : ""}`}>{r.prAuc.toFixed(3)}</td>
+                  <td className={`${MONO} px-0 text-right text-[13.5px] whitespace-nowrap ${best(r) ? "font-semibold" : ""}`}>{top(r) && <><Diamond /><span className="sr-only">Highest PR-AUC on Mission {r.mission}: </span></>}{r.prAuc.toFixed(3)}</td>
                   <td className={`${MONO} px-0 text-right text-[13.5px] ${best(r) ? "font-semibold" : ""}`}>{r.rocAuc.toFixed(3)}</td>
                   <td className={`${MONO} hidden px-0 text-right text-[13.5px] text-[var(--muted)] sm:table-cell`}>{r.eventF1?.toFixed(3) ?? "—"}</td>
-                  <td className="hidden py-2.5 pl-4 min-[480px]:table-cell"><Trend row={r} /></td>
+                  <td className="hidden max-w-[12rem] py-2.5 pl-4 min-[480px]:table-cell"><Trend row={r} long /></td>
                 </tr>
               );
             })}

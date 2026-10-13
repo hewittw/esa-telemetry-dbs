@@ -1,6 +1,6 @@
 # Refined paper: Lucid · Patient · Inked
 
-Board: `/mood-boards/refined-paper`. Built from Ciechanowski (GPS), R2D3, Distill (t-SNE, Activation Atlas),
+Board: `/mood-boards/refined-paper` (28 artifacts, 14 ✦; only two web crops, Ciechanowski and Distill, kept for one UI move each). Built from Ciechanowski (GPS), R2D3, Distill (t-SNE, Activation Atlas),
 Anthropic's transformer-circuits, and Apple's pacing. The paper as a well-made journal page: light, literate, exact.
 
 ## Color roles (contrast measured against Paper #F6F2EA)
@@ -41,6 +41,8 @@ Diagram edges: Oxblood `#6A3E35`.
 ## Texture
 Fractal-noise paper grain at 4.5%; hairline rules at four weights (ink 0.75, rule 1, hair 0.5, dotted guide).
 If you can see the grain, it's too strong.
+Physical references on the board: backlit laid paper (fine laid lines, wide faint chain lines) for the ground, and
+loose vermilion pigment for the accent's body, pulled toward brick to hold 5.8:1 with white text.
 
 ## Do
 - Write the legend in the sentence: colour the noun the same as its line.
@@ -77,3 +79,16 @@ Built from this board's tokens, unchanged; files in `src/app/design-systems/refi
 - Title ornaments: the "·" between the three mood words are Graphite (4.79:1), not Rule-strong (1.94:1).
 - Data honesty: an AP taken from an earlier saved run is shown as "saved AP" or with an asterisk, and the
   Table 1 number sits beside it.
+- Principles (section L, `principles.tsx`): the week 2 lecture rebuilt on our Mission 2 TransformerVAE "Today"
+  screen. Phone mockups are ink-hairline devices (20px corners, an illustration, not a control) with the 3px
+  stacked-card offset; every comparison renders the same `Today` component so only one variable changes.
+  L1 size/weight/contrast/position · L2 louder vs quieter · L3 type roles with ink leader lines · L4 colour roles
+  traced on the screen (+ greyscale: don't use colour alone) · L5 accent everywhere vs one · L6 alignment guides
+  in dashed oxblood · L7 ambiguous vs clear affordances (dashed ink = clickable, dashed oxblood + "not a link" =
+  false affordance; drawn with ::after so it never fights the focus ring) · L8 this style vs gamified candy, per
+  reader (recruiter skimming / peer inspecting) · L9 the handout's 1–6 overview in a browser frame, top of page.
+  Below sm, paired phones show one at a time behind a segmented control.
+- Parts of an interface: a contact sheet of all 18 slide elements (slide name + subtitle), inert thumbnails
+  from the live class strings, each tile linking to its full specimen.
+- Best vs highest: Table 1's "Best M1" tag is the best VAE (the paper bolds it). Say "Best VAE on M1"; mark the
+  highest PR-AUC per mission with an ink diamond (GMM 0.384 on M1, TransformerVAE 0.438 on M2).

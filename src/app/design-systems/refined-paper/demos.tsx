@@ -19,14 +19,16 @@ export const FAMILY: Record<MethodRow["family"], { name: string; by: string; wha
 const POS = { 1: 0.111, 2: 0.0468 } as const;
 
 /* ------------------------------------------------------------------ trend: icon + word, never colour alone */
-export function Trend({ row }: { row: MethodRow }) {
+// Table 1's "Best M1" tag means best VAE (the paper bolds it); GMM has the highest M1 PR-AUC, so say so.
+export function Trend({ row, long }: { row: MethodRow; long?: boolean }) {
   const t = row.trendDirection;
   const s: Status = t === "up" || t === "best" ? "ok" : t === "down" ? "fail" : "idle";
   const { color, Icon } = STATUS[s];
-  const word = row.trend.replace(/[↑↓]/g, "").trim();
+  const raw = row.trend.replace(/[↑↓]/g, "").trim();
+  const word = t === "best" ? `Best VAE on M${row.mission}${long ? " (bolded in the paper)" : ""}` : raw;
   return (
-    <span className={`${SANS} inline-flex items-center gap-1.5 text-[12.5px] font-medium whitespace-nowrap`} style={{ color: s === "idle" ? "var(--muted)" : color }}>
-      <Icon size={11} />
+    <span className={`${SANS} inline-flex items-center gap-1.5 text-[12.5px] font-medium ${long ? "" : "whitespace-nowrap"}`} style={{ color: s === "idle" ? "var(--muted)" : color }}>
+      <Icon size={11} className="shrink-0" />
       {word}
     </span>
   );
@@ -413,7 +415,7 @@ export function HeroSpecimen() {
         <span className={`${SANS} ml-auto hidden text-[13px] text-[var(--muted)] sm:inline`}>Madhogarhia &amp; Watkins · 2026</span>
         <MoreMenu items={[{ label: "Copy link", hint: "⌘L", run: () => toast({ title: "Link copied" }) }, { label: "Cite Table 1", run: () => toast({ title: "Citation copied" }) }, { label: "Download scores", hint: "not saved", disabled: true }]} />
       </div>
-      <div className="px-5 py-10 sm:px-10 sm:py-14">
+      <div className="px-5 py-8 sm:px-10 sm:py-10">
         <p className={`${MONO} text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`}>Finding</p>
         <h4 className={`${SERIF} mt-3 max-w-[18ch] text-[clamp(2.2rem,5vw,3.6rem)] leading-[0.98] font-light tracking-[-0.025em]`}>18 to 29 modes, <span className="whitespace-nowrap"><i className="font-normal">not</i> 4 or 5.</span></h4>
         <p className={`${SERIF} mt-4 max-w-[46ch] text-[17px] leading-[1.55] text-[var(--ink)]`}>ESA telemetry has real latent structure at the operational-group level, and that is why one global detector keeps raising false alarms.</p>
@@ -559,89 +561,6 @@ export function EmptyState({ title, body, action }: { title: string; body: strin
       <p className={`${SERIF} text-[20px] leading-tight font-[450]`}>{title}</p>
       <p className={`${SANS} max-w-[40ch] text-[13.5px] leading-[1.5] text-[var(--muted)]`}>{body}</p>
       {action}
-    </div>
-  );
-}
-
-export function FocusDemo() {
-  const [force, setForce] = useState(false);
-  const s = force ? "focus" : undefined;
-  return (
-    <div>
-      <div className="flex flex-wrap items-center gap-3">
-        <button type="button" data-s={s} className={btnPrimary}>Explore</button>
-        <button type="button" data-s={s} className={btnSecondary}>Read</button>
-        <button type="button" data-s={s} aria-pressed className={chip}><IconCheck size={11} className={chipCheck} />GMM</button>
-        <a href="#focus" data-s={s} className={`${link} ${SANS} text-[14px]`}>Table 1</a>
-        <input data-s={s} aria-label="Search" placeholder="channel_12" className={`${field} w-36`} />
-      </div>
-      <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-[var(--rule)] pt-3">
-        <p className={`${caption} flex-1`}>Press Tab to walk through these. The ring is 2px ink at a 2px offset on every control, on paper and parchment alike.</p>
-        <div className="w-[14rem]"><Switch checked={force} onChange={setForce} label="Show every ring" /></div>
-      </div>
-    </div>
-  );
-}
-
-const VERIFY: Record<MethodRow["verify"], { s: Status; word: string; note: string }> = {
-  exact: { s: "ok", word: "Verified", note: "Notebook output matches Table 1" },
-  near: { s: "warn", word: "Near", note: "Off by one in the third decimal" },
-  mixed: { s: "warn", word: "Mixed", note: "Metric and K come from two runs" },
-  "not found": { s: "fail", word: "Not saved", note: "No saved output for this run" },
-};
-export function ColorAloneDemo({ rows }: { rows: MethodRow[] }) {
-  const [grey, setGrey] = useState(false);
-  const pick = ["GMM (M1, K = 21)", "CapacityVAE (M1, lat. K = 5)", "HierarchicalVAE (M2, lat. K = 28)", "K-Means (M1, K = 2)"].map((l) => rows.find((r) => r.label === l)!).filter(Boolean);
-  return (
-    <div>
-      <ul className={`divide-y divide-[var(--rule)] border-y border-[var(--rule)] transition-[filter] duration-300 ${grey ? "grayscale" : ""}`}>
-        {pick.map((r) => {
-          const v = VERIFY[r.verify];
-          const st = STATUS[v.s];
-          return (
-            <li key={r.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-2.5">
-              <span className="min-w-0">
-                <span className={`${SANS} block truncate text-[14px] font-medium`}>{r.label}</span>
-                <span className={`${SANS} block text-[12px] text-[var(--muted)]`}>{v.note}</span>
-              </span>
-              <span className={`${SANS} inline-flex items-center gap-1.5 rounded-[2px] border px-2 py-1 text-[12.5px] font-medium`} style={{ color: st.color, borderColor: st.color }}>
-                <st.Icon size={11} />{v.word}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-      <div className="mt-2 max-w-[18rem]"><Switch checked={grey} onChange={setGrey} label="Preview in greyscale" hint="The icon and the word still carry it" /></div>
-    </div>
-  );
-}
-
-export function EmphasisDemo() {
-  const [after, setAfter] = useState(true);
-  const loud = `${SANS} inline-flex min-h-10 items-center rounded-[3px] px-4 text-[14px] font-semibold text-white`;
-  return (
-    <div>
-      <Segmented label="Version" value={after ? "after" : "before"} onChange={(v) => setAfter(v === "after")} options={[{ value: "before", label: "Before" }, { value: "after", label: "After" }]} />
-      <div className="mt-4 rounded-[3px] border border-[var(--rule)] bg-[var(--mount)] p-5" aria-live="polite">
-        <p className={`${SERIF} text-[20px] leading-tight font-[450]`}>GMM beats every VAE on Mission 1</p>
-        <p className={`${caption} mt-1`}>ROC-AUC 0.692 against 0.628</p>
-        <div className="mt-4 flex flex-wrap gap-2.5">
-          {after ? (
-            <>
-              <button type="button" className={btnPrimary}>Explore the latent map</button>
-              <button type="button" className={btnQuiet}>Read §4</button>
-              <button type="button" className={btnQuiet}>Download</button>
-            </>
-          ) : (
-            <>
-              <span className={`${loud} bg-[var(--accent)]`}>Explore the latent map</span>
-              <span className={`${loud} bg-[var(--prussian)]`}>Read §4</span>
-              <span className={`${loud} bg-[var(--ochre)]`}>Download!</span>
-            </>
-          )}
-        </div>
-      </div>
-      <p className={`${caption} mt-2`}>{after ? "After: the primary wins because the other two got quieter, not because it got louder." : "Before: three loud buttons, so nothing leads."}</p>
     </div>
   );
 }
