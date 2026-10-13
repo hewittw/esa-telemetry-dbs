@@ -43,7 +43,9 @@ export function CountUp({ value, digits = 0, pad = 0, ms = 800 }: { value: numbe
   const [shown, setShown] = useState<number | null>(null);
   const done = useRef(false);
   const target = useRef(value);
-  target.current = value;
+  useEffect(() => {
+    target.current = value;
+  }, [value]);
   useEffect(() => {
     if (st === "armed" && !done.current) setShown(0);
     if (st !== "in" || done.current) return;

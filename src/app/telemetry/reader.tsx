@@ -80,7 +80,7 @@ function Reader({ page, setPage, onClose }: { page: number; setPage: (p: number)
   // zoom resets to fit on every page change (derived from the page it was set on)
   const [zs, setZs] = useState({ page, zi: 0 });
   const zi = zs.page === page ? zs.zi : 0;
-  const setZi = (f: number | ((i: number) => number)) => setZs((x) => ({ page, zi: typeof f === "function" ? f(x.page === page ? x.zi : 0) : f }));
+  const setZi = useCallback((f: number | ((i: number) => number)) => setZs((x) => ({ page, zi: typeof f === "function" ? f(x.page === page ? x.zi : 0) : f })), [page]);
   const [fit, setFit] = useState({ w: 600, h: 776 });
   const z = ZOOMS[zi];
   const info = PAGES[page - 1];
@@ -135,13 +135,18 @@ function Reader({ page, setPage, onClose }: { page: number; setPage: (p: number)
         const f = [...box.current.querySelectorAll<HTMLElement>("button:not([disabled]),a[href]")];
         const first = f[0];
         const last = f[f.length - 1];
-        if (e.shiftKey && document.activeElement === first) (e.preventDefault(), last.focus());
-        else if (!e.shiftKey && document.activeElement === last) (e.preventDefault(), first.focus());
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [go, onClose, setPage]);
+  }, [go, onClose, setPage, setZi]);
 
   // swipe (touch, unzoomed) and drag-to-pan (mouse, zoomed)
   const touch = useRef<{ x: number; y: number } | null>(null);

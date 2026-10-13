@@ -178,3 +178,29 @@
     animation: none;
   }
 }
+
+/* selected controls still answer hover and press (the selected classes in ui.tsx override the
+   rest-state hover/active ones): selected segmented items brighten to white, selected chips take a
+   Frost border; both drop 1px when pressed */
+.is-root [role="radiogroup"] button[aria-checked="true"]:hover:not(:disabled) {
+  background-color: #ffffff;
+}
+.is-root [role="radiogroup"] button[aria-checked="true"]:active:not(:disabled),
+.is-root button.rounded-full[aria-pressed="true"]:active {
+  transform: translateY(1px);
+}
+.is-root button.rounded-full[aria-pressed="true"]:hover {
+  border-color: var(--is-frost);
+}
+
+/* Firefox range thumb gets the same hover / press as the WebKit one in ds.css */
+.is-root .isd-range::-moz-range-thumb {
+  transition: transform 200ms var(--is-ease), background-color 200ms var(--is-ease);
+}
+.is-root .isd-range:hover::-moz-range-thumb {
+  transform: scale(1.15);
+}
+.is-root .isd-range:active::-moz-range-thumb {
+  transform: scale(0.9);
+  background: #ffffff;
+}

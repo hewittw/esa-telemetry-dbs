@@ -66,7 +66,7 @@ function Inner({ data }: { data: SiteData }) {
           id="structure"
           a="Where the"
           b="structure lives"
-          intro={<KeyedReveal lead="Why detectors fail." text="Every global detector we tried stalls near PR-AUC 0.322, because the telemetry is not one cloud of normal: it is 18 to 29 operating modes." keys={["operating modes"]} />}
+          intro={<KeyedReveal lead="Why detectors fail." text="Every linear detector we tried stalls at PR-AUC 0.322, because the telemetry is not one cloud of normal: it is 18 to 29 operating modes." keys={["operating modes"]} />}
           wide
         >
           <Compare tree={data.tree} m={m} k={K[m]} />
@@ -153,8 +153,8 @@ function Header({ m, setM }: { m: M; setM: (m: M) => void }) {
           <span aria-hidden>←</span> Hub
         </Link>
         <span aria-hidden className="h-5 w-px shrink-0 bg-(--is-line) max-sm:hidden" />
-        <a href="#top" className={`${MONO} min-w-0 truncate whitespace-nowrap rounded-[2px] text-[11px] uppercase tracking-[0.14em] text-(--is-frost) ${FR} max-[359px]:hidden`}>
-          <span className="text-(--is-steel)">[</span> ESA<span className="max-sm:hidden lg:max-xl:hidden"> telemetry</span> <span className="text-(--is-steel)">]</span>
+        <a href="#top" className={`group ${MONO} ${TRANS} min-w-0 truncate whitespace-nowrap rounded-[2px] px-1 text-[11px] uppercase tracking-[0.14em] text-(--is-frost) active:bg-(--is-charcoal) ${FR} max-[359px]:hidden`}>
+          <span className={`${TRANS} text-(--is-steel) group-hover:text-(--is-frost)`}>[</span> ESA<span className="max-sm:hidden lg:max-xl:hidden"> telemetry</span> <span className={`${TRANS} text-(--is-steel) group-hover:text-(--is-frost)`}>]</span>
         </a>
         <nav aria-label="Sections" className="ml-auto hidden items-center lg:flex">
           {NAV.map((n) => link(n))}
@@ -229,7 +229,7 @@ function Hero({ m, strands }: { m: M; strands: SiteData["strands"] }) {
                   </span>
                 ))}
               </span>{" "}
-              <span className="text-(--is-teal)">operating modes,</span> <span className="font-light text-(--is-steel)">not <span className="whitespace-nowrap">4–5</span> subsystems.</span>
+              <span className="text-(--is-teal)">operating modes,</span> <span className="font-light text-(--is-steel) [text-shadow:0_0_6px_#0A0B0D,0_0_14px_#0A0B0D,0_0_28px_#0A0B0D]">not <span className="whitespace-nowrap">4–5</span> subsystems.</span>
             </h1>
             <p className="mt-6 max-w-[40ch] text-[clamp(18px,1.7vw,28px)] font-light leading-[1.2] tracking-[-0.01em] text-(--is-frost)">
               Each mode has its own normal. That multi-modality is why every global detector we tried fails.

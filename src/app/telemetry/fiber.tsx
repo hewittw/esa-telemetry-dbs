@@ -75,19 +75,26 @@ export function FiberField({ strands, mission }: { strands: Strand[]; mission: 1
       }
     };
 
+    // the loop only runs while the canvas is on screen; off screen it stops scheduling frames entirely
     const loop = (now: number) => {
       const dt = Math.min(64, now - last);
       last = now;
-      if (!pausedRef.current && visible) {
+      if (!pausedRef.current) {
         t += dt / 1000;
         draw();
       }
-      raf = requestAnimationFrame(loop);
+      raf = visible ? requestAnimationFrame(loop) : 0;
     };
 
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
-    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !reduce && !raf) {
+        last = performance.now();
+        raf = requestAnimationFrame(loop);
+      }
+    });
     io.observe(canvas);
     resize();
     if (!reduce) raf = requestAnimationFrame(loop);

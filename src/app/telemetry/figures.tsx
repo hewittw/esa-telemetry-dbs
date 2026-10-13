@@ -182,10 +182,22 @@ export function Compare({ tree, m, k }: { tree: Tree; m: M; k: number }) {
             aria-valuetext={`${p}% showing subsystems`}
             onKeyDown={(e) => {
               const s = e.shiftKey ? 10 : 4;
-              if (e.key === "ArrowLeft") (e.preventDefault(), setP((x) => Math.max(0, x - s)));
-              if (e.key === "ArrowRight") (e.preventDefault(), setP((x) => Math.min(100, x + s)));
-              if (e.key === "Home") (e.preventDefault(), setP(0));
-              if (e.key === "End") (e.preventDefault(), setP(100));
+              if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                setP((x) => Math.max(0, x - s));
+              }
+              if (e.key === "ArrowRight") {
+                e.preventDefault();
+                setP((x) => Math.min(100, x + s));
+              }
+              if (e.key === "Home") {
+                e.preventDefault();
+                setP(0);
+              }
+              if (e.key === "End") {
+                e.preventDefault();
+                setP(100);
+              }
             }}
             className={`${MONO} ${TRANS} absolute top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-[2px] border border-(--is-frost) bg-(--is-void) text-[13px] text-(--is-frost) hover:bg-(--is-panel) active:bg-(--is-charcoal) ${FR}`}
             style={{ left: `${p}%` }}
@@ -282,9 +294,18 @@ export function Zoom({ tree, m }: { tree: Tree; m: M }) {
   const s = sub !== null ? t.subsystems[sub] : null;
   const g = s && grp !== null ? s.groups[grp] : null;
   const setLevel = (l: string) => {
-    if (l === "broader") (setSub(null), setGrp(null));
-    if (l === "closer") (setSub(sub ?? 0), setGrp(null));
-    if (l === "deeper") (setSub(sub ?? 0), setGrp(grp ?? 0));
+    if (l === "broader") {
+      setSub(null);
+      setGrp(null);
+    }
+    if (l === "closer") {
+      setSub(sub ?? 0);
+      setGrp(null);
+    }
+    if (l === "deeper") {
+      setSub(sub ?? 0);
+      setGrp(grp ?? 0);
+    }
   };
   const block = `${MONO} ${TRANS} group relative flex min-h-24 min-w-[84px] flex-col justify-between overflow-hidden rounded-[2px] border border-(--is-line) p-2 text-left text-[10px] uppercase tracking-[0.1em] text-(--is-frost) hover:border-(--is-frost) active:bg-(--is-charcoal) ${FR}`;
   const ticks = (n: number, tone: string) => (
@@ -315,7 +336,7 @@ export function Zoom({ tree, m }: { tree: Tree; m: M }) {
         {level === "broader" ? (
           <div key="b" className="isd-dialog flex flex-1 flex-wrap content-stretch gap-1.5">
             {t.subsystems.map((x, k) => (
-              <button key={x.name} type="button" onClick={() => (setSub(k), setGrp(null))} className={block} style={{ flexGrow: x.n, flexBasis: `${x.n * 4}px` }} aria-label={`${x.name}, ${x.n} channels, ${x.groups.length} groups. Go closer`}>
+              <button key={x.name} type="button" onClick={() => (setSub(k), setGrp(null))} className={block} style={{ flexGrow: x.n, flexBasis: `${x.n * 4}px` }} aria-label={`${x.name}, ${x.n} channels, ${x.groups.length} ${x.groups.length === 1 ? "group" : "groups"}. Go closer`}>
                 <span className="relative z-10 bg-(--is-panel) pr-1 leading-tight">
                   {x.name.replace("Subsystem ", "SS-")}
                   <span className="block text-(--is-steel)">
@@ -518,7 +539,7 @@ export function ResultsTable({ rows, m, prov, onOpen }: { rows: Row[]; m: M; pro
             <tr className="border-b border-(--is-frost)">
               {cols.map((c) => (
                 <th key={c.k} scope="col" aria-sort={key === c.k ? (asc ? "ascending" : "descending") : "none"} className={`${c.cls ?? ""} ${c.num ? "text-right" : ""} px-2 py-1 first:pl-4 sm:first:pl-2`}>
-                  <button type="button" onClick={() => sortBy(c.k)} className={`${MONO} ${TRANS} inline-flex min-h-9 items-center gap-1 whitespace-nowrap rounded-[2px] text-[11px] uppercase tracking-[0.12em] ${key === c.k ? "text-(--is-frost)" : "text-(--is-steel) hover:text-(--is-frost)"} active:opacity-70 ${FR}`}>
+                  <button type="button" onClick={() => sortBy(c.k)} className={`${MONO} ${TRANS} inline-flex min-h-9 items-center gap-1 whitespace-nowrap rounded-[2px] text-[11px] uppercase tracking-[0.12em] underline decoration-transparent underline-offset-4 hover:decoration-(--is-frost) ${key === c.k ? "text-(--is-frost)" : "text-(--is-steel) hover:text-(--is-frost)"} active:opacity-70 ${FR}`}>
                     {c.t}
                     <span aria-hidden className={key === c.k ? "" : "opacity-0"}>
                       {asc ? "↑" : "↓"}
@@ -723,7 +744,7 @@ export function Threshold({ curves, m }: { curves: Curves; m: M }) {
   const X = (r: number) => r * 100;
   const Y = (p: number) => (1 - p) * 100;
   return (
-    <Panel id="evidence-threshold" code="E.01" title="Set the alarm threshold" page={m === 1 ? 3 : 9} pageLabel="PR curves" className="lg:col-span-12">
+    <Panel id="evidence-threshold" code="E.01" title="Set the alarm threshold" page={5} pageLabel="Table 1 AP" className="lg:col-span-12">
       <div className="flex flex-wrap items-center gap-3">
         <div className="min-w-[220px] flex-1 sm:max-w-[320px]">
           <label htmlFor="isx-run" className="sr-only">
