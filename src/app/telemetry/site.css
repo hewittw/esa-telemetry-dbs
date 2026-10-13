@@ -111,3 +111,70 @@
 .is-root .is-corners.isx-fill-void {
   background-color: rgba(10, 11, 13, 0.9);
 }
+
+/* ---------------- final-site additions ---------------- */
+
+/* Fiber Green is reserved for the primary action, so text selection uses Frost instead */
+.is-root ::selection {
+  background: var(--is-frost);
+  color: var(--is-void);
+}
+
+/* figures draw in once as they enter the viewport (state set by useReveal in reveal.tsx):
+   static = drawn (SSR, on screen at load, reduced motion) · armed = waiting below the fold · in = drawing */
+.is-root [data-reveal="armed"] .isx-wipe {
+  clip-path: inset(-24px 100% -24px -24px);
+}
+.is-root [data-reveal="armed"] .isx-wipe-down {
+  clip-path: inset(-24px -24px 100% -24px);
+}
+.is-root [data-reveal="armed"] .isx-grow {
+  transform: scaleX(0);
+}
+.is-root [data-reveal="armed"] .isx-rise-y {
+  transform: scaleY(0);
+}
+.is-root [data-reveal="in"] .isx-wipe,
+.is-root [data-reveal="in"] .isx-wipe-down {
+  clip-path: inset(-24px -24px -24px -24px);
+  transition: clip-path 900ms var(--is-ease) var(--d, 0ms);
+}
+.is-root .isx-grow {
+  transform-origin: left;
+}
+.is-root .isx-rise-y {
+  transform-origin: bottom;
+}
+.is-root [data-reveal="in"] .isx-grow,
+.is-root [data-reveal="in"] .isx-rise-y {
+  transition: transform 700ms var(--is-ease) var(--d, 0ms);
+}
+
+/* guided tour: the current stop's segment fills over its dwell; the stop gets a Frost outline */
+.is-root .isx-tourbar {
+  animation: isx-tourbar linear both;
+}
+@keyframes isx-tourbar {
+  from {
+    transform: scaleX(0);
+  }
+}
+.is-root [data-tour-on="true"] {
+  outline: 1px solid var(--is-frost);
+  outline-offset: 6px;
+  transition: outline-color 300ms var(--is-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-root [data-reveal] .isx-wipe,
+  .is-root [data-reveal] .isx-wipe-down,
+  .is-root [data-reveal] .isx-grow,
+  .is-root [data-reveal] .isx-rise-y {
+    clip-path: none;
+    transform: none;
+    transition: none;
+  }
+  .is-root .isx-tourbar {
+    animation: none;
+  }
+}

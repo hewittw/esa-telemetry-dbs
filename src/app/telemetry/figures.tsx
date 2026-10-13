@@ -7,6 +7,15 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Bic, Curve, Curves, Row, Timelines, Tree } from "../design-systems/intense-space/data";
 import { BTN, Br, Button, Chip, DOT, FR, LABEL, MONO, Modal, Range, Segmented, Select, Status, TRANS } from "../design-systems/intense-space/ui";
 import { PageLink } from "./reader";
+import { CountUp, RevealCtx, useReveal } from "./reveal";
+
+export type Prov = { s: "verified" | "near" | "recomputed" | "unsaved"; note: string };
+export const PROV: Record<Prov["s"], { i: string; w: string; c: string }> = {
+  verified: { i: "✓", w: "Verified", c: "text-(--is-frost)" },
+  near: { i: "≈", w: "Near", c: "text-(--is-frost)" },
+  recomputed: { i: "↻", w: "Recomputed", c: "text-(--is-frost)" },
+  unsaved: { i: "–", w: "Not saved", c: "text-(--is-steel)" },
+};
 
 export type M = 1 | 2;
 export const MS: { v: M; t: string }[] = [
@@ -21,8 +30,9 @@ const PLATEAU = 0.322;
 
 /* ---------------- panel: hairline + corner ticks, bracketed tag, optional paper link ---------------- */
 export function Panel({ id, code, title, page, pageLabel, className = "", children }: { id?: string; code: string; title: string; page?: number; pageLabel?: string; className?: string; children: ReactNode }) {
+  const [ref, reveal] = useReveal<HTMLElement>();
   return (
-    <section id={id} aria-labelledby={id ? `${id}-h` : undefined} className={`is-corners isx-fill isx-anchor relative flex min-w-0 flex-col rounded-[2px] border border-(--is-line) bg-(--is-panel) ${className}`}>
+    <section ref={ref} id={id} data-reveal={reveal} aria-labelledby={id ? `${id}-h` : undefined} className={`is-corners isx-fill isx-anchor relative flex min-w-0 flex-col rounded-[2px] border border-(--is-line) bg-(--is-panel) ${className}`}>
       <header className="flex min-h-11 flex-wrap items-center gap-x-3 gap-y-0 border-b border-(--is-line) py-1 pl-4 pr-2">
         <span className={`${LABEL} text-(--is-steel)`}>[ {code} ]</span>
         <h3 id={id ? `${id}-h` : undefined} className={`${LABEL} text-(--is-frost)`}>
@@ -34,13 +44,15 @@ export function Panel({ id, code, title, page, pageLabel, className = "", childr
           </span>
         ) : null}
       </header>
-      <div className="flex flex-1 flex-col gap-5 p-4 sm:p-5">{children}</div>
+      <RevealCtx.Provider value={reveal}>
+        <div className="flex flex-1 flex-col gap-5 p-4 sm:p-5">{children}</div>
+      </RevealCtx.Provider>
     </section>
   );
 }
 
 /* a chart frame: SVG for marks (non-scaling strokes), HTML for every label so text never drops under 10px */
-function Frame({ children, labels, className = "aspect-[16/10]", onPoint, foot }: { children: ReactNode; labels?: ReactNode; className?: string; onPoint?: (fx: number, fy: number) => void; foot?: [ReactNode, ReactNode] }) {
+function Frame({ children, labels, className = "aspect-[16/10]", onPoint, foot, fill }: { children: ReactNode; labels?: ReactNode; className?: string; onPoint?: (fx: number, fy: number) => void; foot?: [ReactNode, ReactNode]; fill?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const down = useRef(false);
   const fire = (e: React.PointerEvent) => {
@@ -49,8 +61,8 @@ function Frame({ children, labels, className = "aspect-[16/10]", onPoint, foot }
     onPoint(Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)));
   };
   return (
-    <div>
-      <div className={`relative ${className}`}>
+    <div className={fill ? "flex h-full flex-col" : ""}>
+      <div className={`relative ${fill ? "flex-1" : ""} ${className}`}>
         <div
           ref={ref}
           className={`is-regdots absolute inset-0 rounded-[2px] border border-(--is-line) bg-(--is-void) ${onPoint ? "cursor-crosshair touch-pan-y" : ""}`}
@@ -59,7 +71,7 @@ function Frame({ children, labels, className = "aspect-[16/10]", onPoint, foot }
           onPointerUp={() => (down.current = false)}
           onPointerLeave={() => (down.current = false)}
         >
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="isx-wipe absolute inset-0 h-full w-full overflow-visible" aria-hidden>
             {children}
           </svg>
         </div>
@@ -84,7 +96,7 @@ const at = (x: number, y: number, cls: string, txt: ReactNode, align: "l" | "r" 
 );
 
 /* ===================== S.01 · before / after: subsystems vs operational groups ===================== */
-export function Compare({ tree, m, setM, ari }: { tree: Tree; m: M; setM: (m: M) => void; ari: { sub: number; group: number } }) {
+export function Compare({ tree, m, k }: { tree: Tree; m: M; k: number }) {
   const t = tree[m];
   const { chans, groups } = useMemo(() => {
     const chans: { sub: number; group: number }[] = [];
@@ -118,13 +130,9 @@ export function Compare({ tree, m, setM, ari }: { tree: Tree; m: M; setM: (m: M)
     setP(Math.round(Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100))));
   };
   return (
-    <Panel id="structure-split" code="S.01" title={`Same ${t.nChannels} channels, two ways to bundle them`} page={11} pageLabel="Latent maps" className="lg:col-span-12">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Segmented label="Mission" value={m} onChange={setM} options={MS} />
-        <p className={`${LABEL} text-(--is-steel)`}>Drag the divider, or focus it and press ← →</p>
-      </div>
+    <Panel id="structure-split" code="S.01" title={`Same ${t.nChannels} channels, two ways to bundle them`} page={5} pageLabel="Discussion" className="lg:col-span-12">
       <div className={`${LABEL} -mb-3 flex justify-between gap-3`}>
-        <span className="text-(--is-frost)">← {nSub} subsystems</span>
+        <span className="text-(--is-steel)">← {nSub} subsystems</span>
         <span className="text-right text-(--is-teal)">{nGrp} operational groups →</span>
       </div>
       <div
@@ -139,8 +147,8 @@ export function Compare({ tree, m, setM, ari }: { tree: Tree; m: M; setM: (m: M)
         onPointerUp={() => (drag.current = false)}
         onPointerCancel={() => (drag.current = false)}
       >
-        <div className="is-regdots relative aspect-[4/3] cursor-ew-resize sm:aspect-[760/250]">
-          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="absolute inset-x-0 top-[6%] h-[80%] w-full" aria-hidden>
+        <div className="is-regdots relative aspect-[4/3] cursor-ew-resize sm:aspect-[760/230]">
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="isx-wipe-down absolute inset-x-0 top-[6%] h-[80%] w-full" aria-hidden>
             <g fill="none" stroke="#CFD9E0" strokeOpacity="0.7">
               {chans.map((c, i) => (
                 <path key={i} d={curve(cx(i), grpX[c.group])} strokeWidth="1" vectorEffect="non-scaling-stroke" />
@@ -152,14 +160,14 @@ export function Compare({ tree, m, setM, ari }: { tree: Tree; m: M; setM: (m: M)
           </svg>
           <div className="absolute inset-0 bg-(--is-void)" style={{ clipPath: `inset(0 ${100 - p}% 0 0)` }}>
             <div className="is-regdots absolute inset-0" />
-            <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="absolute inset-x-0 top-[6%] h-[80%] w-full" aria-hidden>
+            <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="isx-wipe-down absolute inset-x-0 top-[6%] h-[80%] w-full" aria-hidden>
               <g fill="none" stroke="#8C979F" strokeOpacity="0.75">
                 {chans.map((c, i) => (
                   <path key={i} d={curve(cx(i), subX[c.sub])} strokeWidth="1" vectorEffect="non-scaling-stroke" />
                 ))}
               </g>
               {subX.map((x, i) => (
-                <rect key={i} x={x - 4} y={H - 16} width="8" height="8" fill="#CFD9E0" />
+                <rect key={i} x={x - 4} y={H - 16} width="8" height="8" fill="#8C979F" />
               ))}
             </svg>
           </div>
@@ -186,22 +194,15 @@ export function Compare({ tree, m, setM, ari }: { tree: Tree; m: M; setM: (m: M)
           </div>
         </div>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <p className="text-[16px] leading-[1.45] text-(--is-steel)">
-          <span className="text-(--is-frost)">Subsystems.</span> {nSub} bundles, the engineering chart.{" "}
-          {m === 1 ? <>GMM&apos;s modes barely agree with them: ARI {ari.sub.toFixed(3)}.</> : <>BIC never picks a K this small.</>}
-        </p>
-        <p className="text-[16px] leading-[1.45] text-(--is-steel) sm:text-right">
-          <span className="text-(--is-teal)">Operational groups.</span> {nGrp} bundles, next to BIC&apos;s K = {m === 1 ? 21 : 29}.{" "}
-          {m === 1 ? <>Agreement doubles: ARI {ari.group.toFixed(3)}.</> : <>An exact match on Mission 2.</>}
-        </p>
-      </div>
+      <p className="max-w-[72ch] text-[16px] leading-[1.45] text-(--is-frost)">
+        BIC&apos;s K = {k} sits beside the <span className="text-(--is-teal)">{nGrp} operational groups</span>, not the <span className="text-(--is-steel)">{nSub} subsystems</span>; drag the divider to compare.
+      </p>
     </Panel>
   );
 }
 
 /* ===================== S.02 · BIC vs K ===================== */
-export function BicPicker({ bic, m, setM }: { bic: Bic; m: M; setM: (m: M) => void }) {
+export function BicPicker({ bic, m }: { bic: Bic; m: M }) {
   const d = bic[m];
   // K resets to the mission's minimum whenever the mission changes (derived, no effect)
   const [st, setSt] = useState({ m, k: d.selectedK });
@@ -216,19 +217,13 @@ export function BicPicker({ bic, m, setM }: { bic: Bic; m: M; setM: (m: M) => vo
   const zone = k <= d.subsystems ? "subsystem" : k >= d.groups - 2 && k <= 30 ? "group" : "between";
   return (
     <Panel id="structure-bic" code="S.02" title="How many modes? BIC vs K" page={5} pageLabel="Discussion" className="lg:col-span-7">
-      <div className="flex flex-wrap items-center gap-3">
-        <Segmented label="Mission" value={m} onChange={setM} options={MS} />
-        <Button variant="ghost" onClick={() => setK(d.selectedK)} disabled={k === d.selectedK}>
-          Jump to the minimum
-        </Button>
-      </div>
       <Frame
         className="aspect-[4/3] sm:aspect-[16/9] lg:aspect-[2/1]"
         onPoint={(fx) => setK(Math.round(2 + fx * 28))}
         foot={["↑ BIC, lower = better", "K = 2 – 30 →"]}
         labels={
           <>
-            {at(X(d.subsystems) + 1.5, 8, "text-(--is-frost)", `${d.subsystems} subsystems`)}
+            {at(X(d.subsystems) + 1.5, 8, "text-(--is-steel)", `${d.subsystems} subsystems`)}
             {at(X(d.groups) - 1.5, 17, "text-(--is-teal)", `${d.groups} groups`, "r")}
           </>
         }
@@ -240,31 +235,42 @@ export function BicPicker({ bic, m, setM }: { bic: Bic; m: M; setM: (m: M) => vo
         <circle cx={X(k)} cy={Yn(p.bic)} r="1.1" fill="#CFD9E0" />
       </Frame>
       <Range min={2} max={30} value={k} onChange={setK} label="Number of GMM components K" valueText={`K = ${k}, BIC ${(p.bic / 1e6).toFixed(2)} million`} />
-      <div className="mt-auto grid grid-cols-[auto_1fr] items-end gap-x-6 gap-y-2" aria-live="polite">
+      <div className="mt-auto grid grid-cols-[auto_1fr] items-end gap-x-5 gap-y-2 sm:grid-cols-[auto_1fr_auto] sm:gap-x-6">
         <div>
           <p className={`${LABEL} text-(--is-steel)`}>K</p>
-          <p className={`${DOT} text-[44px] font-semibold leading-[0.85] text-(--is-frost)`}>{String(k).padStart(2, "0")}</p>
+          <p className={`${DOT} text-[44px] font-semibold leading-[0.85] text-(--is-frost)`}>
+            <CountUp value={k} pad={2} />
+          </p>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex min-w-0 flex-col gap-1" aria-live="polite">
           <p className={`${MONO} text-[13px] text-(--is-frost)`}>
             BIC {(p.bic / 1e6).toFixed(3)}M{" "}
             {k === d.selectedK ? <Status kind="best">Minimum · K* = {k}</Status> : <span className="text-(--is-steel)">· +{(delta / 1e6).toFixed(3)}M vs K* = {d.selectedK}</span>}
           </p>
           <p className="text-[13px] leading-snug text-(--is-steel)">
-            {zone === "subsystem"
-              ? `At the subsystem scale the fit is ${(delta / 1e6).toFixed(2)}M worse.`
-              : zone === "group"
-                ? "Group scale: this is where BIC bottoms out."
-                : "Between scales: BIC is still falling."}
+            {zone === "subsystem" ? (
+              <>
+                At the <span className="text-(--is-steel)">subsystem</span> scale the fit is {(delta / 1e6).toFixed(2)}M worse.
+              </>
+            ) : zone === "group" ? (
+              <>
+                At the <span className="text-(--is-teal)">group</span> scale, BIC bottoms out.
+              </>
+            ) : (
+              "Between the two scales, BIC is still falling."
+            )}
           </p>
         </div>
+        <Button variant="ghost" className="max-sm:col-span-2 max-sm:-ml-2 max-sm:justify-self-start" onClick={() => setK(d.selectedK)} disabled={k === d.selectedK}>
+          Reset to K*
+        </Button>
       </div>
     </Panel>
   );
 }
 
 /* ===================== S.03 · Broader · Closer · Deeper ===================== */
-export function Zoom({ tree, m, setM }: { tree: Tree; m: M; setM: (m: M) => void }) {
+export function Zoom({ tree, m }: { tree: Tree; m: M }) {
   // zoom resets to Broader whenever the mission changes (derived, no effect)
   const [st, setSt] = useState<{ m: M; sub: number | null; grp: number | null }>({ m, sub: null, grp: null });
   const sub = st.m === m ? st.sub : null;
@@ -281,17 +287,16 @@ export function Zoom({ tree, m, setM }: { tree: Tree; m: M; setM: (m: M) => void
     if (l === "deeper") (setSub(sub ?? 0), setGrp(grp ?? 0));
   };
   const block = `${MONO} ${TRANS} group relative flex min-h-24 min-w-[84px] flex-col justify-between overflow-hidden rounded-[2px] border border-(--is-line) p-2 text-left text-[10px] uppercase tracking-[0.1em] text-(--is-frost) hover:border-(--is-frost) active:bg-(--is-charcoal) ${FR}`;
-  const ticks = (n: number) => (
-    <span aria-hidden className="absolute inset-x-2 bottom-2 top-10 flex justify-between">
+  const ticks = (n: number, tone: string) => (
+    <span aria-hidden className="isx-rise-y absolute inset-x-2 bottom-2 top-10 flex justify-between">
       {Array.from({ length: n }).map((_, k) => (
-        <span key={k} className="w-px bg-(--is-steel)/50 group-hover:bg-(--is-frost)/70" />
+        <span key={k} className={`w-px ${tone} group-hover:bg-(--is-frost)/70`} />
       ))}
     </span>
   );
   return (
     <Panel id="structure-zoom" code="S.03" title="What a group is" page={2} pageLabel="Dataset" className="lg:col-span-5">
-      <div className="flex flex-wrap items-center gap-2">
-        <Segmented label="Mission" value={m} onChange={setM} options={[{ v: 1, t: "M1" }, { v: 2, t: "M2" }]} />
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <Segmented
           label="Zoom level"
           value={level}
@@ -302,14 +307,13 @@ export function Zoom({ tree, m, setM }: { tree: Tree; m: M; setM: (m: M) => void
             { v: "deeper", t: "Deeper" },
           ]}
         />
+        <p className={`${LABEL} text-(--is-steel)`} aria-live="polite">
+          {s ? `${s.name.replace("Subsystem ", "SS-")}${g ? ` › G${g.group}` : ""} · ${g ? g.channels.length : s.n} ch` : `${t.subsystems.length} subsystems · ${t.nChannels} ch`}
+        </p>
       </div>
-      <p className={`${LABEL} text-(--is-steel)`} aria-live="polite">
-        Mission {m} · {t.nChannels} ch{s ? ` › ${s.name.replace("Subsystem ", "SS-")} · ${s.n} ch` : ""}
-        {g ? ` › G${g.group} · ${g.channels.length} ch` : ""}
-      </p>
-      <div className="min-h-[200px]">
+      <div className="flex min-h-[220px] flex-1 flex-col">
         {level === "broader" ? (
-          <div key="b" className="isd-dialog flex flex-wrap gap-1.5">
+          <div key="b" className="isd-dialog flex flex-1 flex-wrap content-stretch gap-1.5">
             {t.subsystems.map((x, k) => (
               <button key={x.name} type="button" onClick={() => (setSub(k), setGrp(null))} className={block} style={{ flexGrow: x.n, flexBasis: `${x.n * 4}px` }} aria-label={`${x.name}, ${x.n} channels, ${x.groups.length} groups. Go closer`}>
                 <span className="relative z-10 bg-(--is-panel) pr-1 leading-tight">
@@ -318,27 +322,27 @@ export function Zoom({ tree, m, setM }: { tree: Tree; m: M; setM: (m: M) => void
                     {x.groups.length} {x.groups.length === 1 ? "group" : "groups"}
                   </span>
                 </span>
-                {ticks(x.n)}
+                {ticks(x.n, "bg-(--is-steel)/60")}
               </button>
             ))}
           </div>
         ) : level === "closer" && s ? (
-          <div key={`c${sub}`} className="isd-dialog rounded-[2px] border border-(--is-teal) p-1.5">
+          <div key={`c${sub}`} className="isd-dialog flex flex-1 flex-col rounded-[2px] border border-(--is-teal) p-1.5">
             <p className={`${LABEL} px-1 pb-1.5 text-(--is-teal)`}>[ {s.name} · {s.groups.length} groups ]</p>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-1 flex-wrap content-stretch gap-1.5">
               {s.groups.map((x, k) => (
                 <button key={x.group} type="button" onClick={() => setGrp(k)} className={block} style={{ flexGrow: x.channels.length, flexBasis: `${x.channels.length * 10}px` }} aria-label={`Group ${x.group}, ${x.channels.length} channels. Go deeper`}>
                   <span className="relative z-10 bg-(--is-panel) pr-1 leading-tight">
                     G{x.group}
                     <span className="block text-(--is-steel)">{x.channels.length} ch</span>
                   </span>
-                  {ticks(x.channels.length)}
+                  {ticks(x.channels.length, "bg-(--is-teal)/70")}
                 </button>
               ))}
             </div>
           </div>
         ) : s && g ? (
-          <div key={`d${sub}-${grp}`} className="isd-dialog rounded-[2px] border border-(--is-teal) p-3">
+          <div key={`d${sub}-${grp}`} className="isd-dialog flex-1 rounded-[2px] border border-(--is-teal) p-3">
             <p className={`${LABEL} pb-3 text-(--is-teal)`}>
               [ {s.name.replace("Subsystem ", "SS-")} › Group {g.group} ]
             </p>
@@ -356,12 +360,9 @@ export function Zoom({ tree, m, setM }: { tree: Tree; m: M; setM: (m: M) => void
           </div>
         ) : null}
       </div>
-      <div className="mt-auto flex flex-wrap items-center gap-3 border-t border-(--is-line) pt-4">
-        <button type="button" disabled={level === "broader"} onClick={() => (grp !== null ? setGrp(null) : setSub(null))} className={`group ${BTN.secondary}`}>
-          <Br>← Broader</Br>
-        </button>
-        <p className="text-[13px] leading-snug text-(--is-steel)">ESA splits each subsystem into groups of channels that work together. Click a block to go closer.</p>
-      </div>
+      <p className="text-[13px] leading-snug text-(--is-steel)">
+        ESA splits each <span className="text-(--is-steel)">subsystem</span> into <span className="text-(--is-teal)">operational groups</span> of channels that work together; click a block to go closer.
+      </p>
     </Panel>
   );
 }
@@ -386,7 +387,7 @@ function topSet(rows: Row[]) {
 }
 
 /* ===================== M.01 · dumbbell: each method on both missions ===================== */
-export function Ladder({ rows, onOpen }: { rows: Row[]; onOpen: (r: Row) => void }) {
+export function Ladder({ rows, m, onOpen }: { rows: Row[]; m: M; onOpen: (r: Row) => void }) {
   const methods = [...new Set(rows.map((r) => r.method))];
   const LO = 0.1;
   const X = (v: number) => ((v - LO) / (0.5 - LO)) * 100;
@@ -394,52 +395,55 @@ export function Ladder({ rows, onOpen }: { rows: Row[]; onOpen: (r: Row) => void
   const top = topSet(rows);
   const grid = "grid grid-cols-[5.5rem_1fr_7.25rem] sm:grid-cols-[7.5rem_1fr_7.5rem]";
   return (
-    <Panel id="methods-ladder" code="M.01" title="PR-AUC by method · Mission 1 vs 2" page={5} pageLabel="Table 1" className="lg:col-span-5">
-      <div className={`${MONO} flex flex-wrap gap-x-5 gap-y-1 text-[11px] uppercase tracking-[0.1em] text-(--is-frost)`}>
-        <span>
+    <Panel id="methods-ladder" code="M.01" title="PR-AUC by method · Mission 1 vs 2" page={5} pageLabel="Table 1" className="lg:col-span-12 xl:col-span-5">
+      <div className={`${MONO} flex flex-wrap gap-x-5 gap-y-1 text-[11px] uppercase tracking-[0.1em]`}>
+        <span className={m === 1 ? "text-(--is-frost)" : "text-(--is-steel)"}>
           <span aria-hidden>○ </span>Mission 1
         </span>
-        <span>
+        <span className={m === 2 ? "text-(--is-frost)" : "text-(--is-steel)"}>
           <span aria-hidden>● </span>Mission 2
         </span>
         <span className="text-(--is-steel)">
           <span aria-hidden>┊ </span>Linear plateau 0.322
         </span>
       </div>
-      <ol className="flex flex-col border-t border-(--is-line)" onMouseLeave={() => setHi(null)}>
-        {methods.map((name) => {
+      <ol className="flex flex-1 flex-col border-t border-(--is-line)" onMouseLeave={() => setHi(null)}>
+        {methods.map((name, idx) => {
           const r1 = rows.find((r) => r.method === name && r.mission === 1);
           const r2 = rows.find((r) => r.method === name && r.mission === 2);
           const on = hi === name;
           const isTop = (r1 && top.has(r1.label)) || (r2 && top.has(r2.label));
           const tone = on ? "#4BCFE0" : "#CFD9E0";
+          const dim = "#8C979F";
+          const c1 = on || m === 1 ? tone : dim;
+          const c2 = on || m === 2 ? tone : dim;
           return (
-            <li key={name}>
+            <li key={name} className="flex flex-1">
               <button
                 type="button"
                 onMouseEnter={() => setHi(name)}
                 onFocus={() => setHi(name)}
                 onBlur={() => setHi(null)}
-                onClick={() => onOpen((r2 ?? r1)!)}
-                aria-label={`${name}: Mission 1 ${r1 ? r1.prAuc.toFixed(3) : "not run"}, Mission 2 ${r2 ? r2.prAuc.toFixed(3) : "not run"}. Open details`}
-                className={`group ${grid} min-h-12 w-full items-center rounded-[2px] border-b border-(--is-line) text-left ${TRANS} hover:bg-(--is-void) active:bg-(--is-charcoal) ${FR} focus-visible:outline-offset-0`}
+                onClick={() => onOpen((m === 2 ? (r2 ?? r1) : (r1 ?? r2))!)}
+                aria-label={`${name}: Mission 1 ${r1 ? r1.prAuc.toFixed(3) : "not run"}, Mission 2 ${r2 ? r2.prAuc.toFixed(3) : "not run"}. Open the method card`}
+                className={`group ${grid} min-h-12 w-full flex-1 items-center rounded-[2px] border-b border-(--is-line) text-left ${TRANS} hover:bg-(--is-void) active:bg-(--is-charcoal) ${FR} focus-visible:outline-offset-0`}
               >
                 <span className={`${MONO} truncate pl-1 text-[11px] uppercase tracking-[0.06em] ${on ? "text-(--is-teal)" : "text-(--is-frost)"}`}>
                   {short(name).replace(" Feat-Recon", " Feat")}
                   {isTop ? <span aria-hidden className="text-(--is-teal)"> ◆</span> : null}
                 </span>
-                <span className="relative mx-2 h-12">
+                <span className="isx-wipe relative mx-2 h-12" style={{ "--d": `${idx * 45}ms` } as React.CSSProperties}>
                   <span aria-hidden className="absolute inset-y-0 border-l border-dashed border-(--is-steel)/70" style={{ left: `${X(PLATEAU)}%` }} />
                   <svg viewBox="0 0 100 10" preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
                     {r1 && r2 ? <line x1={X(r1.prAuc)} x2={X(r2.prAuc)} y1="5" y2="5" stroke={tone} strokeOpacity={on ? 1 : 0.55} strokeWidth={on ? 2 : 1.2} vectorEffect="non-scaling-stroke" /> : null}
                   </svg>
-                  {r1 ? <span className="absolute top-1/2 size-[11px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] bg-(--is-panel)" style={{ left: `${X(r1.prAuc)}%`, borderColor: tone }} /> : null}
-                  {r2 ? <span className="absolute top-1/2 size-[11px] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ left: `${X(r2.prAuc)}%`, background: tone }} /> : null}
+                  {r1 ? <span className={`absolute top-1/2 size-[11px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] bg-(--is-panel) ${TRANS}`} style={{ left: `${X(r1.prAuc)}%`, borderColor: c1 }} /> : null}
+                  {r2 ? <span className={`absolute top-1/2 size-[11px] -translate-x-1/2 -translate-y-1/2 rounded-full ${TRANS}`} style={{ left: `${X(r2.prAuc)}%`, background: c2 }} /> : null}
                 </span>
-                <span className={`${MONO} pr-1 text-right text-[11px] tracking-[0.04em] ${on ? "text-(--is-teal)" : "text-(--is-frost)"}`}>
-                  {r1 ? r1.prAuc.toFixed(3) : "—"}
+                <span className={`${MONO} pr-1 text-right text-[11px] tracking-[0.04em]`}>
+                  <span className={on ? "text-(--is-teal)" : m === 1 ? "text-(--is-frost)" : "text-(--is-steel)"}>{r1 ? r1.prAuc.toFixed(3) : "—"}</span>
                   <span className="text-(--is-steel)"> → </span>
-                  {r2 ? r2.prAuc.toFixed(3) : "—"}
+                  <span className={on ? "text-(--is-teal)" : m === 2 ? "text-(--is-frost)" : "text-(--is-steel)"}>{r2 ? r2.prAuc.toFixed(3) : "—"}</span>
                 </span>
               </button>
             </li>
@@ -450,71 +454,53 @@ export function Ladder({ rows, onOpen }: { rows: Row[]; onOpen: (r: Row) => void
         <span />
         <span className="relative mx-2 h-4">
           {[0.1, 0.2, 0.3, 0.4, 0.5].map((v) => (
-            <span key={v} className="absolute -translate-x-1/2" style={{ left: `${X(v)}%` }}>
+            <span key={v} className={`absolute -translate-x-1/2 ${v > 0.1 && v < 0.5 ? "max-sm:hidden" : ""}`} style={{ left: `${X(v)}%` }}>
               {v.toFixed(1)}
             </span>
           ))}
         </span>
         <span className="pr-1 text-right">M1 → M2</span>
       </div>
-      <table className={`${MONO} mt-auto w-full border-t border-(--is-line) text-left text-[11px] uppercase tracking-[0.08em]`}>
-        <thead>
-          <tr className="text-(--is-steel)">
-            <th scope="col" className="pt-3 font-normal"><span className="sr-only">Measure</span></th>
-            <th scope="col" className="pt-3 font-normal">Mission 1</th>
-            <th scope="col" className="pt-3 font-normal">Mission 2</th>
-          </tr>
-        </thead>
-        <tbody className="text-(--is-frost)">
-          <tr>
-            <th scope="row" className="py-1 font-normal text-(--is-steel)">Labels</th>
-            <td>Real faults</td>
-            <td>95% rare events</td>
-          </tr>
-          <tr>
-            <th scope="row" className="py-1 font-normal text-(--is-steel)">Random</th>
-            <td>0.111</td>
-            <td>0.047</td>
-          </tr>
-        </tbody>
-      </table>
-      <p className="text-[16px] leading-[1.45] text-(--is-steel)">
-        <span className="text-(--is-frost)">GMM leads on Mission 1&apos;s real faults; the VAEs climb past it on Mission 2&apos;s rare events.</span> Baselines were only run on Mission 1. Click a row for details.
+      <p className="mt-auto text-[16px] leading-[1.45] text-(--is-frost)">
+        GMM leads on Mission 1&apos;s real faults; the VAEs pass it on Mission 2&apos;s rare events.
       </p>
     </Panel>
   );
 }
 
 /* ===================== M.02 · Table 1, sortable + filterable ===================== */
-type Key = "label" | "mission" | "family" | "prAuc" | "rocAuc" | "eventF1";
-export function ResultsTable({ rows, onOpen }: { rows: Row[]; onOpen: (r: Row) => void }) {
+type Key = "label" | "family" | "prAuc" | "rocAuc" | "eventF1";
+type TRow = Row & { ghost?: boolean };
+export function ResultsTable({ rows, m, prov, onOpen }: { rows: Row[]; m: M; prov: Record<string, Prov>; onOpen: (r: Row) => void }) {
   const [key, setKey] = useState<Key>("prAuc");
   const [asc, setAsc] = useState(false);
-  const [mis, setMis] = useState<"all" | "1" | "2">("all");
   const [fams, setFams] = useState<string[]>(["baseline", "parametric", "generative"]);
   const top = topSet(rows);
-  const list = rows
-    .filter((r) => (mis === "all" || String(r.mission) === mis) && fams.includes(r.family))
+  const here = rows.filter((r) => r.mission === m);
+  // methods that were only run on Mission 1 stay in the table on Mission 2, quietly marked
+  const ghosts: TRow[] = m === 2 ? rows.filter((r) => r.mission === 1 && !here.some((h) => h.method === r.method)).map((r) => ({ ...r, ghost: true })) : [];
+  const list: TRow[] = ([...here, ...ghosts] as TRow[])
+    .filter((r) => fams.includes(r.family))
     .slice()
     .sort((a, b) => {
+      if (!!a.ghost !== !!b.ghost) return a.ghost ? 1 : -1;
       const x = a[key] ?? -1;
       const y = b[key] ?? -1;
       const c = typeof x === "string" ? x.localeCompare(y as string) : (x as number) - (y as number);
       return asc ? c : -c;
     });
+  const shown = list.filter((r) => !r.ghost).length;
   const cols: { k: Key; t: string; cls?: string; num?: boolean }[] = [
     { k: "label", t: "Method" },
-    { k: "mission", t: "M", num: true },
-    { k: "family", t: "Family", cls: "max-md:hidden" },
+    { k: "family", t: "Family", cls: "max-xl:hidden" },
     { k: "prAuc", t: "PR-AUC", num: true },
     { k: "rocAuc", t: "ROC-AUC", num: true, cls: "max-sm:hidden" },
-    { k: "eventF1", t: "Ev. F1", num: true, cls: "max-lg:hidden" },
+    { k: "eventF1", t: "Ev. F1", num: true, cls: "max-md:hidden" },
   ];
   const sortBy = (k: Key) => (k === key ? setAsc((a) => !a) : (setKey(k), setAsc(k === "label" || k === "family")));
   return (
-    <Panel id="methods-table" code="M.02" title="Table 1 · every result" page={5} pageLabel="Table 1" className="lg:col-span-7">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-        <Segmented label="Show mission" value={mis} onChange={setMis} options={[{ v: "all", t: "Both" }, { v: "1", t: "M1" }, { v: "2", t: "M2" }]} />
+    <Panel id="methods-table" code="M.02" title={`Table 1 · Mission ${m}`} page={5} pageLabel="Table 1" className="lg:col-span-12 xl:col-span-7">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Method family">
           {(["baseline", "parametric", "generative"] as const).map((f) => (
             <Chip key={f} on={fams.includes(f)} onClick={() => setFams((s) => (s.includes(f) ? s.filter((x) => x !== f) : [...s, f]))}>
@@ -522,17 +508,17 @@ export function ResultsTable({ rows, onOpen }: { rows: Row[]; onOpen: (r: Row) =
             </Chip>
           ))}
         </div>
+        <p className={`${LABEL} text-(--is-steel)`} aria-live="polite">
+          {shown} of {here.length} rows · {cols.find((c) => c.k === key)!.t} {asc ? "↑" : "↓"}
+        </p>
       </div>
-      <p className={`${LABEL} -mt-2 text-(--is-steel)`} aria-live="polite">
-        {list.length} of {rows.length} rows · sorted by {cols.find((c) => c.k === key)!.t} {asc ? "↑" : "↓"} · click a row for details
-      </p>
       <div className="-mx-4 overflow-x-auto sm:mx-0">
         <table className="w-full min-w-[290px] border-collapse text-left">
           <thead>
             <tr className="border-b border-(--is-frost)">
               {cols.map((c) => (
                 <th key={c.k} scope="col" aria-sort={key === c.k ? (asc ? "ascending" : "descending") : "none"} className={`${c.cls ?? ""} ${c.num ? "text-right" : ""} px-2 py-1 first:pl-4 sm:first:pl-2`}>
-                  <button type="button" onClick={() => sortBy(c.k)} className={`${MONO} ${TRANS} inline-flex min-h-9 items-center gap-1 rounded-[2px] text-[11px] uppercase tracking-[0.12em] ${key === c.k ? "text-(--is-frost)" : "text-(--is-steel) hover:text-(--is-frost)"} active:opacity-70 ${FR}`}>
+                  <button type="button" onClick={() => sortBy(c.k)} className={`${MONO} ${TRANS} inline-flex min-h-9 items-center gap-1 whitespace-nowrap rounded-[2px] text-[11px] uppercase tracking-[0.12em] ${key === c.k ? "text-(--is-frost)" : "text-(--is-steel) hover:text-(--is-frost)"} active:opacity-70 ${FR}`}>
                     {c.t}
                     <span aria-hidden className={key === c.k ? "" : "opacity-0"}>
                       {asc ? "↑" : "↓"}
@@ -540,47 +526,76 @@ export function ResultsTable({ rows, onOpen }: { rows: Row[]; onOpen: (r: Row) =
                   </button>
                 </th>
               ))}
+              <th scope="col" className={`${MONO} px-2 pr-4 text-left text-[11px] font-normal uppercase tracking-[0.12em] text-(--is-steel) max-sm:hidden sm:pr-2`}>
+                Checked
+              </th>
             </tr>
           </thead>
           <tbody>
             {list.length ? (
-              list.map((r) => (
-                <tr key={r.label} className={`border-b border-(--is-line) ${TRANS} hover:bg-(--is-void)`}>
-                  <td className="py-0 pl-4 pr-2 sm:pl-2">
-                    <button type="button" onClick={() => onOpen(r)} className={`group flex min-h-12 w-full items-center gap-2 rounded-[2px] text-left text-[14px] text-(--is-frost) active:opacity-70 ${FR} focus-visible:outline-offset-0`}>
-                      <span className="min-w-0">
-                        <span className="underline decoration-transparent underline-offset-4 group-hover:decoration-(--is-frost)">{short(r.method)}</span>
-                        {r.latentK ? <span className="text-(--is-steel)"> · K {r.latentK}</span> : null}
-                        <span className="block text-[12px] text-(--is-steel)">{r.scoring}</span>
+              list.map((r, idx) =>
+                r.ghost ? (
+                  <tr key={`g-${r.label}`} className="border-b border-(--is-line)">
+                    <td className="py-0 pl-4 pr-2 sm:pl-2">
+                      <span className="flex min-h-12 flex-col justify-center text-[14px] text-(--is-steel)">
+                        {short(r.method)}
+                        <span className={`${MONO} block text-[10px] uppercase tracking-[0.1em]`}>Mission 1 only</span>
                       </span>
-                      {top.has(r.label) || r.trendDirection === "best" ? (
-                        <span className="ml-auto flex flex-col items-end gap-1 pr-1 text-right">
-                          {top.has(r.label) ? <Status kind="best">Top PR-AUC</Status> : null}
-                          {r.trendDirection === "best" ? <Status kind="vae">Best VAE</Status> : null}
+                    </td>
+                    <td className="px-2 text-[14px] text-(--is-steel) max-xl:hidden">{FAM[r.family]}</td>
+                    <td className={`${MONO} px-2 text-right text-[13px] text-(--is-steel)`}>—</td>
+                    <td className={`${MONO} px-2 text-right text-[13px] text-(--is-steel) max-sm:hidden`}>—</td>
+                    <td className={`${MONO} px-2 text-right text-[13px] text-(--is-steel) max-md:hidden`}>—</td>
+                    <td className="px-2 pr-4 max-sm:hidden sm:pr-2" />
+                  </tr>
+                ) : (
+                  <tr key={r.label} className={`border-b border-(--is-line) ${TRANS} hover:bg-(--is-void)`}>
+                    <td className="py-0 pl-4 pr-2 sm:pl-2">
+                      <button type="button" onClick={() => onOpen(r)} aria-label={`${r.label}: open the method card`} className={`group flex min-h-12 w-full items-center gap-2 rounded-[2px] py-1.5 text-left text-[14px] text-(--is-frost) active:opacity-70 max-sm:flex-col max-sm:items-start max-sm:gap-1 ${FR} focus-visible:outline-offset-0`}>
+                        <span className="min-w-0">
+                          <span className="whitespace-nowrap underline decoration-transparent underline-offset-4 group-hover:decoration-(--is-frost)">{short(r.method)}</span>
+                          {r.latentK ? <span className="whitespace-nowrap text-(--is-steel)"> · K {r.latentK}</span> : null}
+                          <span className="block text-[12px] text-(--is-steel)">
+                            {r.scoring}
+                            {prov[r.label] ? (
+                              <span className="sm:hidden">
+                                {" · "}
+                                <span aria-hidden>{PROV[prov[r.label].s].i}</span> {PROV[prov[r.label].s].w}
+                              </span>
+                            ) : null}
+                          </span>
                         </span>
-                      ) : null}
-                    </button>
-                  </td>
-                  <td className={`${MONO} px-2 text-right text-[13px] text-(--is-frost)`}>{r.mission}</td>
-                  <td className="px-2 text-[14px] text-(--is-steel) max-md:hidden">{FAM[r.family]}</td>
-                  <td className={`${MONO} px-2 text-right text-[13px] text-(--is-frost)`}>
-                    <span className="inline-flex items-center gap-2">
-                      <span aria-hidden className="relative hidden h-1 w-12 bg-(--is-line) sm:inline-block">
-                        <span className="absolute inset-y-0 left-0 bg-(--is-steel)" style={{ width: `${(r.prAuc / 0.5) * 100}%` }} />
+                        {top.has(r.label) || r.trendDirection === "best" ? (
+                          <span className="flex flex-col items-end gap-1 whitespace-nowrap pr-1 text-right max-sm:flex-row max-sm:gap-3 sm:ml-auto">
+                            {top.has(r.label) ? <Status kind="best">Top PR-AUC</Status> : null}
+                            {r.trendDirection === "best" ? <Status kind="vae">Best VAE</Status> : null}
+                          </span>
+                        ) : null}
+                      </button>
+                    </td>
+                    <td className="px-2 text-[14px] text-(--is-steel) max-xl:hidden">{FAM[r.family]}</td>
+                    <td className={`${MONO} px-2 text-right text-[13px] text-(--is-frost)`}>
+                      <span className="inline-flex items-center gap-2">
+                        <span aria-hidden className="relative hidden h-1 w-12 bg-(--is-line) sm:inline-block">
+                          <span className="isx-grow absolute inset-y-0 left-0 bg-(--is-steel)" style={{ width: `${(r.prAuc / 0.5) * 100}%`, "--d": `${idx * 40}ms` } as React.CSSProperties} />
+                        </span>
+                        {r.prAuc.toFixed(3)}
                       </span>
-                      {r.prAuc.toFixed(3)}
-                    </span>
-                  </td>
-                  <td className={`${MONO} px-2 text-right text-[13px] text-(--is-frost) max-sm:hidden`}>{r.rocAuc.toFixed(3)}</td>
-                  <td className={`${MONO} px-2 pr-4 text-right text-[13px] text-(--is-steel) max-lg:hidden sm:pr-2`}>{r.eventF1 === null ? "—" : r.eventF1.toFixed(3)}</td>
-                </tr>
-              ))
+                    </td>
+                    <td className={`${MONO} px-2 text-right text-[13px] text-(--is-frost) max-sm:hidden`}>{r.rocAuc.toFixed(3)}</td>
+                    <td className={`${MONO} px-2 text-right text-[13px] text-(--is-steel) max-md:hidden`}>{r.eventF1 === null ? "—" : r.eventF1.toFixed(3)}</td>
+                    <td className="px-2 pr-4 max-sm:hidden sm:pr-2">
+                      <ProvTag p={prov[r.label]} />
+                    </td>
+                  </tr>
+                ),
+              )
             ) : (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-[16px] text-(--is-steel) sm:px-2">
-                  No rows match. Turn a family chip back on.{" "}
-                  <button type="button" onClick={() => (setFams(["baseline", "parametric", "generative"]), setMis("all"))} className={`${MONO} rounded-[2px] text-[11px] uppercase tracking-[0.12em] text-(--is-frost) underline underline-offset-4 hover:decoration-2 ${FR}`}>
-                    Show all
+                  No rows match.{" "}
+                  <button type="button" onClick={() => setFams(["baseline", "parametric", "generative"])} className={`${MONO} rounded-[2px] text-[11px] uppercase tracking-[0.12em] text-(--is-frost) underline underline-offset-4 hover:decoration-2 ${FR}`}>
+                    Show all families
                   </button>
                 </td>
               </tr>
@@ -588,19 +603,37 @@ export function ResultsTable({ rows, onOpen }: { rows: Row[]; onOpen: (r: Row) =
           </tbody>
         </table>
       </div>
-      <p className={`${MONO} mt-auto text-[10px] uppercase leading-[1.6] tracking-[0.1em] text-(--is-steel)`}>
-        <span className="text-(--is-teal)">◆ Top PR-AUC</span> = highest of every row on that mission · <span className="text-(--is-frost)">◇ Best VAE</span> = the paper&apos;s bold, best of the three VAEs
+      <p className={`${MONO} mt-auto text-[10px] uppercase leading-[1.7] tracking-[0.1em] text-(--is-steel)`}>
+        <span className="text-(--is-teal)">◆ Top PR-AUC</span> = best row on the mission · <span className="text-(--is-frost)">◇ Best VAE</span> = the paper&apos;s bold ·{" "}
+        <span className="text-(--is-frost)">✓</span> verified · <span className="text-(--is-frost)">≈</span> near · <span className="text-(--is-frost)">↻</span> recomputed · – not saved, against our notebooks
       </p>
     </Panel>
   );
 }
 
+function ProvTag({ p }: { p?: Prov }) {
+  if (!p) return null;
+  const v = PROV[p.s];
+  return (
+    <span className={`${MONO} inline-flex items-center gap-1.5 whitespace-nowrap text-[10px] uppercase tracking-[0.1em] ${v.c}`} title={p.note}>
+      <span aria-hidden>{v.i}</span>
+      <span>{v.w}</span>
+      <span className="sr-only">. {p.note}</span>
+    </span>
+  );
+}
+
 /* ===================== method detail (modal body) ===================== */
-export function MethodModal({ row, rows, onClose, onSwitch }: { row: Row | null; rows: Row[]; onClose: () => void; onSwitch: (r: Row) => void }) {
+export function MethodModal({ row, rows, prov, onClose, onSwitch }: { row: Row | null; rows: Row[]; prov: Record<string, Prov>; onClose: () => void; onSwitch: (r: Row) => void }) {
   const top = topSet(rows);
   const other = row ? rows.find((x) => x.method === row.method && x.mission !== row.mission) : undefined;
+  const open = !!row;
+  useEffect(() => {
+    if (open) window.dispatchEvent(new Event("isx-modal"));
+  }, [open]);
+  const pv = row ? prov[row.label] : undefined;
   return (
-    <Modal open={!!row} onClose={onClose} title={row ? row.method : ""} kicker={row ? `[ Mission ${row.mission} · ${FAM[row.family]} · ${row.latentK ? `K = ${row.latentK}` : "no K"} ]` : ""}>
+    <Modal open={open} onClose={onClose} title={row ? row.method : ""} kicker={row ? `[ Mission ${row.mission} · ${FAM[row.family]} · ${row.latentK ? `K = ${row.latentK}` : "no K"} ]` : ""}>
       {row ? (
         <div className="flex flex-col gap-5">
           <div className="flex flex-wrap gap-3">
@@ -642,16 +675,17 @@ export function MethodModal({ row, rows, onClose, onSwitch }: { row: Row | null;
             <dd className="text-(--is-frost)">{row.scoring}</dd>
             <dt className="text-(--is-steel)">Implemented by</dt>
             <dd className="text-(--is-frost)">{BY(row)}</dd>
-            <dt className="text-(--is-steel)">Table 1 row</dt>
-            <dd className="text-(--is-frost)">{row.label}</dd>
+            <dt className="text-(--is-steel)">Checked</dt>
+            <dd className="text-(--is-frost)">{pv ? `${PROV[pv.s].i} ${PROV[pv.s].w}` : "—"}</dd>
           </dl>
+          {pv ? <p className="-mt-3 text-[13px] leading-snug text-(--is-steel)">{pv.note}</p> : null}
           <div className="flex flex-wrap items-center gap-3">
             {other ? (
               <button type="button" onClick={() => onSwitch(other)} className={`group ${BTN.secondary}`}>
                 <Br>Same method on Mission {other.mission} →</Br>
               </button>
             ) : (
-              <span className="text-[13px] text-(--is-steel)">Only run on Mission 1.</span>
+              <span className={`${LABEL} text-(--is-steel)`}>Mission 1 only</span>
             )}
             <PageLink page={5}>Table 1</PageLink>
           </div>
@@ -662,14 +696,14 @@ export function MethodModal({ row, rows, onClose, onSwitch }: { row: Row | null;
 }
 
 /* ===================== E.01 · alarm threshold on a real PR curve ===================== */
-const prov = (c: Curve) =>
+const provLine = (c: Curve) =>
   c.match === "exact"
     ? `✓ AP ${c.prAuc.toFixed(3)} · matches Table 1`
     : c.t1Pr !== null
-      ? `△ AP ${c.prAuc.toFixed(3)} recomputed from saved scores · Table 1: ${c.t1Pr.toFixed(3)}`
+      ? `↻ AP ${c.prAuc.toFixed(3)} recomputed from saved scores · Table 1: ${c.t1Pr.toFixed(3)}`
       : `AP ${c.prAuc.toFixed(3)} · saved run, not in Table 1`;
 
-export function Threshold({ curves, m, setM }: { curves: Curves; m: M; setM: (m: M) => void }) {
+export function Threshold({ curves, m }: { curves: Curves; m: M }) {
   const runs = curves.list.filter((c) => c.mission === m && c.table1);
   const [id, setId] = useState(runs[0].id);
   const run = runs.find((r) => r.id === id) ?? runs[0];
@@ -691,7 +725,6 @@ export function Threshold({ curves, m, setM }: { curves: Curves; m: M; setM: (m:
   return (
     <Panel id="evidence-threshold" code="E.01" title="Set the alarm threshold" page={m === 1 ? 3 : 9} pageLabel="PR curves" className="lg:col-span-12">
       <div className="flex flex-wrap items-center gap-3">
-        <Segmented label="Mission" value={m} onChange={setM} options={MS} />
         <div className="min-w-[220px] flex-1 sm:max-w-[320px]">
           <label htmlFor="isx-run" className="sr-only">
             Method
@@ -699,12 +732,13 @@ export function Threshold({ curves, m, setM }: { curves: Curves; m: M; setM: (m:
           <Select id="isx-run" value={run.id} onChange={setId} options={runs.map((r) => ({ v: r.id, t: `${short(r.method)} · ${r.scoring}` }))} />
         </div>
         <p className={`${MONO} text-[10px] uppercase tracking-[0.1em] ${run.match === "exact" ? "text-(--is-steel)" : "text-(--is-frost)"}`} aria-live="polite">
-          {prov(run)}
+          {provLine(run)}
         </p>
       </div>
       <div className="grid gap-6 md:grid-cols-[1.35fr_1fr] lg:grid-cols-[1.6fr_1fr]">
         <Frame
-          className="aspect-[4/3] md:aspect-[16/10] lg:aspect-[2/1]"
+          fill
+          className="aspect-[4/3] md:aspect-auto md:min-h-[300px]"
           onPoint={(fx) => setRec(Math.max(1, Math.min(99, Math.round(fx * 100))))}
           foot={["↑ Precision 0–1", "Recall 0–1 →"]}
           labels={
@@ -723,11 +757,15 @@ export function Threshold({ curves, m, setM }: { curves: Curves; m: M; setM: (m:
           <div className="grid grid-cols-2 gap-3" aria-live="polite">
             <div>
               <p className={`${LABEL} text-(--is-steel)`}>Precision</p>
-              <p className={`${DOT} text-[52px] font-semibold leading-[0.9] text-(--is-frost)`}>{pt[1].toFixed(2)}</p>
+              <p className={`${DOT} text-[40px] font-semibold leading-[0.9] text-(--is-frost) sm:text-[52px]`}>
+                <CountUp value={pt[1]} digits={2} />
+              </p>
             </div>
             <div>
               <p className={`${LABEL} text-(--is-steel)`}>Recall</p>
-              <p className={`${DOT} text-[52px] font-semibold leading-[0.9] text-(--is-frost)`}>{pt[0].toFixed(2)}</p>
+              <p className={`${DOT} text-[40px] font-semibold leading-[0.9] text-(--is-frost) sm:text-[52px]`}>
+                <CountUp value={pt[0]} digits={2} />
+              </p>
             </div>
           </div>
           <dl className={`${MONO} grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 border-t border-(--is-line) pt-3 text-[11px] uppercase tracking-[0.08em]`}>
@@ -755,15 +793,15 @@ export function Threshold({ curves, m, setM }: { curves: Curves; m: M; setM: (m:
           </div>
         </div>
       </div>
-      <p className="text-[16px] leading-[1.45] text-(--is-steel)">
-        <span className="text-(--is-frost)">Catching more faults costs a flood of false alarms.</span> Drag along the curve: counts come from the {(curves.nTest[m] / 1e6).toFixed(2)}M test steps and their {(curves.pos[m] * 100).toFixed(1)}% fault rate. Curves are recomputed from our saved scores.
+      <p className="text-[16px] leading-[1.45] text-(--is-frost)">
+        Catching more faults costs a flood of false alarms; drag along the curve to feel the trade.
       </p>
     </Panel>
   );
 }
 
 /* ===================== E.02 · mission timeline scrubber ===================== */
-export function Timeline({ tl, m, setM }: { tl: Timelines; m: M; setM: (m: M) => void }) {
+export function Timeline({ tl, m }: { tl: Timelines; m: M }) {
   const pick = (mm: M) => tl[mm].series.find((s) => s.id.startsWith("gmm"))!.id;
   const [st, setSt] = useState({ m, sid: pick(m) });
   const sid = st.m === m ? st.sid : pick(m);
@@ -807,14 +845,13 @@ export function Timeline({ tl, m, setM }: { tl: Timelines; m: M; setM: (m: M) =>
   return (
     <Panel id="evidence-timeline" code="E.02" title="Scrub the whole test set" page={7} pageLabel="Timeline failure" className="lg:col-span-12">
       <div className="flex flex-wrap items-center gap-3">
-        <Segmented label="Mission" value={m} onChange={setM} options={MS} />
         <div className="w-full sm:w-[260px]">
           <label htmlFor="isx-series" className="sr-only">
             Score series
           </label>
           <Select id="isx-series" value={series.id} onChange={setSid} options={tl[m].series.map((s) => ({ v: s.id, t: label(s) }))} />
         </div>
-        <div className="flex flex-wrap gap-2 sm:ml-auto">
+        <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
           <Button bracket aria-pressed={play} onClick={() => setPlay((p) => !p)}>
             {play ? "❚❚ Pause" : "▶ Play"}
           </Button>
@@ -825,7 +862,9 @@ export function Timeline({ tl, m, setM }: { tl: Timelines; m: M; setM: (m: M) =>
             <Button variant="ghost" onClick={longest}>
               Longest fault · Fig. 3
             </Button>
-          ) : null}
+          ) : (
+            <span className={`${LABEL} px-2 text-(--is-steel)`}>Fig. 3 · Mission 1 only</span>
+          )}
         </div>
       </div>
       <Frame
@@ -856,8 +895,10 @@ export function Timeline({ tl, m, setM }: { tl: Timelines; m: M; setM: (m: M) =>
           <dd>{fault ? <Status kind="fault">Labelled fault · {Math.round(b.a * 100)}%</Status> : <Status kind="nominal" />}</dd>
         </div>
       </dl>
-      <p className="text-[16px] leading-[1.45] text-(--is-steel)">
-        <span className="text-(--is-frost)">A long fault becomes the new normal.</span> In the paper&apos;s Fig. 3, K-Means spikes when the 967-hour fault begins, then goes quiet: it files the broken state as one more cluster. {tl[m].nSegments} labelled fault segments on Mission {m}; time is days from the start of the test split.
+      <p className="text-[16px] leading-[1.45] text-(--is-frost)">
+        {m === 1
+          ? "A long fault becomes the new normal: in Fig. 3, K-Means spikes as the 967-hour fault begins, then goes quiet."
+          : "Magenta marks the labelled events: on Mission 2, 613 of 644 are rare operational events, not true failures."}
       </p>
     </Panel>
   );

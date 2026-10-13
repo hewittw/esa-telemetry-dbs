@@ -27,13 +27,14 @@ const Ctx = createContext<(page?: number) => void>(() => {});
 export const useReader = () => useContext(Ctx);
 
 /* a deep link from a finding to the page that backs it */
-export function PageLink({ page, children }: { page: number; children?: ReactNode }) {
+export function PageLink({ page, children }: { page: number; children?: string }) {
   const open = useReader();
   return (
     <button
       type="button"
       onClick={() => open(page)}
-      className={`group ${MONO} ${TRANS} inline-flex min-h-8 items-center rounded-[2px] text-[10px] uppercase tracking-[0.14em] text-(--is-steel) hover:text-(--is-frost) active:opacity-70 ${FR}`}
+      aria-label={`${children ? `${children}: ` : ""}open page ${page} of the paper`}
+      className={`group ${MONO} ${TRANS} inline-flex min-h-8 whitespace-nowrap items-center rounded-[2px] text-[10px] uppercase tracking-[0.14em] text-(--is-steel) hover:text-(--is-frost) active:opacity-70 ${FR}`}
     >
       <Br>
         {children ?? "Paper"} · p.{page} <span aria-hidden>↗</span>
@@ -110,6 +111,7 @@ function Reader({ page, setPage, onClose }: { page: number; setPage: (p: number)
 
   // focus trap, Esc, keys, scroll lock, focus return
   useEffect(() => {
+    window.dispatchEvent(new Event("isx-modal"));
     opener.current = document.activeElement as HTMLElement;
     box.current?.querySelector<HTMLElement>("[data-autofocus]")?.focus();
     const prev = document.body.style.overflow;
