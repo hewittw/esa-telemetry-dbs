@@ -14,7 +14,7 @@
 - **Interactions (≥2, faked/static):** mission toggle (M1/M2) · method filter chips · sort by PR-AUC ·
   method detail panel · explorable latent/t-SNE map · scrubbable anomaly timeline.
 - **Figures:** all redrawn as new, animated figures from exported data, not the old matplotlib PNGs.
-- **Route:** `/telemetry` (working name)
+- **Route:** `/telemetry` (final); candidates at `/versions/<style>`
 - **Content source:** `content/` (report transcription, `results.json`, `figures-data/`).
   Report Table 1 is the source of truth; `RESULTS_SUMMARY.md` in the old repo has stale numbers.
 - **Credit:** Rhea Madhogarhia is co-author. Credit her clearly; she implemented the K-Means / PCA /
@@ -30,7 +30,7 @@ Very modern and clean: SpaceX, Apple. Incredible motion, all-new figures, precis
 | | | | `/mood-boards/` | `/design-systems/` |
 | | | | `/mood-boards/` | `/design-systems/` |
 
-**Picked:** _TBD_, and why (this goes on the hub too).
+**Picked:** intense-space, "Charged · Fibrous · Instrumented". The finding lands in one look (hierarchy), the instrument aesthetic signals engineering rigor to recruiters, every figure runs on real data for peers, and it's the most distinct. Final route: `/telemetry`.
 
 ## Required on the final site (the user's requests)
 - **Authorship:** say clearly that the site is Hewitt Watkins's project (designed and built by Hewitt), while the paper

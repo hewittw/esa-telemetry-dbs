@@ -1,0 +1,113 @@
+/* Intense Space · the site. Page-scoped, every class starts with isx- (CSS Modules are off).
+   Tokens come from the mood board's board.css (.is-root); range/dialog/focus classes from the
+   design system's ds.css (isd-). */
+
+.is-root {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-root {
+    scroll-behavior: auto;
+  }
+}
+
+/* anchor offset under the sticky header */
+.is-root .isx-anchor {
+  scroll-margin-top: 72px;
+}
+
+/* hero headline: one-shot per-letter blur-to-focus on the key number (Planet) */
+.is-root .isx-pull > span {
+  display: inline-block;
+  animation: isx-pull 1100ms var(--is-ease) both;
+}
+@keyframes isx-pull {
+  from {
+    filter: blur(14px);
+    opacity: 0.15;
+  }
+}
+
+/* hero copy rises in once on load */
+.is-root .isx-rise {
+  animation: isx-rise 700ms var(--is-ease) both;
+}
+@keyframes isx-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* reader: page swaps pull into focus, never slide */
+.is-root .isx-page {
+  animation: isx-page 380ms var(--is-ease) both;
+}
+@keyframes isx-page {
+  from {
+    filter: blur(10px);
+    opacity: 0.35;
+  }
+}
+.is-root .isx-reader {
+  animation: isx-fade 220ms var(--is-ease) both;
+}
+@keyframes isx-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* reader stage: a scrollable void with the dot grid; grab cursor when zoomed */
+.is-root .isx-stage {
+  scrollbar-width: thin;
+  scrollbar-color: #2e3135 transparent;
+}
+.is-root .isx-stage[data-zoomed="true"] {
+  cursor: grab;
+}
+.is-root .isx-stage[data-zoomed="true"]:active {
+  cursor: grabbing;
+}
+
+/* horizontal strips: scrollable, no chrome */
+.is-root .isx-strip {
+  scrollbar-width: none;
+}
+.is-root .isx-strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* SVG trace draw-in for the slope chart (pathLength=1) */
+.is-root .isx-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: isx-draw 1.6s var(--is-ease) forwards;
+}
+@keyframes isx-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-root .isx-pull > span,
+  .is-root .isx-rise,
+  .is-root .isx-page,
+  .is-root .isx-reader {
+    animation: none;
+  }
+  .is-root .isx-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* board.css's .is-corners uses the background shorthand (corner ticks), which resets
+   background-color; put the Panel surface back underneath the ticks */
+.is-root .is-corners.isx-fill {
+  background-color: var(--is-panel);
+}
+.is-root .is-corners.isx-fill-void {
+  background-color: rgba(10, 11, 13, 0.9);
+}
