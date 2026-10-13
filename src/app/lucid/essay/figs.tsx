@@ -82,7 +82,7 @@ export function ChannelField({ ch, stage, label }: { ch: Ch[]; stage: 0 | 1 | 2;
           <g key={s.s}>
             <path d={`M${s.x0 + 1},${BASE - 4} V${BASE} H${s.x1 - 1} V${BASE - 4}`} fill="none" stroke="var(--ochre)" strokeWidth="1" />
             <text x={(s.x0 + s.x1) / 2} y={BASE + 18} textAnchor="middle" className={MONO} fill="var(--ochre)">S{s.s}</text>
-            <text x={(s.x0 + s.x1) / 2} y={BASE + 33} textAnchor="middle" className={MONO} fill="var(--muted)">{stage === 2 ? `${s.groups} gr` : `${s.n} ch`}</text>
+            <text x={(s.x0 + s.x1) / 2} y={BASE + 33} textAnchor="middle" className={MONO} fill="var(--muted)">{stage === 2 ? s.groups : s.n}</text>
           </g>
         ))}
       </g>
@@ -130,7 +130,7 @@ export function ChannelSteps({ ch, m }: { ch: Ch[]; m: M }) {
     [`${subs} subsystems`, <>ESA files them under {subs} <b className="font-semibold text-[var(--ochre)]">subsystems</b>: physical units such as power or attitude control.</>],
     [`${groups} groups`, <>Each subsystem divides into finer <b className="font-semibold text-[var(--prussian)]">operational groups</b>, such as battery charging.</>],
   ];
-  const cap = m === 1 ? <>Mission 1 labels: genuine system faults, marked by ESA engineers.</> : <>Mission 2 labels: ≈95% rare operational events, not failures.</>;
+  const cap = <>Each dot is one channel of Mission {m}. S1, S2… are ESA’s anonymised subsystem numbers; the number under each counts its channels, then, once they appear, its groups.</>;
   const label = (k: number) => `Mission ${m} channels. Step ${k + 1}: ${STEPS[k][0]}.`;
   return (
     <>

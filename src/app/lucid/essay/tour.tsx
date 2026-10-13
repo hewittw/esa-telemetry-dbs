@@ -1,20 +1,21 @@
 "use client";
 
-// The 60-second tour for a two-minute reader: six stops, one line each, 10 s per stop.
+// The 60-second tour for a two-minute reader: seven stops, one line each, 8.5 s per stop.
 // It only scrolls the page (no scroll-jacking): Esc, Exit, or any scroll of your own ends it,
 // and focus returns to whatever started it. A secondary control: never vermilion.
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { FOCUS, IconCross, MONO, SANS, SERIF, btnQuiet, btnSecondary } from "../../design-systems/refined-paper/kit";
 
 export const STOPS = [
-  { id: "top", t: "The finding", c: "Structure sits at the operational-group level (18–29 modes), not 4–5 subsystems." },
-  { id: "background", t: "Background", c: "Each subsystem divides into finer operational groups. Which level does the data follow?" },
-  { id: "methods", t: "What we did", c: "Five methods, each richer than the last, all scored by PR-AUC." },
-  { id: "results", t: "Results", c: "BIC picks K = 21 and 29: beside the groups, far from the subsystems." },
-  { id: "conclusions", t: "Conclusions", c: "Each mode has its own normal: the bottleneck for global models." },
+  { id: "top", t: "The question", c: "What hidden structure is in two ESA satellites’ telemetry, and does it explain false alarms?" },
+  { id: "context", t: "Context", c: "A public benchmark labelled by ESA engineers, where every existing detector raises false alarms." },
+  { id: "data", t: "Dataset & setup", c: "Channels sit in subsystems (4–5), each split into operational groups (18–29)." },
+  { id: "methods", t: "Methods", c: "Five methods, from K-Means to three VAEs, all scored by PR-AUC." },
+  { id: "modes", t: "Results", c: "BIC picks K = 21 and 29: group-level granularity, far from the subsystem count." },
+  { id: "conclusions", t: "Conclusions", c: "Each mode has its own normal: the bottleneck for every global model." },
   { id: "paper", t: "The paper", c: "The paper, page by page, with the PDF." },
 ];
-const DWELL = 10000;
+const DWELL = 8500;
 
 type Tour = { on: boolean; start: () => void; stop: (refocus?: boolean) => void };
 const Ctx = createContext<Tour>({ on: false, start: () => {}, stop: () => {} });
