@@ -1,0 +1,113 @@
+/* Scoped to the intense-space board: every selector starts at .is-root. */
+.is-root {
+  --is-void: #0a0b0d;
+  --is-panel: #121316;
+  --is-charcoal: #333333;
+  --is-line: #2e3135;
+  --is-frost: #cfd9e0;
+  --is-steel: #8c979f;
+  --is-fiber: #37fd08;
+  --is-fault: #e04fd6;
+  --is-teal: #4bcfe0;
+  --is-ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  background: var(--is-void);
+  color: var(--is-frost);
+  font-family: var(--font-is-display), ui-sans-serif, sans-serif;
+}
+
+.is-root ::selection {
+  background: var(--is-fiber);
+  color: var(--is-void);
+}
+
+/* 4px registration squares on a 12-column rhythm (iCOMAT drawing sheet) */
+.is-root .is-regmarks {
+  background-image: linear-gradient(var(--is-steel), var(--is-steel));
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+}
+.is-root .is-regdots {
+  background-image: radial-gradient(circle, #3b3f45 1.1px, transparent 1.3px);
+  background-size: 18px 18px;
+  background-position: 9px 9px;
+}
+
+/* corner ticks on hairline panels */
+.is-root .is-corners {
+  --c: var(--is-steel);
+  background:
+    linear-gradient(var(--c), var(--c)) top left / 4px 4px no-repeat,
+    linear-gradient(var(--c), var(--c)) top right / 4px 4px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / 4px 4px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right / 4px 4px no-repeat;
+}
+
+.is-root .is-scan {
+  background: repeating-linear-gradient(to bottom, rgba(10, 11, 13, 0.55) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+}
+
+/* stroke draw-in for SVG traces */
+.is-root .is-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: is-draw 1.6s var(--is-ease) forwards;
+}
+.is-root .is-draw-slow {
+  animation-duration: 2.6s;
+}
+@keyframes is-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Planet blur-to-focus, per letter */
+.is-root .is-blurword > span {
+  display: inline-block;
+  animation: is-focus 5.6s var(--is-ease) infinite;
+}
+@keyframes is-focus {
+  0%,
+  8% {
+    filter: blur(14px);
+    opacity: 0.25;
+  }
+  34%,
+  86% {
+    filter: blur(0);
+    opacity: 1;
+  }
+  100% {
+    filter: blur(14px);
+    opacity: 0.25;
+  }
+}
+
+.is-root .is-blink {
+  animation: is-blink 1.1s steps(1) infinite;
+}
+@keyframes is-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* slow drift on photos when the tile is engaged */
+.is-root .is-photo {
+  transition: transform 1200ms var(--is-ease), filter 600ms var(--is-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-root .is-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .is-root .is-blurword > span,
+  .is-root .is-blink {
+    animation: none;
+  }
+  .is-root .is-photo {
+    transition: none;
+  }
+}
