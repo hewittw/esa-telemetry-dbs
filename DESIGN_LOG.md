@@ -185,7 +185,7 @@ Append as decisions happen, newest at the bottom.
 - Remaining honest caveats on all three: the long-fault figure uses the saved K = 8 K-Means run, not the paper's K = 2
   (labelled); the paper's text says K ∈ {2…20} while the saved sweep runs to 30 (copy avoids stating a range).
 
-## 2026-10-13 · The final site: the Lucid Essay
+## 2026-10-13 · The final site: Below the Telemetry (the Lucid Essay)
 - **The pick.** Hewitt chose **A · The Essay** (`/lucid/essay`) as the final site. The hub's hero now has one primary action ("Open the final site"), and **03 The Final Site** is one large card with the Essay's opening. B · The Paper, Alive and C · The Explainer moved to **05 Other Iterations**, next to the earlier finals and first builds.
 - **Why the Essay.** The grader is a researcher who knows nothing about the project. The Essay teaches the work in order and in one voice: context, data, methods, results, conclusions, then the paper. Each interactive figure sits at the sentence that needs it.
 - **Authorship.** The user asked to remove every who-built-what line ("that is not needed"). The site keeps "Designed & built by Hewitt Watkins" and the paper citation with both authors.
@@ -199,3 +199,4 @@ Append as decisions happen, newest at the bottom.
   - **States.** Every control has hover, focus-visible, pressed, selected and disabled states. Examples are the mission toggle, the method picker and the reader controls. Evidence: the Tab walk.
   - **Visual style.** It is built from the Lucid design system's tokens, components and motion, with an ink line-drawn satellite, so it reads as the style picked from the mood board.
   - **Simplicity.** Every fact comes from the paper, one sentence leads each figure, and there are no credits lists or duplicate controls.
+- **The name.** I offered five names and Hewitt chose **Below the Telemetry**: the site looks under the raw sensor data at the structure beneath it. The name appears on the hub card, in the site's header, in its hero eyebrow and in the browser tab title. The paper's own title stays as the H1.

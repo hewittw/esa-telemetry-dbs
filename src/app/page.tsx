@@ -150,9 +150,9 @@ export default function Hub() {
                 Final site
               </p>
               <h3 className="mt-5 text-3xl font-semibold leading-[1.05] tracking-[-0.025em] md:text-4xl">
-                The Essay
+                Below the Telemetry
               </h3>
-              <p className="mt-2 font-mono text-xs text-neutral-500">{refinedPaper.name} · /lucid/essay</p>
+              <p className="mt-2 font-mono text-xs text-neutral-500">{refinedPaper.name} · an essay · /lucid/essay</p>
               <p className="mt-4 text-[15px] leading-relaxed text-neutral-700">
                 The paper as one paced long read: who it&apos;s for and why the data matters, then the data, the
                 methods, the results and the conclusions, with interactive figures placed exactly where the text
@@ -172,7 +172,7 @@ export default function Hub() {
               <strong className="font-medium text-neutral-900">{refinedPaper.name}.</strong> The paper is the subject, so
               the site reads like a beautifully typeset journal page: a serif for the argument, ink-blue and ochre plot
               lines named by matching words in the text, and one vermilion action. Of three iterations in that style,
-              the <strong className="font-medium text-neutral-900">Essay</strong> won: a researcher meeting this work for
+              the essay, <strong className="font-medium text-neutral-900">Below the Telemetry</strong>, won: a researcher meeting this work for
               the first time learns it in order, in one voice, and can check every number against the page of the
               paper that backs it.
             </p>

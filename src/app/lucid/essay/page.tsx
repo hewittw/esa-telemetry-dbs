@@ -13,7 +13,7 @@ const sans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], 
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--rp-mono-face" });
 
 export const metadata: Metadata = {
-  title: "Uncovering Latent Structure in ESA Satellite Telemetry · The Essay · Hewitt Watkins",
+  title: "Below the Telemetry · Uncovering Latent Structure in ESA Satellite Telemetry · Hewitt Watkins",
   description: "A long-read essay on our TTIC 31220 paper: what hidden structure lies in two ESA satellites’ telemetry, and whether it explains why anomaly detectors keep raising false alarms.",
 };
 

@@ -498,7 +498,7 @@ function Header({ m, setM }: { m: M; setM: (m: M) => void }) {
       <div className={`${WRAP} flex h-14 items-center gap-2 sm:gap-3`}>
         <Link href="/" className={`${SANS} ${link} -ml-1 shrink-0 px-1 py-2 text-[13px] font-medium no-underline hover:underline`}>← Hub</Link>
         <span aria-hidden className="h-5 w-px shrink-0 bg-[var(--rule)] max-sm:hidden" />
-        <a href="#top" className={`${SERIF} ${FOCUS} min-w-0 truncate rounded-[2px] text-[16px] max-sm:hidden`}>ESA telemetry</a>
+        <a href="#top" className={`${SERIF} ${FOCUS} min-w-0 truncate rounded-[2px] text-[16px] max-sm:hidden`}>Below the Telemetry</a>
         <nav aria-label="Sections" className="ml-auto hidden items-center 2xl:flex">{NAV.map((n) => item(n))}</nav>
         <div className="ml-auto flex shrink-0 items-center gap-2 2xl:ml-3">
           <span aria-hidden className={`${SANS} text-[13px] text-[var(--muted)] max-md:hidden`}>Mission</span>
@@ -528,7 +528,7 @@ function Hero() {
         <Satellite />
       </div>
       <div className="lg:col-span-7">
-        <p className={`${eyebrow} rps-in`}>A machine-learning paper, written as an essay</p>
+        <p className={`${eyebrow} rps-in`}>Below the Telemetry · a machine-learning paper, as an essay</p>
         <h1 id="rps-h1" tabIndex={-1} className={`${SERIF} rps-in mt-5 max-w-[17ch] text-[clamp(2.4rem,5vw,4.6rem)] leading-[1.03] font-light tracking-[-0.03em] outline-none`} style={{ animationDelay: "80ms" }}>
           Uncovering Latent Structure in ESA Satellite Telemetry
         </h1>
