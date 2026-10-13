@@ -184,3 +184,18 @@ Append as decisions happen, newest at the bottom.
   0.335. The spec was corrected to "land close to the plateau (0.293–0.335)" and pushed to the other builders mid-run.
 - Remaining honest caveats on all three: the long-fault figure uses the saved K = 8 K-Means run, not the paper's K = 2
   (labelled); the paper's text says K ∈ {2…20} while the saved sweep runs to 30 (copy avoids stating a range).
+
+## 2026-10-13 · The final site: the Lucid Essay
+- **The pick.** Hewitt chose **A · The Essay** (`/lucid/essay`) as the final site. The hub's hero now has one primary action ("Open the final site"), and **03 The Final Site** is one large card with the Essay's opening. B · The Paper, Alive and C · The Explainer moved to **05 Other Iterations**, next to the earlier finals and first builds.
+- **Why the Essay.** The grader is a researcher who knows nothing about the project. The Essay teaches the work in order and in one voice: context, data, methods, results, conclusions, then the paper. Each interactive figure sits at the sentence that needs it.
+- **Authorship.** The user asked to remove every who-built-what line ("that is not needed"). The site keeps "Designed & built by Hewitt Watkins" and the paper citation with both authors.
+- **The 9 design requirements on the final site (what · why · evidence):**
+  - **Visual hierarchy.** The paper's title is the H1, the goal sentence comes second and "Read the paper" third. This way a newcomer learns what the work is before the findings. Evidence: the 1440 and 390 hero screenshots.
+  - **Type.** A serif for the argument, a sans for labels and controls, and a mono for numbers, with a ~66ch measure. One voice reads comfortably over a long essay. Evidence: the matrix found no text under 10px at any of the 11 sizes.
+  - **Color.** Warm paper and ink, with ink-blue and ochre plot lines named by matching words in the text, and vermilion only on "Read the paper". Each color has a single job. Evidence: the accent audit found one vermilion element per view.
+  - **Accessibility.** Contrast is ≥ 4.5:1 (measured), focus is visible everywhere, there is a reduced-motion final state, and the reader works by keys and Esc. Evidence: the builder's 30/30 checks.
+  - **Layout.** One column grid with figures inline, more space between sections than within them, and one left edge. Evidence: no horizontal overflow at 320–2560px.
+  - **Affordances.** Page chips [§ · p.N] open the reader. Buttons look like buttons and links are underlined. Evidence: interaction tests by mouse, keyboard and touch.
+  - **States.** Every control has hover, focus-visible, pressed, selected and disabled states. Examples are the mission toggle, the method picker and the reader controls. Evidence: the Tab walk.
+  - **Visual style.** It is built from the Lucid design system's tokens, components and motion, with an ink line-drawn satellite, so it reads as the style picked from the mood board.
+  - **Simplicity.** Every fact comes from the paper, one sentence leads each figure, and there are no credits lists or duplicate controls.

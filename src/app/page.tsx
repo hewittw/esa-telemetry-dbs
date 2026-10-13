@@ -5,7 +5,7 @@ import { board as intenseSpace } from "./mood-boards/intense-space/meta";
 import { board as refinedPaper } from "./mood-boards/refined-paper/meta";
 import { board as whiteImmersion } from "./mood-boards/white-immersion/meta";
 
-// The hub: the submitted URL. Neutral on purpose until the final style is picked.
+// The hub: the submitted URL. Neutral on purpose; the final site (the Lucid Essay) is featured in 03.
 const boards: MoodBoardMeta[] = [intenseSpace, refinedPaper, whiteImmersion];
 
 const ring =
@@ -71,12 +71,20 @@ export default function Hub() {
         ESA Telemetry
       </h1>
       <p className="mt-5 max-w-2xl text-lg leading-relaxed text-neutral-600">
-        Three visual directions for an interactive explorer of the paper{" "}
-        <em>Uncovering Latent Structure in ESA Satellite Telemetry</em>.
+        Three visual directions, three design systems, and one final site that brings the paper{" "}
+        <em>Uncovering Latent Structure in ESA Satellite Telemetry</em> to life.
       </p>
-      <p className="mt-4 font-mono text-xs uppercase tracking-[0.16em] text-neutral-500">
-        Designed &amp; built by Hewitt Watkins
-      </p>
+      <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <Link
+          href="/lucid/essay"
+          className={`inline-flex items-center gap-2 rounded-full bg-neutral-900 px-6 py-3 text-[15px] font-medium text-white transition-colors hover:bg-neutral-700 active:scale-[0.97] ${ring}`}
+        >
+          Open the final site <span aria-hidden>→</span>
+        </Link>
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-neutral-500">
+          Designed &amp; built by Hewitt Watkins
+        </p>
+      </div>
 
       <section className="mt-20" aria-labelledby="mb">
         <SectionHead n="01" title="Mood Boards" note="Three directions, 28 artifacts each" />
@@ -119,58 +127,58 @@ export default function Hub() {
         </ul>
       </section>
 
-      <section className="mt-20">
-        <SectionHead n="03" title="The Site" note="In the style Hewitt picked" />
-        <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-neutral-700">
-          Hewitt picked <strong className="font-medium text-neutral-900">{refinedPaper.name}</strong>. Three iterations
-          now compete on one question: which best brings the paper to life for a researcher who knows nothing about it?
-        </p>
-        <ul className="mt-6 grid gap-4 md:grid-cols-3">
-          {[
-            { t: "A · The Essay", d: "One paced long read, figures inline where the text needs them.", href: "/lucid/essay" },
-            { t: "B · The Paper, Alive", d: "The paper's own sections, with interactive figures and margin notes.", href: "/lucid/paper" },
-            { t: "C · The Explainer", d: "The picked design, rebuilt for a newcomer: context first, plain titles.", href: "/lucid/explainer" },
-          ].map((v) => (
-            <li key={v.href}>
-              <Link
-                href={v.href}
-                className={`group flex h-full flex-col justify-between rounded-lg border border-neutral-900 px-5 py-5 transition-colors hover:bg-neutral-900 hover:text-white active:scale-[0.99] ${ring}`}
-              >
-                <div>
-                  <p className="font-mono text-xs text-neutral-500 group-hover:text-neutral-300">{refinedPaper.name}</p>
-                  <p className="mt-2 text-[17px] font-medium tracking-tight">{v.t}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-600 group-hover:text-neutral-300">{v.d}</p>
-                </div>
-                <span className="mt-6 text-sm">Open →</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <h3 className="mt-10 text-sm font-medium">Earlier finals, one per style</h3>
-        <ul className="mt-3 grid gap-x-6 divide-y divide-neutral-200 border-y border-neutral-200 md:grid-cols-3 md:divide-y-0">
-          {[
-            { b: intenseSpace, href: "/telemetry" },
-            { b: refinedPaper, href: "/finalists/refined-paper" },
-            { b: whiteImmersion, href: "/finalists/white-immersion" },
-          ].map(({ b, href }) => (
-            <li key={href}>
-              <Link href={href} className={`group flex items-center justify-between gap-4 py-3 text-sm ${ring}`}>
-                <span className="group-hover:underline">{b.name}</span>
-                <span className="font-mono text-xs text-neutral-500">final →</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-10 grid gap-8 md:grid-cols-12">
-          <div className="md:col-span-7">
+      <section className="mt-20" aria-labelledby="site">
+        <SectionHead n="03" title="The Final Site" note={`In the style Hewitt picked: ${refinedPaper.name}`} />
+        <span id="site" className="sr-only">The Final Site</span>
+        <Link
+          href="/lucid/essay"
+          className={`group mt-8 grid overflow-hidden rounded-xl border border-neutral-900 transition-shadow hover:shadow-[0_18px_50px_-24px_rgba(0,0,0,0.45)] active:scale-[0.995] md:grid-cols-12 ${ring}`}
+        >
+          <div className="relative aspect-[16/9] overflow-hidden border-b border-neutral-900 bg-neutral-100 md:col-span-7 md:aspect-auto md:min-h-[360px] md:border-b-0 md:border-r">
+            <Image
+              src="/site/essay-hero.jpg"
+              alt="The final site's opening: the paper's title beside an ink line drawing of a satellite"
+              fill
+              sizes="(min-width: 768px) 700px, 100vw"
+              className="object-cover object-left-top transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              priority
+            />
+          </div>
+          <div className="flex flex-col justify-between gap-8 p-6 md:col-span-5 md:p-8">
+            <div>
+              <p className="inline-flex rounded-full bg-neutral-900 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-white">
+                Final site
+              </p>
+              <h3 className="mt-5 text-3xl font-semibold leading-[1.05] tracking-[-0.025em] md:text-4xl">
+                The Essay
+              </h3>
+              <p className="mt-2 font-mono text-xs text-neutral-500">{refinedPaper.name} · /lucid/essay</p>
+              <p className="mt-4 text-[15px] leading-relaxed text-neutral-700">
+                The paper as one paced long read: who it&apos;s for and why the data matters, then the data, the
+                methods, the results and the conclusions, with interactive figures placed exactly where the text
+                needs them. It ends with the paper itself in a page reader, with a PDF download.
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-2 text-[15px] font-medium">
+              <span className="group-hover:underline">Open the final site</span>
+              <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+            </span>
+          </div>
+        </Link>
+        <div className="mt-10 grid gap-8 md:grid-cols-2">
+          <div>
             <h3 className="text-sm font-medium">Our pick, and why</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-neutral-700">
               <strong className="font-medium text-neutral-900">{refinedPaper.name}.</strong> The paper is the subject, so
               the site reads like a beautifully typeset journal page: a serif for the argument, ink-blue and ochre plot
-              lines named by matching words in the text, and one vermilion action. A researcher meeting this work for the
-              first time can learn it in order, and check every number against the page of the paper that backs it.
+              lines named by matching words in the text, and one vermilion action. Of three iterations in that style,
+              the <strong className="font-medium text-neutral-900">Essay</strong> won: a researcher meeting this work for
+              the first time learns it in order, in one voice, and can check every number against the page of the
+              paper that backs it.
             </p>
-            <h3 className="mt-6 text-sm font-medium">The browser check</h3>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium">The browser check</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-neutral-700">
               Every page was opened in a headless, logged-out browser at 11 screen sizes, from a 320px phone to a
               2560px display, in Chromium and in WebKit (Safari&apos;s engine). Each interaction was run by mouse,
@@ -180,19 +188,6 @@ export default function Hub() {
               </Link>
               .
             </p>
-          </div>
-          <div className="md:col-span-5">
-            <h3 className="text-sm font-medium">Earlier candidate versions</h3>
-            <ul className="mt-3 divide-y divide-neutral-200 border-y border-neutral-200">
-              {boards.map((b) => (
-                <li key={b.slug}>
-                  <Link href={`/versions/${b.slug}`} className={`group flex items-center justify-between gap-4 py-3 text-sm ${ring}`}>
-                    <span className="group-hover:underline">{b.name}</span>
-                    <span className="font-mono text-xs text-neutral-500">first build →</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </section>
@@ -216,12 +211,68 @@ export default function Hub() {
           Read the decision log →
         </Link>
       </section>
+      <section className="mt-20" aria-labelledby="other">
+        <SectionHead n="05" title="Other Iterations" note="Not the final site; kept to show the process" />
+        <span id="other" className="sr-only">Other Iterations</span>
+        <div className="mt-8 grid gap-10 md:grid-cols-3">
+          <div>
+            <h3 className="text-sm font-medium">The other two {refinedPaper.name} iterations</h3>
+            <ul className="mt-3 divide-y divide-neutral-200 border-y border-neutral-200">
+              {[
+                { t: "B · The Paper, Alive", d: "The paper's own sections, with margin notes", href: "/lucid/paper" },
+                { t: "C · The Explainer", d: "Context first, plain titles, a glossary", href: "/lucid/explainer" },
+              ].map((v) => (
+                <li key={v.href}>
+                  <Link href={v.href} className={`group flex items-center justify-between gap-4 py-3 text-sm ${ring}`}>
+                    <span>
+                      <span className="block group-hover:underline">{v.t}</span>
+                      <span className="block text-neutral-500">{v.d}</span>
+                    </span>
+                    <span aria-hidden className="font-mono text-xs text-neutral-500">→</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium">Earlier finals, one per style</h3>
+            <ul className="mt-3 divide-y divide-neutral-200 border-y border-neutral-200">
+              {[
+                { b: intenseSpace, href: "/telemetry" },
+                { b: refinedPaper, href: "/finalists/refined-paper" },
+                { b: whiteImmersion, href: "/finalists/white-immersion" },
+              ].map(({ b, href }) => (
+                <li key={href}>
+                  <Link href={href} className={`group flex items-center justify-between gap-4 py-3 text-sm ${ring}`}>
+                    <span className="group-hover:underline">{b.name}</span>
+                    <span className="font-mono text-xs text-neutral-500">final →</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium">First builds, one per style</h3>
+            <ul className="mt-3 divide-y divide-neutral-200 border-y border-neutral-200">
+              {boards.map((b) => (
+                <li key={b.slug}>
+                  <Link href={`/versions/${b.slug}`} className={`group flex items-center justify-between gap-4 py-3 text-sm ${ring}`}>
+                    <span className="group-hover:underline">{b.name}</span>
+                    <span className="font-mono text-xs text-neutral-500">first build →</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section className="mt-20" aria-labelledby="about">
         <SectionHead n="—" title="About this site" note="Authorship" />
         <div id="about" className="mt-6 grid gap-6 text-[15px] leading-relaxed text-neutral-700 md:grid-cols-2">
           <p>
             This site is <strong className="font-medium text-neutral-900">Hewitt Watkins&apos;s project</strong>:
-            the research, the three mood boards, the three design systems, and the explorer were directed,
+            the research, the three mood boards, the three design systems, and the final site were directed,
             designed, and built by Hewitt for MPCS 51238 <em>Design, Build, Ship</em> (UChicago, Autumn 2026).
           </p>
           <p className="text-neutral-600">
