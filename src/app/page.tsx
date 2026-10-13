@@ -90,11 +90,30 @@ export default function Hub() {
 
       <section className="mt-20">
         <SectionHead n="02" title="Design Systems" note="Each one built from its mood board" />
-        <ul className="mt-6 grid gap-3 sm:grid-cols-3">
-          {boards.map((b) => (
-            <li key={b.slug} className="rounded-lg border border-dashed border-neutral-300 px-5 py-4">
-              <p className="text-sm font-medium">{b.name}</p>
-              <p className="mt-1 text-sm text-neutral-400">In progress</p>
+        <ul className="mt-8 grid gap-4 sm:grid-cols-3">
+          {boards.map((b, i) => (
+            <li key={b.slug}>
+              <Link
+                href={`/design-systems/${b.slug}`}
+                className={`group flex h-full flex-col justify-between rounded-lg border border-neutral-200 px-5 py-5 transition-colors hover:border-neutral-900 active:scale-[0.99] ${ring}`}
+              >
+                <div>
+                  <p className="font-mono text-xs text-neutral-400">0{i + 1}</p>
+                  <p className="mt-1 text-[15px] font-medium tracking-tight group-hover:underline">{b.name}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+                    Color · type · spacing · components in every state · Parts of an Interface · lecture principles ·
+                    novel and telemetry components
+                  </p>
+                </div>
+                <div className="mt-5 flex items-center justify-between">
+                  <div className="flex gap-1" aria-hidden>
+                    {b.palette.slice(0, 6).map((c) => (
+                      <span key={c.hex} className="h-3 w-3 rounded-full ring-1 ring-black/10" style={{ background: c.hex }} />
+                    ))}
+                  </div>
+                  <span aria-hidden className="text-neutral-400 transition-transform group-hover:translate-x-1">→</span>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
