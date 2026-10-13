@@ -227,6 +227,73 @@ function Palette() {
   );
 }
 
+/* ---------- color in use ---------- */
+function Signal({ data }: P) {
+  // live: how much of the current view the board's one cyan thing (the tour pill) covers
+  const [pct, setPct] = useState<number | null>(null);
+  useEffect(() => {
+    const measure = () => {
+      const pill = [...document.querySelectorAll<HTMLElement>("button.wi-pill")].find((el) => !el.closest(".wi-card"));
+      if (!pill) { setPct(null); return; }
+      const r = pill.getBoundingClientRect();
+      setPct((r.width * r.height * 100) / (window.innerWidth * window.innerHeight));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+  const v = data.ridges[1]?.v ?? [];
+  const line = v.map((y, i) => `${((i / (v.length - 1)) * 300).toFixed(1)},${(30 - y * 26).toFixed(1)}`).join(" ");
+  const SIG = PALETTE[5].hex;
+  const label = "whitespace-nowrap font-[family-name:var(--wi-mono)] text-[10.5px] font-light uppercase tracking-[0.1em] text-[var(--wi-ink)]";
+  return (
+    <div className="flex h-full flex-col justify-between p-6 font-[family-name:var(--wi-mono)]">
+      <div className="flex justify-between text-[11px] font-light uppercase tracking-[0.14em] text-[var(--wi-muted)]">
+        <span>Signal in use · one fill per screen</span><span>{SIG}</span>
+      </div>
+      {/* a slice of the explorer at true size */}
+      <div className="relative h-[124px] border border-[var(--wi-rime)] bg-[var(--wi-bg)]" aria-hidden="true">
+        <div className="absolute left-3 top-2.5 text-[10.5px] font-light uppercase tracking-[0.1em] text-[var(--wi-muted)]">M1 · GMM · score</div>
+        <svg viewBox="0 0 300 32" preserveAspectRatio="none" className="absolute left-3 right-14 top-8 h-[38px] w-[calc(100%-68px)]">
+          <polyline points={line} fill="none" stroke={INK} strokeWidth={0.8} vectorEffect="non-scaling-stroke" />
+        </svg>
+        <div className="absolute right-3 top-2.5 flex flex-col gap-1.5">
+          {["+", "−"].map((g) => (
+            <span key={g} className="grid h-8 w-8 place-items-center rounded-full border border-[var(--wi-rime)] bg-white text-[14px] text-[var(--wi-ink)]">{g}</span>
+          ))}
+        </div>
+        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2">
+          <span className="inline-flex h-8 items-center whitespace-nowrap rounded-full border border-[var(--wi-ink)] px-3 text-[10.5px] uppercase tracking-[0.1em] text-[var(--wi-ink)]">● Free explore</span>
+          <span className="inline-flex h-8 items-center whitespace-nowrap rounded-full px-3.5 text-[10.5px] font-medium uppercase tracking-[0.1em] text-[var(--wi-ink)]" style={{ background: SIG }}>▶ Guided tour</span>
+        </div>
+      </div>
+      <div>
+        <div className="relative h-1.5 w-full border border-[var(--wi-rime)] bg-white" aria-hidden="true">
+          <span className="absolute inset-y-0 left-0" style={{ width: `${Math.max(1.2, pct ?? 1)}%`, background: SIG }} />
+        </div>
+        <div className="mt-2 flex justify-between text-[11px] font-light text-[var(--wi-ink)]">
+          <span>{pct === null ? "≈1% of the view" : `${pct.toFixed(1)}% of this view (live)`}</span>
+          <span>Ink on Signal {contrast(INK, SIG).toFixed(2)}:1</span>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-3 border-t border-[var(--wi-rime)] pt-3">
+        <div className="flex items-center gap-2">
+          <span className="block h-3.5 w-3.5 shrink-0" style={{ background: SIG }} aria-hidden="true" />
+          <span className={label}>✕ Text {contrast(SIG, PALETTE[0].hex).toFixed(2)}:1</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <svg width="22" height="12" viewBox="0 0 22 12" aria-hidden="true" className="shrink-0"><polyline points="0,10 6,4 11,8 16,2 22,6" fill="none" stroke={SIG} strokeWidth="1.6" /></svg>
+          <span className={label}>✕ Chart lines</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="flex shrink-0 gap-0.5" aria-hidden="true"><i className="block h-2.5 w-3.5 rounded-full" style={{ background: SIG }} /><i className="block h-2.5 w-3.5 rounded-full" style={{ background: SIG }} /></span>
+          <span className={label}>✕ Two fills</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ---------- interface ---------- */
 function Controls() {
   const states = [
@@ -424,6 +491,7 @@ export function Generated({ k, ...p }: P & { k: GenKey }) {
     case "display": return <Display {...p} />;
     case "mono": return <Mono />;
     case "palette": return <Palette />;
+    case "signal": return <Signal {...p} />;
     case "controls": return <Controls />;
     case "hud": return <Hud {...p} />;
     case "scramble": return <Scramble {...p} />;

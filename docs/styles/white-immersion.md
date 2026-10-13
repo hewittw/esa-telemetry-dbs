@@ -14,6 +14,7 @@ Board: `/mood-boards/white-immersion`. References: `igloo`, `skyviewer`.
 | text | Ink | `#111824` | 16.43:1 (17.8 on Frost) | Body, values, icons, focus rings, selected fills |
 | accent | Signal | `#2FE0E3` | 1.50:1, so **fill only** | Primary action (tour pill) with Ink text at 10.93:1 |
 Rule: white on white has no contrast, so separation comes from Rime hairlines and Ink. Cyan is never text and never decoration.
+Saturation budget: Signal covers about 1% of the view (the board measures its own tour pill live: 0.9% at 1440 × 900). Color is a rare event in a white field, never a wash.
 
 ## Type
 - **Display:** Michroma 400, tracked +3–6%, caps. Mood name, section stamps, big numerals. Six words max.
@@ -37,6 +38,9 @@ Rule: white on white has no contrast, so separation comes from Rime hairlines an
 - Snowfield: the real anomaly-score timelines drawn as faint dotted drifts across the canvas, with labelled anomalies as Ink specks.
 - Snow grain at about 3% density behind large white areas, never under text. Thin 1px wireframe shards at 16% Ink.
 
+## Board contents (revised)
+28 artifacts, 15 generated (✦) and 13 collected. Color: palette card ✦, Signal-in-use study ✦ (live coverage bar), meltwater saturation-budget photo. Texture: hoar frost, frost growth ✦, snow grain ✦, wireframe shard ✦. Only two website crops remain (floating round controls, corner-pinned HUD text); every note describes the design move and where it goes in the explorer, not the source's subject.
+
 ## Interaction model
 - Pan (drag / one finger), zoom (wheel / pinch / ± circles), fit (0), coordinate-grid toggle, guided tour vs free explore.
 - Tab or ← → steps through objects. Focus flies the camera, draws Ink corner brackets, and opens the note.
@@ -52,3 +56,13 @@ Rule: white on white has no contrast, so separation comes from Rime hairlines an
 - Grey cards with soft shadows and 12px radius, or Inter. No purple, no glow, no gradients on surfaces.
 - Cyan text on white (1.5:1). Muted text lighter than Glacier.
 - Canvas-only text, scroll-jacking that hides content, or loaders that gate the first paint.
+
+## Design system (`/design-systems/white-immersion`)
+Files: `src/app/design-systems/white-immersion/` (page-scoped `wids.css`, every class `wids-`, wrapped in `@layer components` so Tailwind utilities still win).
+- **Layout call:** a normal scroll document inside the immersive frame, not a full pan/zoom canvas. A UI library has to be scannable, linkable, keyboard-first and readable on a 320px phone, so the camera language moves into the frame: a fixed snowfield of our real score timelines (parallax 0.35/0.5/0.15), an Igloo corner HUD (section, item, Y, zoom, frame, mode), Skyviewer floating circles (prev/next section, atlas, coordinate grid), fly-to between sections with a field zoom-out arc, a guided tour (the one cyan pill) vs free explore, and an atlas that zooms out to every component. Real pan/zoom lives in the N06–N09 deep-zoom viewer, where it serves the data.
+- **Added tokens:** `--press #E9EDF2` (pressed fill), `--dis #7B8794` (disabled text, 3.66:1 on Frost), `--fast 160ms`, `--slow 520ms`, skeleton `#E8EDF2`.
+- **State recipe:** hover = inset 1px Ink · focus = 2px Ink ring, offset 3 · pressed = `--press` + 1px sink (or scale .94–.97) · selected = Ink fill / 4px Ink rail / corner brackets · disabled = dashed, `--dis`. A disabled primary loses its cyan.
+- **Status:** shape + word, never color: ○ Nominal · ▲ Anomaly · ◇ Rare event · ✕ Comm. gap · ● Best.
+- **Lines in charts:** method = dash pattern, not hue. SVG charts measure their container so 10.5px labels render at true size.
+- **≥1800px:** the whole system is CSS-zoomed 1.14 (1.4 at ≥2300) so it reads at the same physical size.
+- **Sections:** 01–06 handout · 07 Parts of an Interface (all slide elements, slide name + subtitle) · 08 Novel (Igloo, Skyviewer) · 09 Telemetry · L Lecture principles (L1–L9, ending with the one-screen system overview).

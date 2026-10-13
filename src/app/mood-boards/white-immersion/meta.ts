@@ -6,7 +6,7 @@ export const board: MoodBoardMeta = {
   name: "Whiteout · Crystalline · Instrumented",
   moodWords: ["Whiteout", "Crystalline", "Instrumented"],
   summary:
-    "A cold, silent white field you fly through: Igloo's glacial HUD world merged with Rubin Skyviewer's deep zoom, inverted so the telemetry becomes a snowfield of data.",
+    "A cold, silent white field you fly through: text pinned to the corners, round controls floating over the content, deep pan and zoom, and our telemetry drawn as the snowfield.",
   palette: [
     { hex: "#F4F6F8", name: "Whiteout" },
     { hex: "#FFFFFF", name: "Frost" },
@@ -16,7 +16,7 @@ export const board: MoodBoardMeta = {
     { hex: "#2FE0E3", name: "Signal" },
   ],
   artifactCount: ARTIFACTS.length, // 28
-  generatedCount: ARTIFACTS.filter((a) => a.generated).length, // 14
+  generatedCount: ARTIFACTS.filter((a) => a.generated).length, // 15
   preview: "/mood-boards/white-immersion/preview.jpg",
   references: ["igloo", "skyviewer"],
 };

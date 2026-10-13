@@ -478,7 +478,7 @@ function Field(p: FieldProps) {
             WHITEOUT<br />CRYSTALLINE<br />INSTRUMENTED
           </div>
           <div className="mx-auto mt-10 max-w-[900px] text-[30px] font-light leading-relaxed text-[var(--wi-muted)]">
-            Igloo&apos;s glacial WebGL world × Rubin Skyviewer&apos;s deep zoom, inverted into a white snowfield. Every speck behind you is a real anomaly score.
+            Corner-pinned HUD, floating round controls, and deep zoom over one white value. Every speck behind you is a real anomaly score.
           </div>
         </div>
         {ARTIFACTS.map((art, i) => (
@@ -733,7 +733,7 @@ function Credits({ refEl }: { refEl: React.RefObject<HTMLDialogElement | null> }
           </button></form>
         </div>
         <p className="mt-2 text-[12px] leading-relaxed text-[var(--wi-muted)]">
-          {collected.length} collected artifacts. NASA images are public domain. Screenshot crops are used for study, via the sites named. The other {N - collected.length} artifacts (✦) were generated in code from our own data.
+          {collected.length} collected artifacts. NASA images are public domain. Two are screenshot crops, kept only for the UI move they show. The other {N - collected.length} (✦) were generated in code, and the data pieces draw our own telemetry.
         </p>
         <ol className="mt-5 divide-y divide-[var(--wi-rime)] border-y border-[var(--wi-rime)]">
           {collected.map(({ a, i }) => (

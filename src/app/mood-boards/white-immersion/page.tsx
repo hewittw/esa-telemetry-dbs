@@ -11,7 +11,7 @@ const display = Michroma({ subsets: ["latin"], weight: "400", variable: "--wi-di
 
 export const metadata: Metadata = {
   title: "Mood board: Whiteout · Crystalline · Instrumented",
-  description: "An explorable white snowfield of 28 artifacts: Igloo's glacial HUD world merged with Rubin Skyviewer's deep zoom.",
+  description: "An explorable white snowfield of 28 artifacts: corner-pinned HUD text, floating round controls, and deep pan and zoom.",
 };
 
 export default function WhiteImmersionBoard() {
