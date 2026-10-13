@@ -171,3 +171,16 @@ Append as decisions happen, newest at the bottom.
 - **Three iterations:** A · The Essay, B · The Paper Alive, C · The Explainer (a better version of the current page).
 - **Decided with Hewitt:** a generic satellite drawn in ink, because the dataset anonymises the missions; no more work
   on the older finals; the hub puts the three Lucid iterations first.
+
+## 2026-10-13 · Three Lucid iterations built and deployed
+| Version | Shape | Prose / page words | Checks |
+|---|---|---|---|
+| A · The Essay | one 66ch long read, figures inline where the text needs them | ~2,200 prose | 30/30 |
+| B · The Paper, Alive | the paper's own §1–§7, numbered subsections, ~35 margin glosses, sticky section rail | ~2,930 | 42/42 |
+| C · The Explainer | the picked design rebuilt for a newcomer: "You'll learn" lines, a plain sentence before every result, a 12-term inline glossary | ~2,265 | 29 (2 false fails) |
+- All three open with the paper's title, an ink satellite line drawing, and the goal, then a context section
+  (the course → ESA → telemetry → the ESA Anomaly Dataset → why it's novel → the gap → Q1/Q2).
+- **A builder caught an error in the agent's own spec:** it said the M1 VAEs "don't clear" 0.322, but TransformerVAE scores
+  0.335. The spec was corrected to "land close to the plateau (0.293–0.335)" and pushed to the other builders mid-run.
+- Remaining honest caveats on all three: the long-fault figure uses the saved K = 8 K-Means run, not the paper's K = 2
+  (labelled); the paper's text says K ∈ {2…20} while the saved sweep runs to 30 (copy avoids stating a range).
