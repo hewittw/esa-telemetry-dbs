@@ -1,20 +1,22 @@
 "use client";
 
-// The 60-second tour for a two-minute reader: six stops, one line each, 10 s per stop.
+// The 60-second tour: eight stops, one line each, 7.5 s per stop.
 // It only scrolls the page (no scroll-jacking): Esc, Exit, or any scroll of your own ends it,
 // and focus returns to whatever started it. A secondary control: never vermilion.
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { FOCUS, IconCross, MONO, SANS, SERIF, btnQuiet, btnSecondary } from "../../design-systems/refined-paper/kit";
 
 export const STOPS = [
-  { id: "top", t: "The finding", c: "Structure sits at the operational-group level (18–29 modes), not 4–5 subsystems." },
-  { id: "background", t: "Background", c: "Each subsystem divides into finer operational groups. Which level does the data follow?" },
-  { id: "methods", t: "What we did", c: "Five methods, each richer than the last, all scored by PR-AUC." },
-  { id: "results", t: "Results", c: "BIC picks K = 21 and 29: beside the groups, far from the subsystems." },
-  { id: "conclusions", t: "Conclusions", c: "Each mode has its own normal: the bottleneck for global models." },
+  { id: "top", t: "The question", c: "Does the sensor data of two ESA satellites hide a consistent structure, and does learning it help detect anomalies?" },
+  { id: "introduction", t: "1 Introduction", c: "ESA engineers watch dozens of channels; existing detectors raise false alarms, and nobody had asked why." },
+  { id: "dataset", t: "2 Dataset", c: "Each channel belongs to a subsystem, and each subsystem divides into finer operational groups." },
+  { id: "baselines", t: "3 Baselines", c: "K-Means, PCA and KPCA plateau near PR-AUC 0.322: one global normal cannot fit many modes." },
+  { id: "gmm", t: "4 GMM", c: "A Gaussian mixture lets BIC choose how many operating modes the data contains." },
+  { id: "results", t: "6 Results", c: "BIC picks 21 and 29 modes, beside 18 and 29 groups: group-level granularity, not 4–5 subsystems." },
+  { id: "conclusions", t: "7 Conclusions", c: "Each mode has its own normal: the bottleneck for every global model." },
   { id: "paper", t: "The paper", c: "The paper, page by page, with the PDF." },
 ];
-const DWELL = 10000;
+const DWELL = 7500;
 
 type Tour = { on: boolean; start: () => void; stop: (refocus?: boolean) => void };
 const Ctx = createContext<Tour>({ on: false, start: () => {}, stop: () => {} });

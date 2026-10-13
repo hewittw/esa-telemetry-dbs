@@ -13,8 +13,8 @@ const sans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], 
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--rp-mono-face" });
 
 export const metadata: Metadata = {
-  title: "Latent structure in ESA satellite telemetry · Hewitt Watkins",
-  description: "ESA telemetry has latent structure at the operational-group level (18–29 modes), not the subsystem level (4–5), and that multi-modality is why global detectors fail.",
+  title: "Uncovering Latent Structure in ESA Satellite Telemetry · The paper, alive",
+  description: "The paper by Rhea Madhogarhia & Hewitt Watkins (TTIC 31220), as an annotated journal page with interactive figures. Site designed & built by Hewitt Watkins.",
 };
 
 /** Both missions' channels, as filed by ESA: channel → subsystem → operational group. */
