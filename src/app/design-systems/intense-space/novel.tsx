@@ -21,7 +21,7 @@ export function NovelFiber({ m1, m2 }: { m1: Strand[]; m2: Strand[] }) {
       novel="iCOMAT"
       className="md:col-span-2 lg:col-span-8"
       spec={{
-        use: "Borrowed iCOMAT's steered-fiber hero; transformed so each strand is one slice of the test set (brightness = GMM score vs its local baseline, magenta = a labelled fault). Pause control from NASA's Eyes.",
+        use: "Borrowed a full-bleed hero drawn as hundreds of fine parallel strokes that bend together; transformed so each stroke is one slice of the test set (brightness = GMM score vs its local baseline, magenta = a labelled fault). The Pause control is NASA's Eyes' always-visible play/pause.",
         tokens: "Canvas on Charcoal · Green rgba(55,253,8,.1–1) · Magenta faults · shear amplitude ∝ score · paused when off-screen or reduced motion",
       }}
     >
@@ -40,8 +40,8 @@ export function NovelFiber({ m1, m2 }: { m1: Strand[]; m2: Strand[] }) {
 
 /* ---------- N2 · Doto readout (iCOMAT dot-matrix callout) ---------- */
 const READOUTS = [
-  { id: "m2", t: "Best PR-AUC · M2", v: 0.438, d: 3, note: "Transformer VAE, Neg. ELBO · Table 1" },
-  { id: "m1", t: "Best PR-AUC · M1", v: 0.384, d: 3, note: "GMM, K = 21, neg. log-lik. · Table 1" },
+  { id: "m2", t: "Top PR-AUC · M2", v: 0.438, d: 3, note: "Transformer VAE, Neg. ELBO · highest of the 4 M2 rows in Table 1" },
+  { id: "m1", t: "Top PR-AUC · M1", v: 0.384, d: 3, note: "GMM, K = 21 · highest of the 9 M1 rows in Table 1 (best VAE on M1: TVAE 0.335)" },
   { id: "ts", t: "Test timesteps · M1", v: 7364161, d: 0, note: "one reading per ~30 s · results.json" },
   { id: "ev", t: "Labelled events · M2", v: 644, d: 0, note: "613 rare events + 31 anomalies · ESA-ADB anomaly_types.csv" },
 ];
@@ -84,7 +84,7 @@ export function NovelDoto() {
       novel="iCOMAT"
       className="lg:col-span-4"
       spec={{
-        use: "Borrowed iCOMAT's sparing Doto callouts; transformed into an instrument readout with unlit 8-segments behind and a count-up when the value changes.",
+        use: "Borrowed the move of setting only one or two numbers in a dot-matrix face; transformed into an instrument readout with unlit 8-segments behind and a count-up when the value changes.",
         tokens: "Doto 600 · lit Frost, unlit Hairline #2E3135 · 700ms ease-out cubic · for ≤ 3 numbers per view",
       }}
     >
@@ -177,7 +177,7 @@ export function NovelWords() {
       novel="iCOMAT"
       className="md:col-span-2 lg:col-span-7"
       spec={{
-        use: "Borrowed iCOMAT's statement paragraph that brightens as you scroll; transformed so a word, once lit, stays lit (a fast scroller never sees a dimmed finding), plus a Replay.",
+        use: "Borrowed a statement paragraph that brightens word by word as you scroll; transformed so a word, once lit, stays lit (a fast scroller never sees a dimmed finding), plus a Replay.",
         tokens: "Host Grotesk 500 clamp(22–34px) / 1.08 · unread Frost @ 42% · 300ms per word · off under reduced motion",
       }}
     >
@@ -214,7 +214,7 @@ export function NovelFocus() {
       novel="Planet"
       className="lg:col-span-5"
       spec={{
-        use: "Borrowed Planet's half-blurred UNDETECTED; transformed into a one-shot per-letter focus pull that fires whenever a headline value changes, so the change itself is visible.",
+        use: "Borrowed a headline word set half out of focus; transformed into a one-shot per-letter focus pull that fires whenever a headline value changes, so the change itself is visible.",
         tokens: "blur 14px → 0, opacity .2 → 1 · 900ms per letter, 60ms stagger · Host Grotesk 600 caps",
       }}
     >
@@ -224,7 +224,7 @@ export function NovelFocus() {
           ↻ Replay
         </Button>
       </div>
-      <p className={`${LABEL} text-(--is-steel)`}>[ Best PR-AUC · Mission {m} ]</p>
+      <p className={`${LABEL} text-(--is-steel)`}>[ Top PR-AUC · Mission {m} ]</p>
       <p key={`${m}-${n}`} aria-live="polite" aria-label={word} className="isd-focus text-[clamp(40px,4.6vw,68px)] font-semibold uppercase leading-[0.95] tracking-[-0.035em] text-(--is-frost)">
         {word.split("").map((c, i) => (
           <span key={i} aria-hidden style={{ animationDelay: `${i * 60}ms` }}>
@@ -274,7 +274,7 @@ export function NovelCompare({ tree, ari }: { tree: Tree; ari: { sub: number; gr
       novel="iCOMAT"
       className="md:col-span-2 lg:col-span-12"
       spec={{
-        use: "Borrowed iCOMAT's straight-fiber vs steered-fiber comparison; transformed into our central claim: the same 76 Mission 1 channels bundled by the 4 subsystems (before) vs the 18 operational groups (after).",
+        use: "Borrowed a draggable before/after split that shows one set of lines in two arrangements; transformed into our central claim: the same 76 Mission 1 channels bundled by the 4 subsystems (before) vs the 18 operational groups (after).",
         tokens: "Drag, click or ←/→ (Shift = 10) · 1px Frost divider + 32px handle · before Steel strands, after Frost strands + Teal nodes",
       }}
     >
@@ -364,7 +364,7 @@ const OPS = [
   ["Sweep", "Fit full-covariance GMMs for K = 2–30 on 800K sampled rows; score each by BIC.", "K 2–30"],
   ["Select", "BIC bottoms out at K* = 21 on M1 and 29 on M2, near the group counts (18, 29).", "K* 21"],
   ["Score", "Each test timestep's score is its negative log-likelihood; alarm above τ99 = 36.24.", "τ 36.24"],
-  ["Evaluate", "Against labelled faults: PR-AUC 0.384, ROC-AUC 0.692, the best on Mission 1.", "0.384"],
+  ["Evaluate", "Against labelled faults: PR-AUC 0.384, ROC-AUC 0.692, the highest PR-AUC of any Mission 1 row.", "0.384"],
 ] as const;
 export function NovelProcess() {
   const [i, setI] = useState(0);
@@ -382,7 +382,7 @@ export function NovelProcess() {
       novel="iCOMAT"
       className="md:col-span-2 lg:col-span-12"
       spec={{
-        use: "Borrowed iCOMAT's O1–O7 operations strip; transformed into our GMM pipeline, each stop carrying its one real number. A tab list: click or ←/→.",
+        use: "Borrowed a numbered O1–O7 horizontal step strip, one short line per stop; transformed into our GMM pipeline, each stop carrying its one real number. A tab list: click or ←/→.",
         tokens: "Mono O-codes · 1px Hairline rail, Frost progress to the current stop · 8px square nodes · Doto value",
       }}
     >
@@ -451,7 +451,7 @@ export function NovelTags() {
       novel="Helion"
       className="lg:col-span-5"
       spec={{
-        use: "Borrowed Helion's mono labels and square-bracket captions; transformed into one tag grammar for runs, links, live data and faults. Brackets drift 3px apart on hover/focus; click copies the tag.",
+        use: "Borrowed small mono labels and square-bracket captions; transformed into one tag grammar for runs, links, live data and faults. Brackets drift 3px apart on hover/focus; click copies the tag.",
         tokens: "Fragment Mono 11 / 0.14em caps · [ ] in Steel · content Frost · glyph + word for status",
       }}
     >
@@ -517,7 +517,7 @@ export function NovelMechanism() {
       novel="Helion"
       className="lg:col-span-7"
       spec={{
-        use: "Borrowed Helion's pinned 3-step technology story and its Skip link; transformed into a self-advancing explainer with Pause, step buttons and Skip, and no scroll-jacking.",
+        use: "Borrowed a pinned 3-step explainer with a visible Skip link; transformed into a self-advancing explainer with Pause, step buttons and Skip, and no scroll-jacking.",
         tokens: "5s per step · 1px progress rule · step numbers Mono · Magenta only at step 3's flagged reading",
       }}
     >
@@ -622,7 +622,7 @@ export function NovelZoom({ tree }: { tree: Tree }) {
       novel="Planet"
       className="md:col-span-2 lg:col-span-12"
       spec={{
-        use: "Borrowed Planet's broader / closer / deeper zoom through imagery; transformed into a zoom through the channel hierarchy: mission → subsystem → operational group → channel. The current region gets Planet's teal outline.",
+        use: "Borrowed a three-step broader / closer / deeper zoom in which each step narrows the frame and outlines the current region; transformed into a zoom through the channel hierarchy: mission → subsystem → operational group → channel, with the current region in a teal outline.",
         tokens: "Blocks sized by channel count · 1px Steel ticks = channels · Teal 1px AOI outline on the region you zoomed from",
       }}
     >
@@ -715,7 +715,7 @@ export function NovelEntries() {
       novel="NASA's Eyes"
       className="md:col-span-2 lg:col-span-12"
       spec={{
-        use: "Borrowed NASA's Eyes' numbered 01–05 'things to try' list; transformed into the explorer's five entry points, each a whole-row link into the Telemetry section.",
+        use: "Borrowed a numbered 01–05 'things to try' list of whole-row links; transformed into the explorer's five entry points, each a whole-row link into the Telemetry section.",
         tokens: "Mono numerals 28px Steel → Frost on hover · hairline rules · arrow slides 4px · row min-h 72",
       }}
     >

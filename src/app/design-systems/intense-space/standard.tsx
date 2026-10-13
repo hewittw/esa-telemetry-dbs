@@ -350,7 +350,7 @@ export function Components({ rows, tree }: { rows: Row[]; tree: Tree }) {
                 <span className={`${LABEL} block text-(--is-steel)`}>PR-AUC</span>
                 <span className={`${DOT} block text-[46px] font-semibold leading-[0.85] text-(--is-frost)`}>0.438</span>
               </span>
-              <Status kind="best">Best M2</Status>
+              <Status kind="best">Top PR-AUC · M2</Status>
             </span>
             <span className={`${MONO} mt-4 flex items-center justify-between border-t border-(--is-line) pt-3 text-[11px] uppercase tracking-[0.12em] text-(--is-steel)`}>
               <span>ROC-AUC 0.749</span>
@@ -395,7 +395,7 @@ export function Components({ rows, tree }: { rows: Row[]; tree: Tree }) {
         code="4.9"
         title="Badges & status"
         className="md:col-span-2 lg:col-span-4"
-        spec={{ use: "Count badge for a number on a control; status = icon + word + color, never color alone.", tokens: "Count: Frost fill, Void mono 10 · Status: ● Green live, ■ Magenta fault, ◆ Teal best, ○ Steel nominal" }}
+        spec={{ use: "Count badge for a number on a control; status = icon + word + color, never color alone.", tokens: "Count: Frost fill, Void mono 10 · Status: ● Green live, ■ Magenta fault, ◆ Teal top PR-AUC (highest of all rows on a mission), ◇ Frost best VAE (Table 1's bold among VAEs), ○ Steel nominal" }}
       >
         <div className="flex flex-wrap items-center gap-3">
           <button type="button" className={`${BTN.secondary} group`}>
@@ -420,7 +420,10 @@ export function Components({ rows, tree }: { rows: Row[]; tree: Tree }) {
             <Status kind="nominal" />
           </li>
           <li>
-            <Status kind="best">Best M1 · GMM</Status>
+            <Status kind="best">Top PR-AUC M1 · GMM</Status>
+          </li>
+          <li>
+            <Status kind="vae">Best VAE M1 · TVAE</Status>
           </li>
         </ul>
       </Panel>
@@ -473,7 +476,8 @@ export function MethodDetail({ r, onDone }: { r: Row; onDone: () => void }) {
       </div>
       <p className="text-[16px] leading-[1.45] text-(--is-frost)">
         Trend vs the K-Means baseline:{" "}
-        <span className="font-semibold">{r.trendDirection === "best" ? `best ${r.family === "generative" ? "VAE " : ""}on Mission ${r.mission}` : r.trend}</span>. The linear plateau sits at PR-AUC 0.322; a random detector would score the positive rate ({r.mission === 1 ? "0.111" : "0.047"}).
+        <span className="font-semibold">{r.trendDirection === "best" ? `best VAE on Mission ${r.mission}, as bolded in the paper` : r.trend}</span>
+        {(r.method === "GMM" && r.mission === 1) || (r.method === "TransformerVAE" && r.mission === 2) ? `, and the highest PR-AUC of any Mission ${r.mission} row` : ""}. The linear plateau sits at PR-AUC 0.322; a random detector would score the positive rate ({r.mission === 1 ? "0.111" : "0.047"}).
       </p>
       <div className="flex flex-wrap gap-3">
         <Button variant="primary" onClick={onDone}>
@@ -886,7 +890,7 @@ export function Parts({ strands }: { strands: { s: number; a: number }[] }) {
             <p className={`${LABEL} text-(--is-steel)`}>[ M1 · GMM K = 21 ]</p>
             <p className="text-[22px] font-semibold leading-tight tracking-[-0.02em] text-(--is-frost)">Gaussian mixture</p>
             <p className={`${DOT} text-[44px] font-semibold leading-[0.85] text-(--is-frost)`}>0.384</p>
-            <p className="text-[13px] text-(--is-steel)">PR-AUC · best on Mission 1</p>
+            <p className="text-[13px] text-(--is-steel)">PR-AUC · highest of any Mission 1 row</p>
           </div>
         )}
       </Panel>
@@ -1023,7 +1027,7 @@ export function Parts({ strands }: { strands: { s: number; a: number }[] }) {
       </Panel>
 
       {/* color alone */}
-      <Panel id="p-color" code="P.10" title="Don’t use color alone" className="lg:col-span-6" spec={{ use: "Every status pairs color with a glyph and a word, so it reads in grayscale and for color-blind readers.", tokens: "■ fault · □ rare event · ○ nominal · ● live · ◆ best" }}>
+      <Panel id="p-color" code="P.10" title="Don’t use color alone" className="lg:col-span-6" spec={{ use: "Every status pairs color with a glyph and a word, so it reads in grayscale and for color-blind readers.", tokens: "■ fault · □ rare event · ○ nominal · ● live · ◆ top PR-AUC · ◇ best VAE" }}>
         <ul className="flex flex-col divide-y divide-(--is-line) border-y border-(--is-line)">
           {[
             ["2009-05-25", "Longest M1 anomaly · 967 h", "fault"],

@@ -14,6 +14,7 @@ export const INDEX = [
   ["s-parts", "P", "Parts"],
   ["s-novel", "N", "Novel"],
   ["s-telemetry", "T", "Telemetry"],
+  ["s-principles", "L", "Principles"],
 ] as const;
 
 // Helion's nav: mono items in one hairline capsule, the main button split off to its right.

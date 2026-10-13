@@ -365,12 +365,15 @@ export function Range({
 }
 
 /* ---------------- badges + status (color + icon + word) ---------------- */
-export function Status({ kind, children }: { kind: "live" | "fault" | "nominal" | "best" | "rare"; children?: ReactNode }) {
+export function Status({ kind, children }: { kind: "live" | "fault" | "nominal" | "best" | "vae" | "rare"; children?: ReactNode }) {
   const m = {
     live: { c: "text-(--is-fiber)", i: "●", w: "Live" },
     fault: { c: "text-(--is-fault)", i: "■", w: "Labelled fault" },
     nominal: { c: "text-(--is-steel)", i: "○", w: "Nominal" },
-    best: { c: "text-(--is-teal)", i: "◆", w: "Best" },
+    // two different "best"s, never one word for both: ◆ = highest PR-AUC of every row on a mission;
+    // ◇ = Table 1's bold, best among the three VAEs only (TVAE on both missions)
+    best: { c: "text-(--is-teal)", i: "◆", w: "Top PR-AUC" },
+    vae: { c: "text-(--is-frost)", i: "◇", w: "Best VAE" },
     rare: { c: "text-(--is-frost)", i: "□", w: "Rare event" },
   }[kind];
   return (

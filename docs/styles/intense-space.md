@@ -18,6 +18,8 @@ A deep-space control room drawn in steered fiber: charcoal void, real telemetry 
 
 Green is the accent: the primary button, plus the single "live" mark in a readout. Magenta means a labelled fault, nothing else.
 Teal outlines one region or highlights one series. Always pair color with a word (`■ labelled fault`, `● Generative`).
+Color budget (board artifact 07): magenta's area is set by the data, so a strip shows magenta only as far as each slice is
+labelled fault (M1 11.1%, M2 4.7% of test steps). Per view: one teal outline region, one green primary action.
 
 ## Type
 - **Display / heading / body:** Host Grotesk (Lay Grotesk stand-in). Display 600, -4.5% tracking, 0.9 leading, sentence case.
@@ -46,7 +48,10 @@ Teal outlines one region or highlights one series. Always pair color with a word
 
 ## Texture
 Fine fractal grain plus 3px scanlines over Charcoal, vignetted to Void, behind heroes only. Dot grid (18px) for figure frames.
-Imagery: real mission hardware and night scenes (NASA), each with a mono source caption (Planet).
+Physical references stand in for most website crops: a CSIRO micrograph of fibres drawn into one strand (the FiberField and
+channel-tree convergence), NASA hardware panels (a lamp grid of short engraved caps; an overhead switch panel with red only
+on guarded switches). Imagery is real mission hardware and night scenes (NASA), each with a mono source caption.
+The board keeps just two website crops (an art-field hero with a low-left headline, and a half-blurred headline).
 
 ## Do
 - Draw every line from real data (one strand = one slice of the test set; one path = one ESA channel).
@@ -86,3 +91,15 @@ Built from this board: same fonts (Host Grotesk 300–600, Fragment Mono, Doto 6
   (readout + blur, tags + mechanism, mission switcher + method card); charts stay full width.
 - **Fiber canvases:** the hero and N.01 each run a FiberField, but it pauses whenever off-screen (IntersectionObserver),
   so only one animates at a time.
+- **Two kinds of "best", never one word for both:** `◆ Top PR-AUC · M1` (Teal) = highest PR-AUC of every Table 1 row on that
+  mission (GMM 0.384 on M1, TVAE 0.438 on M2). `◇ Best VAE · M1 (paper bold)` (Frost) = Table 1's own bold, best among the
+  three VAEs only (TVAE 0.335 on M1, TVAE 0.438 on M2). Other systems that badge TVAE as "Best M1" are using the second meaning.
+- **Parts of an Interface:** the slide's 16 tiles / 18 elements in the slide's order, each titled with the slide's name and
+  subtitle ("Toast · Material: snackbar. It goes away."), drawn in this system and linked to the live, every-state version.
+- **Principles (section L):** the Week 2 lecture rebuilt on our Mission 2 "Today" phone: L.01 four hierarchy levers ·
+  L.02 Louder vs Quieter · L.03 type roles with leader lines · L.04 color roles (pick a swatch → Teal outline on its uses) ·
+  L.05 accent everywhere vs one accent · L.06 five edges vs one (guides toggle) · L.07 ambiguous vs clear mini page with an
+  affordance overlay (Teal = clickable, Steel = false affordance) · L.08 this system vs an arcade counter-example, with a
+  recruiter/peer toggle · L.09 the full system on one screen in the handout's 1–6 layout, closing the page.
+- **Captions describe the borrowed design move, not the source company:** "Novel · from iCOMAT" stays as the attribution,
+  but the spec line says what was borrowed (e.g. "a draggable before/after split that shows one set of lines in two arrangements").

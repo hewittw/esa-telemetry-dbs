@@ -173,13 +173,13 @@ export function TMission({ missions }: { missions: Missions }) {
   const d = missions[m];
   const days = d.test / d.hz / 86400;
   return (
-    <Panel id="t-mission" code="T.02" title="Mission switcher" className="lg:col-span-4" spec={{ use: "Swap the whole context between the two ESA missions; every stat on the page follows.", tokens: "Segmented, full width · Doto for the best score · Mono stat grid" }}>
+    <Panel id="t-mission" code="T.02" title="Mission switcher" className="lg:col-span-4" spec={{ use: "Swap the whole context between the two ESA missions; every stat on the page follows.", tokens: "Segmented, full width · Doto for the mission's top PR-AUC · Mono stat grid" }}>
       <div className="[&>div]:flex [&>div]:w-full [&_button]:flex-1">
         <Segmented label="Mission" value={m} onChange={setM} options={MS} />
       </div>
       <div key={m} className="isd-dialog flex flex-col gap-4">
         <div>
-          <p className={`${LABEL} text-(--is-steel)`}>Best PR-AUC · {d.best.method === "GMM" ? "GMM" : "TVAE"}</p>
+          <p className={`${LABEL} text-(--is-steel)`}>Top PR-AUC on M{m} · {d.best.method === "GMM" ? "GMM" : "TVAE"}</p>
           <p className={`${DOT} text-[56px] font-semibold leading-[0.9] text-(--is-frost)`}>{d.best.prAuc.toFixed(3)}</p>
         </div>
         <dl className={`${MONO} grid grid-cols-2 gap-px overflow-hidden rounded-[2px] border border-(--is-line) bg-(--is-line) text-[11px] uppercase tracking-[0.08em]`}>
@@ -236,7 +236,9 @@ export function TMethod({ rows }: { rows: Row[] }) {
   const random = r.mission === 1 ? 0.111 : 0.047;
   const peers = rows.filter((x) => x.mission === r.mission).sort((a, b) => b.prAuc - a.prAuc);
   const dir = r.trendDirection;
-  const trend = dir === "best" ? { k: "best" as const, w: `Best ${r.family === "generative" ? "VAE " : ""}M${r.mission}` } : dir === "up" ? { g: "↑", w: r.trend } : dir === "down" ? { g: "↓", w: r.trend } : { g: "–", w: r.trend };
+  // two different "best"s: ◆ top = highest PR-AUC of every row on this mission; ◇ paper = the VAE Table 1 bolds as best among VAEs
+  const top = peers[0].label === r.label;
+  const trend = dir === "best" ? { k: "vae" as const, w: `Best VAE · M${r.mission} (paper bold)` } : dir === "up" ? { g: "↑", w: r.trend } : dir === "down" ? { g: "↓", w: r.trend } : { g: "–", w: r.trend };
   return (
     <Panel id="t-method" code="T.03" title="Method spec card" className="lg:col-span-5" spec={{ use: "One Table 1 row as a spec sheet: family, K, scoring, both AUCs, trend, and where PR-AUC sits between random and the linear plateau.", tokens: "Doto PR-AUC · scale bar 0–0.5 with Steel random tick, Frost plateau tick · trend = arrow + word" }}>
       <div className="flex items-center gap-2">
@@ -258,14 +260,17 @@ export function TMethod({ rows }: { rows: Row[] }) {
           <p className="mt-1 text-[24px] font-semibold leading-[1.05] tracking-[-0.02em] text-(--is-frost)">{r.method}</p>
           <p className="text-[13px] text-(--is-steel)">{r.scoring}</p>
         </div>
-        {"k" in trend ? (
-          <Status kind="best">{trend.w}</Status>
-        ) : (
-          <span className={`${MONO} shrink-0 text-[11px] uppercase tracking-[0.12em] text-(--is-frost)`}>
-            <span aria-hidden>{trend.g} </span>
-            {trend.w}
-          </span>
-        )}
+        <div className="flex shrink-0 flex-col items-end gap-1.5 text-right">
+          {top ? <Status kind="best">Top PR-AUC · M{r.mission}</Status> : null}
+          {"k" in trend ? (
+            <Status kind="vae">{trend.w}</Status>
+          ) : (
+            <span className={`${MONO} text-[11px] uppercase tracking-[0.12em] text-(--is-frost)`}>
+              <span aria-hidden>{trend.g} </span>
+              {trend.w}
+            </span>
+          )}
+        </div>
       </div>
       <div className="grid grid-cols-[auto_auto_1fr] gap-5">
         {[
@@ -336,7 +341,7 @@ export function TPr({ curves }: { curves: Curves }) {
   const shown = runs.filter((r) => on.includes(r.id));
   const focus = hi ?? [...shown].sort((a, b) => b.prAuc - a.prAuc)[0]?.id;
   return (
-    <Panel id="t-pr" code="T.04" title="PR-curve viewer" className="md:col-span-2 lg:col-span-7" spec={{ use: "Compare saved runs; hover or focus a chip to lift its curve. The teal box is a Planet-style AOI: does a run hold precision ≥ 0.6 anywhere between recall 0.15 and 0.5?", tokens: "Highlighted run Teal 2px · others Frost 1px · context runs Frost 15% · AOI Teal 1px" }}>
+    <Panel id="t-pr" code="T.04" title="PR-curve viewer" className="md:col-span-2 lg:col-span-7" spec={{ use: "Compare saved runs; hover or focus a chip to lift its curve. The teal box is an area-of-interest outline (Planet's AOI move): does a run hold precision ≥ 0.6 anywhere between recall 0.15 and 0.5?", tokens: "Highlighted run Teal 2px · others Frost 1px · context runs Frost 15% · AOI Teal 1px" }}>
       <div className="flex flex-wrap items-center gap-3">
         <Segmented label="Mission" value={m} onChange={setM} options={MS} />
         <Check checked={ctx} onChange={setCtx} label="Context: all saved runs" />
@@ -417,7 +422,7 @@ export function TTimeline({ tl }: { tl: Timelines }) {
   };
   const X = (k: number) => (k / (n - 1)) * 100;
   return (
-    <Panel id="t-timeline" code="T.05" title="Mission timeline scrubber" className="md:col-span-2 lg:col-span-12" spec={{ use: "Scrub the whole test set (NASA's Eyes time scrubber): the trace is the anomaly score, magenta bands are labelled faults. Play / pause, jump to the next fault, or drag.", tokens: "240 bins · Frost trace 1.2px · Magenta bands at fault share · Teal playhead · ←/→ step one bin" }}>
+    <Panel id="t-timeline" code="T.05" title="Mission timeline scrubber" className="md:col-span-2 lg:col-span-12" spec={{ use: "Scrub the whole test set (NASA's Eyes' time-scrubber pattern): the trace is the anomaly score, magenta bands are labelled faults. Play / pause, jump to the next fault, or drag.", tokens: "240 bins · Frost trace 1.2px · Magenta bands at fault share · Teal playhead · ←/→ step one bin" }}>
       <div className="flex flex-wrap items-center gap-3">
         <Segmented
           label="Mission"
@@ -675,7 +680,7 @@ export function TTable({ rows }: { rows: Row[] }) {
   ];
   const sortBy = (k: Key) => (k === key ? setAsc((a) => !a) : (setKey(k), setAsc(k === "label" || k === "family")));
   return (
-    <Panel id="t-table" code="T.08" title="Table 1 · sortable results" className="md:col-span-2 lg:col-span-12" spec={{ use: "All 13 Table 1 rows. Click a header to sort (again to reverse); click a row for its detail.", tokens: "Mono 11 headers with ↑/↓ + aria-sort · Host Grotesk 14 cells · ◆ Teal = highest PR-AUC per mission · hairline rows 48px" }}>
+    <Panel id="t-table" code="T.08" title="Table 1 · sortable results" className="md:col-span-2 lg:col-span-12" spec={{ use: "All 13 Table 1 rows. Click a header to sort (again to reverse); click a row for its detail.", tokens: "Mono 11 headers with ↑/↓ + aria-sort · Host Grotesk 14 cells · ◆ Teal Top PR-AUC = highest of all rows on that mission · ◇ Frost Best VAE = the paper's bold among VAEs · hairline rows 48px" }}>
       <div className="flex flex-wrap items-center gap-3">
         <Segmented label="Mission filter" value={mis} onChange={setMis} options={[{ v: "all", t: "All" }, { v: "1", t: "M1" }, { v: "2", t: "M2" }]} />
         <p className={`${LABEL} text-(--is-steel)`} aria-live="polite">
@@ -707,9 +712,10 @@ export function TTable({ rows }: { rows: Row[] }) {
                       {short(r.method)}
                       <span className="block text-[12px] text-(--is-steel)">{r.scoring}</span>
                     </span>
-                    {best.has(r.label) ? (
-                      <span className="ml-auto pr-1">
-                        <Status kind="best">Best</Status>
+                    {best.has(r.label) || r.trendDirection === "best" ? (
+                      <span className="ml-auto flex flex-col items-end gap-1 pr-1 text-right">
+                        {best.has(r.label) ? <Status kind="best">Top PR-AUC</Status> : null}
+                        {r.trendDirection === "best" ? <Status kind="vae">Best VAE</Status> : null}
                       </span>
                     ) : null}
                   </button>

@@ -9,6 +9,8 @@ import { Components, ControlStates, Parts, UiStates } from "./standard";
 import { NovelCompare, NovelDoto, NovelEntries, NovelFiber, NovelFocus, NovelMechanism, NovelProcess, NovelTags, NovelWords, NovelZoom } from "./novel";
 import { TBic, TEvents, TMethod, TMission, TPr, TTable, TThreshold, TTimeline } from "./telemetry";
 import { ToastProvider } from "./ui";
+import { Principles } from "./principles";
+import { PartsSheet } from "./sheet";
 
 const display = Host_Grotesk({ subsets: ["latin"], variable: "--font-is-display", weight: ["300", "400", "500", "600"] });
 const mono = Fragment_Mono({ subsets: ["latin"], variable: "--font-is-mono", weight: "400" });
@@ -74,28 +76,6 @@ const TEXT_PAIRS: [string, string, string, string][] = [
   ["Disabled (exempt)", "#5F676E", "Void", C.void],
 ];
 
-/* the Parts checklist: every slide element → where it lives on this page */
-const PARTS_INDEX: [string, string][] = [
-  ["Hero", "#p-hero"],
-  ["Card", "#c-card"],
-  ["Primary / secondary buttons", "#c-buttons"],
-  ["Menu ≡", "#p-menu"],
-  ["More ⋮", "#c-card"],
-  ["Segmented control", "#p-seg"],
-  ["Switch / toggle", "#c-select"],
-  ["Checkbox & radio", "#c-select"],
-  ["Filter chips / tags", "#c-chips"],
-  ["Toast / snackbar", "#p-toast"],
-  ["Banner", "#p-toast"],
-  ["Badge", "#c-badges"],
-  ["Skeleton screen", "#p-skel"],
-  ["Tooltip", "#p-tip"],
-  ["Modal + scrim", "#c-modal"],
-  ["Accordion", "#p-acc"],
-  ["Empty state", "#p-empty"],
-  ["Focus ring", "#p-focus"],
-];
-
 /* ---------- section scaffolding ---------- */
 function SectionHead({ id, n, a, b, intro }: { id: string; n: string; a: string; b: string; intro: React.ReactNode }) {
   return (
@@ -135,7 +115,7 @@ export default function IntenseSpaceSystem() {
   const s1 = strands(1);
   const s2 = strands(2);
 
-  const counts = { standard: 30, novel: 10, telemetry: 8 };
+  const counts = { standard: 30, novel: 10, telemetry: 8, principles: 9 };
 
   return (
     <main className={`${display.variable} ${mono.variable} ${dot.variable} is-root min-h-screen w-full`}>
@@ -173,11 +153,12 @@ export default function IntenseSpaceSystem() {
                     <span className="mt-3 block text-[clamp(20px,2.2vw,32px)] font-light tracking-[-0.01em] text-(--is-frost)">· Design System</span>
                   </h1>
                 </div>
-                <dl className={`${MONO} grid grid-cols-3 gap-px self-end overflow-hidden rounded-[2px] border border-(--is-line) bg-(--is-line) lg:col-span-4`}>
+                <dl className={`${MONO} grid grid-cols-2 gap-px self-end overflow-hidden sm:grid-cols-4 rounded-[2px] border border-(--is-line) bg-(--is-line) lg:col-span-4`}>
                   {[
                     ["Standard", counts.standard],
                     ["Novel", counts.novel],
                     ["Telemetry", counts.telemetry],
+                    ["Principles", counts.principles],
                   ].map(([k, v]) => (
                     <div key={k} className="bg-(--is-void)/90 px-3 py-3">
                       <dt className="text-[10px] uppercase tracking-[0.14em] text-(--is-steel)">{k}</dt>
@@ -453,28 +434,9 @@ export default function IntenseSpaceSystem() {
               n="P"
               a="Parts of an"
               b="interface"
-              intro={<>Every element from the Week 2 slide. Those already built in section 4 are linked; the rest are here.</>}
+              intro={<>All 18 elements from the Week 2 slide, in the slide&apos;s own order and under its own names and subtitles, drawn in this system. Each tile opens the live version, in every state, further down or in section 4.</>}
             />
-            <nav aria-label="Parts checklist" className="mb-3">
-              <ol className="grid grid-cols-2 gap-px overflow-hidden rounded-[2px] border border-(--is-line) bg-(--is-line) sm:grid-cols-3 lg:grid-cols-6">
-                {PARTS_INDEX.map(([t, href], i) => (
-                  <li key={t}>
-                    <a
-                      href={href}
-                      className={`${MONO} group flex h-full min-h-12 items-center justify-between gap-2 bg-(--is-panel) px-3 py-2 text-[11px] uppercase tracking-[0.1em] text-(--is-frost) transition-colors duration-200 hover:bg-(--is-void) active:bg-(--is-charcoal) focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-(--is-frost)`}
-                    >
-                      <span>
-                        <span className="mr-2 text-(--is-steel)">{String(i + 1).padStart(2, "0")}</span>
-                        {t}
-                      </span>
-                      <span aria-hidden className="text-(--is-steel) transition-transform duration-200 group-hover:translate-x-0.5">
-                        ↘
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <PartsSheet />
             <Parts strands={s2} />
           </section>
 
@@ -520,6 +482,18 @@ export default function IntenseSpaceSystem() {
               <TEvents ev={ev} />
               <TTable rows={rows} />
             </div>
+          </section>
+
+          {/* ================= Principles ================= */}
+          <section id="s-principles" aria-labelledby="s-principles-h" className="scroll-mt-24">
+            <SectionHead
+              id="s-principles"
+              n="L"
+              a="Design"
+              b="principles"
+              intro={<>The Week 2 lecture, rebuilt in this system on our own numbers. Each principle is shown as a wrong and a right version of the same telemetry screen, so the rule can be seen, not just stated. L.09 closes the page: the whole system on one screen.</>}
+            />
+            <Principles />
           </section>
 
           <footer className={`${MONO} mt-24 grid gap-3 border-t border-(--is-line) py-8 text-[11px] uppercase tracking-[0.12em] text-(--is-steel) sm:grid-cols-2`}>
