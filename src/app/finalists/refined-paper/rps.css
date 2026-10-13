@@ -1,20 +1,32 @@
-/* Refined paper, the site. Page-scoped additions on top of the design system's rpd.css.
+/* Refined paper, the final site. Page-scoped additions on top of the design system's rpd.css.
    Every selector starts at .rps-root and every class is prefixed rps-. Tokens come from .rpd-root. */
 
 .rps-root { min-height: 100dvh; }
+.rps-root [id] { scroll-margin-top: 72px; }
 .rps-root .rps-grain {
   background-color: var(--parchment);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 .13 0 0 0 0 .12 0 0 0 0 .1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
 }
 
-/* Hero: the finding sets in line by line, once. */
-.rps-root .rps-in { opacity: 0; transform: translateY(10px); animation: rps-in 900ms var(--ease) forwards; }
+/* Hero: the finding sets in once, 700ms. */
+.rps-root .rps-in { opacity: 0; transform: translateY(8px); animation: rps-in 700ms var(--ease) forwards; }
 @keyframes rps-in { to { opacity: 1; transform: none; } }
 
-/* A page on paper: hairline frame plus the 3px stacked-card offset the diagrams use. */
+/* Figures draw their lines in once, on entering view: 900ms ease-out (pathLength = 1). */
+.rps-root [data-inview] .rps-draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 900ms var(--ease), opacity 200ms ease-out, stroke-width 200ms ease-out; }
+.rps-root [data-inview="true"] .rps-draw { stroke-dashoffset: 0; }
+
+/* The method ladder: each stair rises once, left to right. */
+.rps-root .rps-ladder .rps-step { transform-origin: bottom; transform: scaleY(0); transition: transform 600ms var(--ease); transition-delay: calc(var(--k) * 90ms + var(--j) * 40ms); }
+.rps-root .rps-ladder[data-inview="true"] .rps-step { transform: none; }
+
+/* Table 1 dots slide from the random line to their score, once. */
+.rps-root .rps-dot { transition: left 700ms var(--ease), width 700ms var(--ease); }
+
+/* A page on paper: hairline frame plus the 3px stacked-card offset. */
 .rps-root .rps-sheet { position: relative; background: #fff; outline: 1px solid var(--rule-strong); box-shadow: 3px 3px 0 0 var(--paper), 3px 3px 0 1px var(--rule-strong); }
 
-/* Page turn in the reader: a short slide + fade in the paging direction. */
+/* Page turn in the reader. */
 .rps-root .rps-turn-next { animation: rps-turn-next 300ms var(--ease) both; }
 .rps-root .rps-turn-prev { animation: rps-turn-prev 300ms var(--ease) both; }
 @keyframes rps-turn-next { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
@@ -22,11 +34,17 @@
 
 .rps-root .rps-noscroll { scrollbar-width: none; }
 .rps-root .rps-noscroll::-webkit-scrollbar { display: none; }
-
-/* Footnote chips fly a parchment flag on hover; never vermilion. */
 .rps-root .rps-fn { font-feature-settings: "tnum"; }
+
+/* Tour: the stop being shown gets a quiet ink rule in the margin; the bar's timer runs down once. */
+.rps-root [data-tour-on="true"] { box-shadow: -14px 0 0 -12px var(--ink); }
+.rps-root .rps-tourbar { transform-origin: left; animation: rps-tourbar linear forwards; }
+@keyframes rps-tourbar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 @media (prefers-reduced-motion: reduce) {
   .rps-root .rps-in { opacity: 1; transform: none; animation: none; }
+  .rps-root [data-inview] .rps-draw { stroke-dashoffset: 0; transition: none; }
+  .rps-root .rps-ladder .rps-step { transform: none; transition: none; }
   .rps-root .rps-turn-next, .rps-root .rps-turn-prev { animation: none; }
+  .rps-root .rps-tourbar { animation: none; transform: scaleX(1); }
 }

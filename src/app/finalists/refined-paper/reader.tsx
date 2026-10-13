@@ -14,17 +14,17 @@ const RATIO = 1600 / 2071;
 
 /** What each page holds, and where on the site it is argued. */
 export const PAGE_NOTES: Record<number, { t: string; back?: { href: string; label: string } }[]> = {
-  1: [{ t: "Title, authors and the abstract: the whole finding in one paragraph.", back: { href: "#top", label: "The finding" } }],
-  2: [{ t: "Division of labour: Rhea built the baselines, Hewitt the GMM and VAEs.", back: { href: "#credits", label: "Credits" } }, { t: "§2 Dataset: 76 and 100 channels, 4 and 5 subsystems, 18 and 29 groups.", back: { href: "#structure", label: "§2 Structure" } }],
-  3: [{ t: "Figure 1a: the K-Means precision–recall curve at the 0.322 plateau.", back: { href: "#evidence", label: "§4 Evidence" } }, { t: "§4 GMM: full covariance on PCA-30, K by BIC.", back: { href: "#bic", label: "BIC step player" } }],
-  4: [{ t: "§5 The three VAEs: capacity, hierarchical and transformer.", back: { href: "#methods", label: "§3 Methods" } }],
-  5: [{ t: "Table 1: every method, both missions.", back: { href: "#methods", label: "§3 Methods" } }, { t: "§6 Structure at the group level, not the subsystem level.", back: { href: "#structure", label: "§2 Structure" } }],
+  1: [{ t: "Title, authors and abstract.", back: { href: "#top", label: "The finding" } }],
+  2: [{ t: "§1 Introduction and Q1, Q2. Division of labour.", back: { href: "#background", label: "01 Background" } }, { t: "§2 Dataset: channels, subsystems, groups, labels.", back: { href: "#background", label: "01 Background" } }],
+  3: [{ t: "§3 Baselines. Figure 1: K-Means PR curve, t-SNE.", back: { href: "#methods", label: "02 What we did" } }, { t: "§4 GMM: PCA-30, K by BIC.", back: { href: "#bic", label: "BIC figure" } }],
+  4: [{ t: "§5 The three VAEs.", back: { href: "#methods", label: "02 What we did" } }],
+  5: [{ t: "Table 1: every method, both missions.", back: { href: "#table", label: "Table 1" } }, { t: "§6 Results. §7 Conclusions.", back: { href: "#conclusions", label: "04 Conclusions" } }],
   6: [{ t: "References." }],
-  7: [{ t: "Figure 3: timeline failure modes over the longest Mission 1 fault.", back: { href: "#fault", label: "The longest fault" } }],
-  8: [{ t: "Figure 4: t-SNE on raw and PCA inputs; the archipelago is intrinsic." }, { t: "Figure 5a: the Nyström-KPCA sensitivity sweep." }],
-  9: [{ t: "Figure 5b: Nyström-KPCA precision–recall curves (0.334 and 0.164).", back: { href: "#pr", label: "The PR figure" } }],
-  10: [{ t: "Figure 6b: PCA precision–recall curves (0.322 and 0.317).", back: { href: "#pr", label: "The PR figure" } }],
-  11: [{ t: "Figure 7: the TransformerVAE latent maps, K = 16 and K = 18.", back: { href: "#structure", label: "§2 Structure" } }],
+  7: [{ t: "Figure 3: timeline failure on the longest Mission 1 fault.", back: { href: "#fault", label: "Fault figure" } }],
+  8: [{ t: "Figure 4: t-SNE on raw and PCA inputs. Figure 5a: KPCA sweep." }],
+  9: [{ t: "Figure 5b: Nyström-KPCA PR curves (0.334, 0.164).", back: { href: "#pr", label: "PR figure" } }],
+  10: [{ t: "Figure 6: PCA scatter and PR curves (0.322, 0.317).", back: { href: "#pr", label: "PR figure" } }],
+  11: [{ t: "Figure 7: TransformerVAE latent maps, K = 16 and 18.", back: { href: "#results", label: "03 Results" } }],
 };
 
 const Ctx = createContext<(p: number) => void>(() => {});
@@ -37,6 +37,7 @@ export function ReaderProvider({ children }: { children: ReactNode }) {
   const opener = useRef<HTMLElement | null>(null);
   const open = useCallback((p: number) => {
     opener.current = document.activeElement as HTMLElement;
+    window.dispatchEvent(new Event("rps-modal"));
     setPage(Math.min(PAGES, Math.max(1, p)));
   }, []);
   // Deep links: #paper-N opens the reader on page N (on load and on hash change).
@@ -76,7 +77,7 @@ export function PageRef({ p, children, className = "" }: { p: number; children?:
       href={`#paper-${p}`}
       onClick={(e) => { e.preventDefault(); open(p); }}
       aria-label={`${children ? `${typeof children === "string" ? children : "Source"}, ` : ""}page ${p} of the paper (opens the reader)`}
-      className={`${SANS} ${FOCUS} rps-fn inline-flex items-center gap-1 rounded-[2px] px-1 align-baseline text-[12px] font-medium whitespace-nowrap text-[var(--prussian)] transition-colors duration-200 hover:bg-[var(--parchment)] active:bg-[var(--rule)] ${className}`}
+      className={`${SANS} ${FOCUS} rps-fn inline-flex items-center gap-1 rounded-[2px] px-1 align-baseline text-[12px] font-medium whitespace-nowrap text-[var(--ink)] underline decoration-[var(--rule-strong)] underline-offset-[3px] transition-colors duration-200 hover:bg-[var(--parchment)] hover:decoration-[var(--ink)] active:bg-[var(--rule)] ${className}`}
     >
       [{children ? <>{children}<span aria-hidden className="text-[var(--muted)]">·</span></> : null}p. {p}]
     </a>
