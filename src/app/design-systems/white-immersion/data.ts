@@ -11,7 +11,7 @@ export type Row = {
   id: string; method: string; label: string; family: string; mission: 1 | 2; latentK: number | null;
   scoring: string; prAuc: number; rocAuc: number; eventF1: number | null; trend: string; trendDirection: string | null;
 };
-export type Curve = { id: string; method: string; family: string; prAuc: number; table1: boolean; pts: [number, number][] };
+export type Curve = { id: string; method: string; family: string; prAuc: number; table1: boolean; match: "exact" | "partial" | "none"; pts: [number, number][] };
 export type Timeline = { method: string; v: [number, number, number][] }; // [median 0..1, max 0..1, anomaly fraction]
 export type Mission = {
   id: 1 | 2; channels: number; train: string; test: number; hz: number; subsystems: number; groups: number;
@@ -36,7 +36,7 @@ export type DSData = {
 };
 
 type RawRow = Omit<Row, "id" | "mission"> & { mission: number };
-type RawCurve = { runId: string; method: string; family: string; prAuc: number; table1: unknown; points: [number, number][] };
+type RawCurve = { runId: string; method: string; family: string; prAuc: number; table1: { match?: string } | null; points: [number, number][] };
 type RawTl = { nTest: number; anomalySegments: [number, number][]; series: { method: string; bins: [number, number, number, number][] }[] };
 
 function down<T>(arr: T[], n: number): T[] {
@@ -60,7 +60,7 @@ function pickCurves(curves: RawCurve[]): Curve[] {
     if (!prev || (c.table1 && !prev.table1) || (!prev.table1 && c.prAuc > prev.prAuc)) by.set(c.method, c);
   }
   return [...by.values()].map((c) => ({
-    id: c.runId, method: c.method.replace(" (K=8, raw features)", " K=8"), family: c.family, prAuc: r4(c.prAuc), table1: !!c.table1,
+    id: c.runId, method: c.method.replace(" (K=8, raw features)", " K=8"), family: c.family, prAuc: r4(c.prAuc), table1: !!c.table1, match: (c.table1?.match === "exact" ? "exact" : c.table1 ? "partial" : "none") as Curve["match"],
     pts: down(c.points, 140).map(([r, p]) => [r4(r), r4(p)] as [number, number]),
   }));
 }

@@ -65,4 +65,6 @@ Files: `src/app/design-systems/white-immersion/` (page-scoped `wids.css`, every 
 - **Status:** shape + word, never color: ○ Nominal · ▲ Anomaly · ◇ Rare event · ✕ Comm. gap · ● Best.
 - **Lines in charts:** method = dash pattern, not hue. SVG charts measure their container so 10.5px labels render at true size.
 - **≥1800px:** the whole system is CSS-zoomed 1.14 (1.4 at ≥2300) so it reads at the same physical size.
-- **Sections:** 01–06 handout · 07 Parts of an Interface (all slide elements, slide name + subtitle) · 08 Novel (Igloo, Skyviewer) · 09 Telemetry · L Lecture principles (L1–L9, ending with the one-screen system overview).
+- **Sections:** 01–06 handout · 07 Parts of an Interface (all slide elements, slide name + subtitle) · 08 Novel (Igloo, Skyviewer) · 09 Telemetry · L Principles (L1–L9, ending with the one-screen system overview).
+- **Specimens vs the page's own action:** the guided-tour pill (fixed, bottom centre) is the page's one primary action. Cyan pills inside phone mockups, the L9 frame and the state matrix are specimens: each phone is captioned "Specimen" (or "This system" / "Example · deliberately wrong"). Deliberately low-contrast samples (L1 contrast panel, L8 neon phone, the Fill-only rows in 1.2) are always labelled as examples.
+- **Data honesty:** PR-curve chips and the T03 method menu show PR-AUC recomputed from the saved curve runs. Only runs marked T1 equal a Table 1 figure; the others, including the M2 TransformerVAE curve (0.452 vs Table 1 0.438), are labelled as saved runs.

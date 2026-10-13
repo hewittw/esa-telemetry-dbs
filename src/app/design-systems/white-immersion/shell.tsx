@@ -17,7 +17,7 @@ export const SECTIONS = [
   { id: "parts", n: 7, title: "Parts of an interface", short: "Parts" },
   { id: "novel", n: 8, title: "Novel", short: "Novel" },
   { id: "telemetry", n: 9, title: "Telemetry", short: "Telemetry" },
-  { id: "principles", n: 10, title: "Lecture principles", short: "Principles" },
+  { id: "principles", n: 10, title: "Principles", short: "Principles" },
 ] as const;
 export const tagOf = (n: number) => (n === 10 ? "L" : pad(n));
 const NS = SECTIONS.length;

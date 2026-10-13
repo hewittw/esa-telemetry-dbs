@@ -109,7 +109,7 @@ function Threshold({ d, m }: { d: DSData; m: M }) {
       <div className="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
         <label className="grid gap-1.5"><span className="wids-label text-[var(--ink)]">Method</span>
           <select className="wids-select" value={ci} onChange={(e) => setCi(+e.target.value)}>
-            {P.curves.map((x, i) => <option key={x.id} value={i}>{x.method} · PR-AUC {x.prAuc.toFixed(3)}{x.table1 ? " · Table 1 run" : " · best saved run"}</option>)}
+            {P.curves.map((x, i) => <option key={x.id} value={i}>{x.method} · saved-curve PR-AUC {x.prAuc.toFixed(3)}{x.match === "exact" ? " · = Table 1" : x.match === "partial" ? " · Table 1 run, recomputed" : " · best saved run"}</option>)}
           </select>
         </label>
         <button type="button" className="wids-btn" onClick={bestF1}>Snap to best F1</button>
@@ -149,11 +149,12 @@ function PrViewer({ d, m }: { d: DSData; m: M }) {
           return (
             <button key={c.id} type="button" className="wids-chip min-h-[32px] px-2.5 text-[10.5px]" aria-pressed={sel} onClick={() => setOn(sel ? on.filter((x) => x !== c.id) : [...on, c.id])}>
               <svg width="18" height="6" aria-hidden="true"><line x1="0" y1="3" x2="18" y2="3" stroke="currentColor" strokeWidth="1.6" strokeDasharray={DASH[i % DASH.length]} /></svg>
-              {short(c.method)} {c.prAuc.toFixed(3)}
+              {short(c.method)} {c.prAuc.toFixed(3)}{c.match === "exact" ? " · T1" : ""}
             </button>
           );
         })}
       </div>
+      <p className="wids-caption">Chip values are PR-AUC recomputed from each saved curve. Only those marked T1 equal a Table 1 figure; the rest come from saved runs and can differ from Table 1.</p>
       <div ref={wref}>
       <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full touch-none border border-[var(--rime)] bg-white" tabIndex={0}
         role="img" aria-label={`Precision-recall curves for Mission ${m}. Arrow keys move the recall crosshair.`}

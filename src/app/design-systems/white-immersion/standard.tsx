@@ -81,7 +81,7 @@ export function ColorSection() {
                   const pass = p.min === 99 ? false : r >= p.min;
                   return (
                     <tr key={p.fgN + p.bgN} className="border-b border-[var(--rime)]">
-                      <td className="py-2 pr-3"><span className="inline-block px-2 py-1 text-[12px]" style={{ background: p.bg, color: p.fg, boxShadow: "inset 0 0 0 1px #d5dce4" }}>Aa 0.438</span></td>
+                      <td className="py-2 pr-3"><span className="inline-block px-2 py-1 text-[12px]" style={{ background: p.bg, color: p.fg, boxShadow: "inset 0 0 0 1px #d5dce4" }}>{p.min === 99 ? "Aa · example" : "Aa 0.438"}</span></td>
                       <td className="py-2 pr-3">{p.fgN} on {p.bgN}</td>
                       <td className="wids-caption py-2 pr-3">{p.job}</td>
                       <td className="wids-num py-2 pr-3 text-right text-[14px]">{r.toFixed(2)}</td>
@@ -92,6 +92,7 @@ export function ColorSection() {
               </tbody>
             </table>
           </div>
+          <p className="wids-caption mt-3">Rows marked <span className="text-[var(--ink)]">Fill only</span> are deliberate low-contrast examples. Those pairs never carry text anywhere in the system.</p>
         </Spec>
       </div>
     </Section>

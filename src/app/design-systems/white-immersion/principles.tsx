@@ -9,9 +9,10 @@ import { ratio } from "./standard";
 const HEX = { bg: "#F4F6F8", surface: "#FFFFFF", rime: "#D5DCE4", muted: "#56616F", ink: "#111824", signal: "#2FE0E3" };
 
 /* a phone mockup: device frame is illustration, so it may be round */
-function Phone({ children, label, sub }: { children: React.ReactNode; label?: string; sub?: string }) {
+function Phone({ children, label, sub, tag = "Specimen" }: { children: React.ReactNode; label?: string; sub?: string; tag?: string }) {
   return (
     <figure className="grid justify-items-center gap-3">
+      <span className="wids-label">{tag}</span>
       <div className="relative w-[214px] rounded-[30px] border-[1.5px] border-[var(--ink)] bg-[var(--bg)] p-2.5 shadow-[0_40px_70px_-50px_rgba(61,69,88,.45)]">
         <span className="mx-auto mb-2 block h-[5px] w-[54px] rounded-full bg-[var(--ink)]" aria-hidden="true" />
         <div className="flex min-h-[340px] flex-col gap-2 overflow-hidden rounded-[20px] px-1 pb-1">{children}</div>
@@ -30,7 +31,8 @@ function Phone({ children, label, sub }: { children: React.ReactNode; label?: st
 type Mode = "loud" | "quiet" | "accentAll" | "one" | "wrong";
 function TodayScreen({ d, mode, onPrimary }: { d: DSData; mode: Mode; onPrimary?: () => void }) {
   const r = d.rows.find((x) => x.trend === "Best M2")!;
-  const stats: [string, string][] = [["Best", r.prAuc.toFixed(3).slice(1)], ["ROC", r.rocAuc.toFixed(3).slice(1)], ["K", String(r.latentK)]];
+  const m1 = d.rows.find((x) => x.trend === "Best M1")!;
+  const stats: [string, string][] = [["ROC", r.rocAuc.toFixed(3).slice(1)], ["K", String(r.latentK)], ["M1", m1.prAuc.toFixed(3).slice(1)]];
   const rows: [string, boolean][] = [["GMM K = 29", true], ["CapacityVAE", true], ["HVAE", false]];
   if (mode === "wrong") {
     return (
@@ -56,9 +58,9 @@ function TodayScreen({ d, mode, onPrimary }: { d: DSData; mode: Mode; onPrimary?
       </div>
       <div className="grid grid-cols-3 gap-1.5">
         {stats.map(([k, v]) => (
-          <div key={k} className={`bg-white px-1.5 py-1 ${loud ? "border-2 border-[var(--ink)]" : "border border-[var(--rime)]"}`} style={tint}>
+          <div key={k} className={`bg-white px-1 py-1 ${loud ? "border-2 border-[var(--ink)]" : "border border-[var(--rime)]"}`} style={tint}>
             <span className={`block text-[10px] uppercase tracking-[0.08em] ${quiet ? "text-[var(--muted)]" : ""}`}>{k}</span>
-            <span className={`wids-num block ${loud ? "text-[15px]" : quiet ? "text-[12px] text-[var(--muted)]" : "text-[13px]"}`}>{v}</span>
+            <span className={`wids-num block ${loud ? "text-[13.5px]" : quiet ? "text-[12px] text-[var(--muted)]" : "text-[13px]"}`}>{v}</span>
           </div>
         ))}
       </div>
@@ -72,7 +74,7 @@ function TodayScreen({ d, mode, onPrimary }: { d: DSData; mode: Mode; onPrimary?
       </ul>
       <div className="relative mt-auto">
         {loud && <svg className="absolute -top-7 right-4" width="34" height="28" viewBox="0 0 34 28" aria-hidden="true"><path d="M30 2C26 14 16 20 6 22m0 0 6-6m-6 6 7 4" stroke="#111824" strokeWidth="2.2" fill="none" strokeLinecap="round" /></svg>}
-        <button type="button" className={`wids-pill w-full ${loud ? "min-h-[52px] text-[14px]" : quiet ? "is-sm" : ""}`} tabIndex={onPrimary ? 0 : -1} onClick={onPrimary}>Explore findings</button>
+        <button type="button" className={`wids-pill w-full ${loud ? "min-h-[52px] !px-2 text-[12.5px] !tracking-[0.06em]" : quiet ? "is-sm" : ""}`} tabIndex={onPrimary ? 0 : -1} onClick={onPrimary}>Explore findings</button>
       </div>
     </>
   );
@@ -86,7 +88,7 @@ function WhatYouSee({ d }: { d: DSData }) {
   const lever: { k: string; line: string; cell: (v: string, i: number) => React.ReactNode }[] = [
     { k: "Size", line: "Bigger things get noticed first.", cell: (v, i) => <span className={`wids-num ${i === 0 ? "text-[30px]" : "text-[13px]"}`}>{v}</span> },
     { k: "Weight", line: "Heavier text stands out.", cell: (v, i) => <span className={`text-[15px] tabular-nums ${i === 0 ? "font-medium" : "font-light"}`}>{v}</span> },
-    { k: "Contrast", line: "Most contrast with the background draws the eye.", cell: (v, i) => <span className="text-[15px] tabular-nums" style={{ color: i === 0 ? HEX.ink : "#a7b0bb" }}>{v}</span> },
+    { k: "Contrast", line: "Most contrast with the background draws the eye. The pale values are a low-contrast example (2.2:1), never real text.", cell: (v, i) => <span className="text-[15px] tabular-nums" style={{ color: i === 0 ? HEX.ink : "#a7b0bb" }}>{v}</span> },
     { k: "Position", line: "Things near the top are seen first.", cell: (v) => <span className="text-[15px] tabular-nums">{v}</span> },
   ];
   return (
@@ -111,7 +113,7 @@ function TypeRoles({ d }: { d: DSData }) {
   const r = d.rows.find((x) => x.trend === "Best M2")!;
   const rows: { role: string; font: string; node: React.ReactNode; h: string }[] = [
     { role: "Label", font: "Martian Mono 400 · 10.5 caps", node: <span className="wids-label">Mission 2 · Today</span>, h: "min-h-[52px]" },
-    { role: "Heading", font: "Michroma 400 · 17 caps", node: <span className="wids-display text-[12px] tracking-[0.04em] sm:text-[17px]">TransformerVAE</span>, h: "min-h-[52px]" },
+    { role: "Heading", font: "Michroma 400 · 17 caps", node: <span className="wids-display text-[10px] tracking-[0.02em] min-[360px]:text-[12px] min-[360px]:tracking-[0.04em] sm:text-[17px]">TransformerVAE</span>, h: "min-h-[52px]" },
     { role: "Display", font: "Michroma 400 · 48 tabular", node: <span className="wids-num text-[34px] leading-none sm:text-[48px]">{r.prAuc.toFixed(3)}<span className="ml-2 hidden text-[13px] sm:inline">PR-AUC</span></span>, h: "min-h-[84px]" },
     { role: "Body", font: "Martian Mono 400 · 13", node: <span className="text-[13px]">Best on rare events. ROC-AUC {r.rocAuc.toFixed(3)}.</span>, h: "min-h-[52px]" },
     { role: "Caption", font: "Martian Mono 300 · 11 · Glacier", node: <span className="wids-caption">Neg. ELBO · latent K = {r.latentK} · Table 1</span>, h: "min-h-[52px]" },
@@ -120,7 +122,7 @@ function TypeRoles({ d }: { d: DSData }) {
     <div className="grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[minmax(0,420px)_1fr]">
       {rows.map((x, i) => (
         <div key={x.role} className="contents">
-          <div className={`flex items-center border-x-[1.5px] border-[var(--ink)] bg-white px-4 sm:px-5 ${x.h} ${i === 0 ? "border-t-[1.5px] pt-3" : ""} ${i === rows.length - 1 ? "border-b-[1.5px] pb-3" : ""}`}>{x.node}</div>
+          <div className={`flex items-center border-x-[1.5px] border-[var(--ink)] bg-white px-3 min-[360px]:px-4 sm:px-5 ${x.h} ${i === 0 ? "border-t-[1.5px] pt-3" : ""} ${i === rows.length - 1 ? "border-b-[1.5px] pb-3" : ""}`}>{x.node}</div>
           <div className={`flex items-center ${x.h} ${i === 0 ? "pt-3" : ""} ${i === rows.length - 1 ? "pb-3" : ""}`}>
             <span className="h-px w-4 bg-[var(--ink)] sm:w-12" aria-hidden="true" />
             <span className="pl-2"><span className="wids-title block text-[12.5px] leading-tight sm:text-[14px]">{x.role}</span><span className="wids-caption hidden sm:block">{x.font}</span></span>
@@ -139,8 +141,9 @@ function ColorRoles({ d }: { d: DSData }) {
     ["Muted", "Labels and small print", HEX.muted, HEX.surface], ["Border", "1px hairlines", HEX.rime, HEX.ink], ["Accent", "Primary action only", HEX.signal, HEX.ink],
   ];
   return (
-    <div className="grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_auto]">
+    <div className="grid items-center justify-center gap-8 md:grid-cols-[minmax(0,460px)_auto] md:gap-16">
       <ul className="grid max-w-[460px] gap-2.5">
+        <li className="wids-label grid grid-cols-[52px_1fr_auto] gap-3 border-b border-[var(--rime)] pb-1.5"><span>Swatch</span><span>Role · hex</span><span>Text on it</span></li>
         {sw.map(([k, s, hex, on]) => (
           <li key={k} className="grid grid-cols-[52px_1fr_auto] items-center gap-3">
             <span className="h-[38px] border border-[var(--rime)]" style={{ background: hex }} />
@@ -231,14 +234,14 @@ function Overview() {
         <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)]">
           <div className="grid content-start gap-5">
             <div><H n={1} t="Color roles" />
-              <div className="grid grid-cols-6 gap-1">{sw.map((c, i) => <div key={c}><span className="block h-8 border border-[var(--rime)]" style={{ background: c }} /><span className="mt-1 block truncate text-[10px] text-[var(--muted)]">{names[i]}</span></div>)}</div>
+              <div className="grid grid-cols-3 gap-1 min-[400px]:grid-cols-6">{sw.map((c, i) => <div key={c}><span className="block h-8 border border-[var(--rime)]" style={{ background: c }} /><span className="mt-1 block truncate text-[10px] text-[var(--muted)]">{names[i]}</span></div>)}</div>
             </div>
             <div><H n={2} t="Type roles" />
               <div className="grid gap-1">
-                <div className="flex items-baseline justify-between"><span className="wids-num text-[26px] leading-none">0.438</span><span className="text-[10px] text-[var(--muted)]">Display</span></div>
-                <div className="flex items-baseline justify-between"><span className="wids-display text-[12px]">TransformerVAE</span><span className="text-[10px] text-[var(--muted)]">Heading</span></div>
-                <div className="flex items-baseline justify-between"><span className="text-[11.5px]">Best on rare events.</span><span className="text-[10px] text-[var(--muted)]">Body</span></div>
-                <div className="flex items-baseline justify-between"><span className="wids-label">Mission 2</span><span className="text-[10px] text-[var(--muted)]">Label</span></div>
+                <div className="flex items-baseline justify-between gap-2"><span className="wids-num text-[26px] leading-none">0.438</span><span className="text-[10px] text-[var(--muted)]">Display</span></div>
+                <div className="flex items-baseline justify-between gap-2"><span className="wids-display text-[10px] min-[360px]:text-[12px]">TransformerVAE</span><span className="text-[10px] text-[var(--muted)]">Heading</span></div>
+                <div className="flex items-baseline justify-between gap-2"><span className="text-[11.5px]">Best on rare events.</span><span className="text-[10px] text-[var(--muted)]">Body</span></div>
+                <div className="flex items-baseline justify-between gap-2"><span className="wids-label">Mission 2</span><span className="text-[10px] text-[var(--muted)]">Label</span></div>
               </div>
             </div>
             <div><H n={3} t="Spacing & shape" />
@@ -279,7 +282,7 @@ function Overview() {
 export function PrinciplesSection({ d }: { d: DSData }) {
   const toast = useToast();
   return (
-    <Section id="principles" n={10} title="Lecture principles" intro={<>The Week 2 lecture, rebuilt in this style on our results. Each card shows one design principle, usually as a bad and a good version side by side, so the rule is visible rather than described.</>}>
+    <Section id="principles" n={10} title="Principles" intro={<>The Week 2 lecture principles, rebuilt in this style on our results. Each card shows one principle, usually as a weak and a strong version side by side. Phones and frames here are specimens: their cyan pills illustrate the rule, while the page's own primary action stays the guided-tour pill.</>}>
       <div className="grid gap-5 md:grid-cols-2">
         <Spec code="L1" name="What you see" sub="Visual hierarchy" use="Four levers decide what is read first: size, weight, contrast, position. The same four PR-AUC values, one lever at a time." tokens="Numeral 30 vs 13 · 500 vs 300 · Ink vs #A7B0BB · top + 2px rail" wide><WhatYouSee d={d} /></Spec>
         <Spec code="L2" name="Emphasize by de-emphasizing" sub="To make one thing stand out, make the rest quieter" use="Louder: every element shouts and an arrow points at the button. Quieter: stats drop to Glacier, so the cyan action wins without growing." tokens="Glacier for supporting numbers · one Signal pill" wide>
@@ -302,8 +305,8 @@ export function PrinciplesSection({ d }: { d: DSData }) {
         <Spec code="L7" name="What's clickable?" sub="Where are the affordances?" use="Toggle the version and reveal the affordances. Shape must say what can be pressed." tokens="underline = link · hairline + arrow = card · filled pill = action" wide><Clickable /></Spec>
         <Spec code="L8" name="Choosing a direction" sub="Fit the style to the context" use="The same screen in this style and in a deliberately wrong one." tokens="audience: ML recruiters skimming, peers inspecting" wide>
           <div className="flex flex-wrap justify-center gap-10">
-            <Phone label="Whiteout" sub="Calm, legible, one action."><TodayScreen d={d} mode="one" /></Phone>
-            <Phone label="Neon arcade" sub="Wrong for this audience."><TodayScreen d={d} mode="wrong" /></Phone>
+            <Phone tag="This system" label="Whiteout" sub="Calm, legible, one action."><TodayScreen d={d} mode="one" /></Phone>
+            <Phone tag="Example · deliberately wrong" label="Neon arcade" sub="Wrong for this audience."><TodayScreen d={d} mode="wrong" /></Phone>
           </div>
           <p className="mt-5 border-t border-[var(--rime)] pt-3 text-[12.5px] leading-[1.65]">Recruiters skim for one number in a few seconds and peers inspect curves for minutes. The neon version turns 0.438 into a score to celebrate, buries the method name, and tires the eye; the white field keeps the number exact and quiet.</p>
         </Spec>
