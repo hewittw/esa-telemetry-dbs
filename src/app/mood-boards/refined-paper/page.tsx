@@ -8,7 +8,7 @@ import {
   AnomalyTimeline, BreakoutGrid, ColorKeyedProse, GmmNodeDiagram, PaletteCard, PaperGrain,
   PrimaryAction, SmallMultiples, TypePairing, TypeScale,
 } from "./figures";
-import { BicStepPlayer, CitationChip, SvgTextFit, ThresholdSlider, TocFragment } from "./interactive";
+import { BicStepPlayer, CitationChip, NoteToggle, SvgTextFit, ThresholdSlider, TocFragment } from "./interactive";
 import { board } from "./meta";
 
 const serif = Newsreader({ subsets: ["latin"], axes: ["opsz"], style: ["normal", "italic"], variable: "--rp-serif-face" });
@@ -84,7 +84,7 @@ function Artifact({ n, item, wide }: { n: number; item: Item; wide?: boolean }) 
             {item.interactive && <span className="rp-hint"> · hover or focus here for the note</span>}
           </span>
         </span>
-        <span
+        <NoteToggle
           id={noteId}
           className={`rp-note pointer-events-none absolute right-0 bottom-full left-0 z-20 mb-3 translate-y-1.5 rounded-[3px] border border-[var(--rule-strong)] bg-[var(--paper)]/[.97] p-4 opacity-0 shadow-[0_18px_40px_-24px_rgba(33,31,27,.45)] backdrop-blur-sm transition duration-300 ease-[cubic-bezier(.22,.61,.36,1)] ${reveal}`}
         >
@@ -94,7 +94,7 @@ function Artifact({ n, item, wide }: { n: number; item: Item; wide?: boolean }) 
               <span className="rp-serif text-[14.5px] leading-[1.45] text-[var(--ink)]">{item.note[k]}</span>
             </span>
           ))}
-        </span>
+        </NoteToggle>
       </figcaption>
     </figure>
   );
@@ -158,7 +158,15 @@ export default function RefinedPaperBoard() {
     },
     {
       title: "Citation chip", kind: "Interface", gen: true, interactive: true,
-      body: <div className="bg-[var(--paper)] px-5 pt-20 pb-6"><CitationChip /></div>,
+      body: (
+        <div className="bg-[var(--paper)] px-5 pt-4 pb-6">
+          {/* A running head, as on a journal page; the popover opens over it, never over the line being read. */}
+          <p className="rp-mono flex justify-between border-b border-[var(--rule)] pb-2 text-[11px] tracking-[0.08em] text-[var(--muted)] uppercase">
+            <span>§4 Results</span><span>Madhogarhia &amp; Watkins</span>
+          </p>
+          <div className="pt-14"><CitationChip /></div>
+        </div>
+      ),
       note: { take: "Distill's bracketed citation, opened by hover, focus or tap.", use: "Every claim that points at Table 1 of the report.", leave: "Pop-ups that cover the line being read." },
     },
   ];
@@ -230,8 +238,8 @@ export default function RefinedPaperBoard() {
     title: "Small multiples: PR curves, Mission 2", kind: "Figure", gen: true,
     body: (
       <>
-        <p className="rp-serif mb-5 max-w-[52ch] text-[19px] leading-[1.5] text-[var(--ink)]">
-          Four methods, one axis. Each curve is drawn from saved test scores; the dotted line is the 4.7% positive rate.
+        <p className="rp-serif mb-5 max-w-[60ch] text-[19px] leading-[1.5] text-[var(--ink)]">
+          Four methods, one axis; the dotted line is the 4.7% positive rate. Only GMM is the exact Table 1 run: the VAE report runs’ scores weren’t saved, so those curves come from earlier runs.
         </p>
         <SmallMultiples {...m2} />
       </>
@@ -333,7 +341,7 @@ export default function RefinedPaperBoard() {
       </header>
 
       <main className="mx-auto max-w-[1320px] min-[1800px]:max-w-[1760px] min-[2400px]:max-w-[2160px] px-5 md:px-10">
-        <p className="sr-only">Each artifact has a note: what to take, where it goes, and what to leave. Hover or focus an artifact to read it.</p>
+        <p className="sr-only">Each artifact has a note: what to take, where it goes, and what to leave. Hover or focus an artifact to read it; on touch screens, use its Note button.</p>
         <div className={cols}>{A.map((it) => <Artifact key={it.title} n={next()} item={it} />)}</div>
         <div className="py-6 md:py-10"><Artifact n={next()} item={W1} wide /></div>
         <div className={cols}>{B.map((it) => <Artifact key={it.title} n={next()} item={it} />)}</div>
@@ -395,6 +403,7 @@ const CSS = `
 @media (min-width:1800px){.rp-root .rp-cols{columns:4;column-gap:3.5rem}}
 .rp-root .rp-delay{transition-delay:500ms}
 .rp-root .rp-draw[data-inview="false"] .rp-line{stroke-dashoffset:1}
+.rp-root .rp-instant .rp-line,.rp-root .rp-instant .rp-rise{transition:none!important}
 .rp-root .rp-rise{transition:opacity 900ms var(--ease) 600ms}
 .rp-root .rp-draw[data-inview="false"] .rp-rise{opacity:0}
 .rp-root .rp-fade{animation:rp-fade 420ms var(--ease)}
@@ -407,9 +416,12 @@ const CSS = `
 .rp-range:hover::-webkit-slider-thumb{transform:scale(1.15)}
 .rp-range:active::-webkit-slider-thumb{background:var(--ink)}
 .rp-root svg text{font-size:calc(10.5px * var(--rp-k,1))}
+.rp-root .rp-toggle{display:none}
 @media (max-width:1099px),(hover:none),(pointer:coarse){
-  .rp-root .rp-note{position:static;opacity:1;transform:none;margin:.75rem 0 0;box-shadow:none;backdrop-filter:none;pointer-events:auto}
-  .rp-root figcaption{flex-wrap:wrap} .rp-root .rp-note{flex-basis:100%} .rp-root .rp-hint{display:none}
+  .rp-root .rp-note{position:static;display:none;opacity:1;transform:none;margin:.75rem 0 0;box-shadow:none;backdrop-filter:none;pointer-events:auto;flex-basis:100%;animation:rp-fade 300ms var(--ease)}
+  .rp-root .rp-note[data-open="true"],.rp-root figure:focus-visible .rp-note,.rp-root figcaption:focus-visible .rp-note{display:block}
+  .rp-root .rp-toggle{display:inline-flex}
+  .rp-root figcaption{flex-wrap:wrap} .rp-root .rp-hint{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   .rp-root *,.rp-root *::before,.rp-root *::after{transition-duration:1ms!important;transition-delay:0ms!important;animation:none!important}

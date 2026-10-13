@@ -46,6 +46,9 @@ If you can see the grain, it's too strong.
 - Write the legend in the sentence: colour the noun the same as its line.
 - Small multiples on shared axes rather than one overloaded chart.
 - Every control: rest, hover (parchment fill or darker ink), focus-visible (2px Ink ring, 2px offset), pressed, disabled.
+- Notes and asides: hover/focus reveal on desktop; on phones, tablets and touch, a "Note +" button opens them in flow
+  under the caption, never over the content.
+- Label any figure drawn from a run that is not the exact Table 1 run, and give the Table 1 number beside it.
 - Credit Rhea Madhogarhia and cite Table 1 with a bracketed chip.
 
 ## Don't

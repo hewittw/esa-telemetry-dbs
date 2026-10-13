@@ -122,7 +122,7 @@ export function ColorKeyedProse({ gmm, kmeans, positiveRate }: { gmm: PrSeries; 
           <text x={L - 4} y={y(0) + 3} textAnchor="end" fontSize="9" className="rp-mono" fill="var(--muted)">0</text>
         </svg>
       </InView>
-      <p className="rp-sans mt-1 text-[11px] text-[var(--muted)]">Mission 1 test set, saved scores. K-Means here is the K = 8 run.</p>
+      <p className="rp-sans mt-1 text-[11px] text-[var(--muted)]">Mission 1 test set, saved scores. GMM is the Table 1 run; K-Means is an earlier K = 8 run (Table 1 reports K = 2, whose scores weren’t saved).</p>
     </div>
   );
 }
@@ -192,7 +192,10 @@ export function SmallMultiples({ series, positiveRate }: { series: PrSeries[]; p
             )}
             <text x={x(1)} y={H - 6} textAnchor="end" fontSize="10" className="rp-mono" fill="var(--muted)">recall</text>
           </svg>
-          <p className="rp-sans text-[11px] text-[var(--muted)]">{s.scoring}</p>
+          <p className="rp-sans text-[11px] leading-snug text-[var(--muted)]">
+            {s.scoring}
+            {s.exact ? " · Table 1 run" : s.reportAp ? ` · earlier saved run; Table 1 AP ${s.reportAp.toFixed(3)}` : " · earlier saved run"}
+          </p>
         </div>
       ))}
     </InView>
@@ -297,8 +300,8 @@ export function BreakoutGrid() {
         <rect x="0.5" y="170" width="399" height="54" fill="var(--ink)" />
         <text x="10" y="184" fontSize="8" className="rp-mono" fill="#CFC7B8">full bleed, once per page</text>
         {bars(236, 4)}
-        <line x1="110" x2="290" y1="10" y2="10" stroke="var(--accent)" strokeWidth="0.75" />
-        <text x="200" y="7" textAnchor="middle" fontSize="7.5" className="rp-mono" fill="var(--accent-ink)">text 680</text>
+        <line x1="110" x2="290" y1="8" y2="8" stroke="var(--accent)" strokeWidth="0.75" />
+        <text x="296" y="8" dy="0.35em" fontSize="7.5" className="rp-mono" fill="var(--accent-ink)">text 680</text>
       </svg>
       <p className="rp-sans mt-3 border-t border-[var(--rule)] pt-2 text-[12px] leading-[1.45] text-[var(--muted)]">
         <span className="font-semibold text-[var(--ink)]">Figure 3.</span> Anomaly score over the Mission 1 test set. Bands mark the 89 labelled segments; the line is the median per bin.

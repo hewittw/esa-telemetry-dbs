@@ -6,7 +6,7 @@ import path from "node:path";
 const DIR = path.join(process.cwd(), "content", "figures-data");
 const read = <T,>(f: string): T => JSON.parse(fs.readFileSync(path.join(DIR, f), "utf8")) as T;
 
-type Curve = { runId: string; method: string; scoring: string; prAuc: number; points: [number, number][] };
+type Curve = { runId: string; method: string; scoring: string; prAuc: number; points: [number, number][]; table1: { match: string } | null };
 type PrFile = { positiveRate: number; curves: Curve[] };
 
 /** Keep every nth point plus the last, rounded to 3 decimals. */
@@ -17,12 +17,14 @@ function thin<T extends number[]>(pts: T[], target: number): T[] {
   return out.map((p) => p.map((v) => Math.round(v * 1000) / 1000) as T);
 }
 
-export type PrSeries = { key: string; label: string; scoring: string; ap: number; points: [number, number][] };
+/** reportAp: the Table 1 PR-AUC when this saved curve is not the exact Table 1 run. */
+export type PrSeries = { key: string; label: string; scoring: string; ap: number; points: [number, number][]; exact: boolean; reportAp?: number };
 
-function pick(file: PrFile, runId: string, scoring: string, label: string, n = 70): PrSeries {
+function pick(file: PrFile, runId: string, scoring: string, label: string, n = 70, reportAp?: number): PrSeries {
   const c = file.curves.find((x) => x.runId === runId && x.scoring === scoring);
   if (!c) throw new Error(`missing curve ${runId} ${scoring}`);
-  return { key: `${runId}-${scoring}`, label, scoring, ap: c.prAuc, points: thin(c.points, n) };
+  const exact = c.table1?.match === "exact";
+  return { key: `${runId}-${scoring}`, label, scoring, ap: c.prAuc, points: thin(c.points, n), exact, reportAp: exact ? undefined : reportAp };
 }
 
 export function getPrM1() {
@@ -40,9 +42,10 @@ export function getPrM2Multiples() {
     positiveRate: f.positiveRate,
     series: [
       pick(f, "gmm_m2", "Neg. log-lik.", "GMM"),
-      pick(f, "capvae_run1_m2", "Neg. ELBO", "CapacityVAE"),
-      pick(f, "hvae_run1_m2", "Recon. MSE", "HierarchicalVAE"),
-      pick(f, "tvae_run1_m2", "Neg. ELBO", "TransformerVAE"),
+      // Table 1 PR-AUC for the report runs, whose scores were not saved (content/report.md, Table 1).
+      pick(f, "capvae_run1_m2", "Neg. ELBO", "CapacityVAE", 70, 0.414),
+      pick(f, "hvae_run1_m2", "Recon. MSE", "HierarchicalVAE", 70, 0.434),
+      pick(f, "tvae_run1_m2", "Neg. ELBO", "TransformerVAE", 70, 0.438),
     ],
   };
 }

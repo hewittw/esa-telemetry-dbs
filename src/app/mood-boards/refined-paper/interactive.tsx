@@ -10,9 +10,17 @@ const ring =
 export function InView({ children, className = "" }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
+  const [instant, setInstant] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Already on screen when the page loads (or restores scroll)? Show it finished, never half-drawn.
+    const r = el.getBoundingClientRect();
+    if (r.top < innerHeight && r.bottom > 0) {
+      setInstant(true);
+      setSeen(true);
+      return;
+    }
     const io = new IntersectionObserver(
       (es) => es.forEach((e) => e.isIntersecting && (setSeen(true), io.disconnect())),
       { threshold: 0.2 },
@@ -21,7 +29,7 @@ export function InView({ children, className = "" }: { children: ReactNode; clas
     return () => io.disconnect();
   }, []);
   return (
-    <div ref={ref} data-inview={seen ? "true" : "false"} className={`rp-draw ${className}`}>
+    <div ref={ref} data-inview={seen ? "true" : "false"} className={`rp-draw ${instant ? "rp-instant" : ""} ${className}`}>
       {children}
     </div>
   );
@@ -34,7 +42,7 @@ type Bic = { sweep: { k: number; bic: number }[]; selectedK: number; reference: 
 export function BicStepPlayer({ sweep, selectedK, reference }: Bic) {
   const [i, setI] = useState(sweep.length - 1);
   const [playing, setPlaying] = useState(false);
-  const W = 560, H = 250, L = 44, R = 16, T = 22, B = 34;
+  const W = 560, H = 268, L = 44, R = 16, T = 22, B = 52;
   const ks = sweep.map((s) => s.k);
   const bics = sweep.map((s) => s.bic);
   const x = (k: number) => L + ((k - ks[0]) / (ks[ks.length - 1] - ks[0])) * (W - L - R);
@@ -66,7 +74,7 @@ export function BicStepPlayer({ sweep, selectedK, reference }: Bic) {
 
   return (
     <div>
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`BIC against number of GMM components K for Mission 1. Current step K = ${cur.k}, BIC ${cur.bic.toFixed(2)} million. Minimum at K = ${selectedK}.`}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full overflow-visible" role="img" aria-label={`BIC against number of GMM components K for Mission 1. Current step K = ${cur.k}, BIC ${cur.bic.toFixed(2)} million. Minimum at K = ${selectedK}.`}>
         {[reference.subsystems, reference.groups].map((k, j) => (
           <g key={k}>
             <line x1={x(k)} x2={x(k)} y1={T - 6} y2={H - B} stroke="var(--rule-strong)" strokeDasharray="2 3" />
@@ -81,15 +89,15 @@ export function BicStepPlayer({ sweep, selectedK, reference }: Bic) {
         {i >= minIdx && (
           <g className="rp-fade">
             <circle cx={x(selectedK)} cy={y(sweep[minIdx].bic)} r="6.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" />
-            <text x={x(selectedK)} y={H - B - 26} textAnchor="middle" fontSize="12" className="rp-mono" fill="var(--accent-ink)">min</text>
+            <text x={x(selectedK)} y={y(sweep[minIdx].bic) - 6} dy="-0.45em" textAnchor="middle" fontSize="12" className="rp-mono" fill="var(--accent-ink)" stroke="var(--paper)" strokeWidth="4" paintOrder="stroke" strokeLinejoin="round">min</text>
           </g>
         )}
         <circle cx={x(cur.k)} cy={y(cur.bic)} r="4" fill="var(--paper)" stroke="var(--ink)" strokeWidth="1.5" />
         <line x1={L} x2={W - R} y1={H - B} y2={H - B} stroke="var(--ink)" strokeWidth="0.75" />
         {[2, 5, 10, 15, 20, 25, 30].map((k) => (
-          <text key={k} x={x(k)} y={H - B + 16} textAnchor="middle" fontSize="12" className="rp-mono" fill="var(--muted)">{k}</text>
+          <text key={k} x={x(k)} y={H - B} dy="1.25em" textAnchor="middle" fontSize="12" className="rp-mono" fill="var(--muted)">{k}</text>
         ))}
-        <text x={W - R} y={H - 4} textAnchor="end" fontSize="12" className="rp-mono" fill="var(--muted)">components K</text>
+        <text x={W - R} y={H - B} dy="2.5em" textAnchor="end" fontSize="12" className="rp-mono" fill="var(--muted)">components K</text>
         <text x={L - 8} y={y(hi) + 4} textAnchor="end" fontSize="12" className="rp-mono" fill="var(--muted)">{hi.toFixed(0)}M</text>
         <text x={L - 8} y={y(lo) + 4} textAnchor="end" fontSize="12" className="rp-mono" fill="var(--muted)">{lo.toFixed(1)}M</text>
       </svg>
@@ -130,7 +138,7 @@ export function ThresholdSlider({ points, positiveRate, label }: { points: [numb
   const pt = points.reduce((a, b) => (Math.abs(b[0] - r / 100) < Math.abs(a[0] - r / 100) ? b : a));
   return (
     <div>
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`Precision-recall curve for ${label}. At recall ${pt[0].toFixed(2)}, precision is ${pt[1].toFixed(2)}.`}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full overflow-visible" role="img" aria-label={`Precision-recall curve for ${label}. At recall ${pt[0].toFixed(2)}, precision is ${pt[1].toFixed(2)}.`}>
         <line x1={x(0)} x2={x(1)} y1={y(positiveRate)} y2={y(positiveRate)} stroke="var(--graphite)" strokeDasharray="2 3" />
         <path d={d} fill="none" stroke="var(--prussian)" strokeWidth="1.6" />
         <line x1={x(pt[0])} x2={x(pt[0])} y1={y(0)} y2={y(pt[1])} stroke="var(--ink)" strokeWidth="0.75" />
@@ -262,4 +270,31 @@ export function SvgTextFit() {
     return () => ro.disconnect();
   }, []);
   return null;
+}
+
+/* ---------------------------------------------------------------- note toggle */
+
+/** On desktop the note reveals on hover/focus (CSS). On phones, tablets and touch screens the
+ *  button shows instead and opens the note in flow, under the caption, never over the artifact. */
+export function NoteToggle({ id, className, children }: { id: string; className: string; children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen((o) => !o)}
+        className={`rp-toggle rp-sans relative shrink-0 items-center gap-1.5 self-center rounded-[3px] border border-[var(--rule-strong)] px-2.5 py-1 text-[12px] font-medium text-[var(--ink)] transition-colors duration-200 after:absolute after:-inset-2 after:content-[''] hover:bg-[var(--parchment)] active:bg-[var(--rule)] aria-expanded:border-[var(--ink)] aria-expanded:bg-[var(--parchment)] ${ring}`}
+      >
+        Note
+        <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden className={`transition-transform duration-300 ${open ? "rotate-45" : ""}`}>
+          <path d="M5 1v8M1 5h8" stroke="currentColor" strokeWidth="1.4" />
+        </svg>
+      </button>
+      <span id={id} data-open={open ? "true" : "false"} className={className}>
+        {children}
+      </span>
+    </>
+  );
 }
