@@ -560,7 +560,12 @@ export function ControlStates() {
     {
       name: "Text input",
       note: "“Selected” here is the invalid state: Magenta border + ■ word.",
-      render: (s) => <span className={`${FIELD_FORCED[s]} flex items-center ${s === "Disabled" ? "" : "text-(--is-frost)"}`}>{s === "Selected" ? "ch 99" : s === "Rest" || s === "Disabled" ? <span className="text-(--is-steel)">ch 41</span> : "ch 4"}</span>,
+      render: (s) => <span className={`${FIELD_FORCED[s]} flex items-center ${s === "Disabled" ? "" : "text-(--is-frost)"}`}>{s === "Selected" ? (
+          <>
+            ch 99
+            <span className={`${MONO} ml-auto pl-2 text-[10px] uppercase tracking-[0.1em] text-(--is-fault)`}>■ Invalid</span>
+          </>
+        ) : s === "Rest" || s === "Disabled" ? <span className="text-(--is-steel)">ch 41</span> : "ch 4"}</span>,
     },
     { name: "Switch", note: "Selected = on; the word On/Off always sits beside it.", render: (s) => <ToggleForced s={s} /> },
   ];
@@ -645,7 +650,7 @@ function StateBody({ s, onRetry, onShowAll }: { s: UiS; onRetry?: () => void; on
   return (
     <div className="flex flex-col gap-3">
       <p className={`${MONO} text-[11px] uppercase tracking-[0.12em] text-(--is-frost)`}>
-        <span aria-hidden>✓ </span>6 Mission 2 runs loaded
+        <span aria-hidden>✓ </span>6 saved Mission 2 runs loaded · Table 1 PR-AUC
       </p>
       <ul className={`${MONO} divide-y divide-(--is-line) text-[11px] uppercase tracking-[0.1em]`}>
         {[
@@ -780,7 +785,7 @@ export function Parts({ strands }: { strands: { s: number; a: number }[] }) {
 
       {/* menu ≡ */}
       <Panel id="p-menu" code="P.02" title="Menu ≡" className="lg:col-span-4" spec={{ use: "Phones: the full nav collapses behind ≡. Opens a sheet; Esc or ✕ closes; focus returns to ≡.", tokens: "40×40 target · sheet Void · items Host Grotesk 22" }}>
-        <div className="relative mx-auto h-[300px] w-full max-w-[300px] overflow-hidden rounded-[3px] border border-(--is-line) bg-(--is-void)">
+        <div className="relative mx-auto flex h-[320px] w-full max-w-[300px] flex-1 flex-col overflow-hidden rounded-[3px] border border-(--is-line) bg-(--is-void) lg:h-auto lg:min-h-[320px]">
           <div className={`${MONO} flex h-11 items-center justify-between border-b border-(--is-line) px-3 text-[11px] uppercase tracking-[0.14em] text-(--is-frost)`}>
             <span>ESA · Latent</span>
             <button
@@ -818,7 +823,14 @@ export function Parts({ strands }: { strands: { s: number; a: number }[] }) {
               </button>
             </nav>
           ) : (
-            <p className="p-4 text-[14px] leading-snug text-(--is-steel)">A 300px phone frame. Press ≡ to open its menu.</p>
+            <div className="flex flex-1 flex-col gap-3 p-4">
+              <p className={`${MONO} text-[10px] uppercase tracking-[0.14em] text-(--is-steel)`}>[ 300px phone frame ]</p>
+              <p className="text-[26px] font-semibold leading-[0.95] tracking-[-0.04em] text-(--is-frost)">Structure lives at the group level.</p>
+              <p className="text-[13px] leading-snug text-(--is-steel)">GMM picks K = 21 modes on Mission 1, near its 18 groups.</p>
+              <p className={`${MONO} mt-auto border-t border-(--is-line) pt-3 text-[11px] uppercase tracking-[0.12em] text-(--is-frost)`}>
+                <span aria-hidden>↗ </span>Press ≡ to open the menu
+              </p>
+            </div>
           )}
         </div>
       </Panel>
@@ -881,10 +893,24 @@ export function Parts({ strands }: { strands: { s: number; a: number }[] }) {
 
       {/* tooltip */}
       <Panel id="p-tip" code="P.06" title="Tooltip" className="lg:col-span-4" spec={{ use: "A definition on demand. Opens on hover AND keyboard focus; Esc closes.", tokens: "Void box, 1px Hairline · Mono 11 · 10px gap · fade + 4px rise" }}>
-        <p className="pt-10 text-[16px] leading-[1.6] text-(--is-frost)">
+        <p className="pt-8 text-[16px] leading-[1.6] text-(--is-frost)">
           TVAE reaches <Tip label="PR-AUC" tip="Area under the precision–recall curve (average precision). Random = the positive rate: 0.047 on M2." /> 0.438 at{" "}
           <Tip label="τ99" tip="Alarm threshold: the 99th percentile of the training score. M1 GMM: 36.24 NLL." />.
         </p>
+        <dl className="mt-auto flex flex-col border-t border-(--is-line)">
+          {[
+            ["BIC", "Bayesian information criterion: fit minus a cost per parameter. Lowest at K = 21 (M1) and 29 (M2).", "Model selection"],
+            ["ARI", "Adjusted Rand index: agreement between two labelings. GMM vs subsystems 0.047; vs groups 0.094.", "Agreement"],
+            ["GMM-OOD", "Score a VAE's latent codes by their negative log-likelihood under a GMM fitted to training latents.", "VAE scoring"],
+          ].map(([t, tip, w]) => (
+            <div key={t} className="flex min-h-11 items-center justify-between gap-3 border-b border-(--is-line)">
+              <dt className={`${MONO} text-[11px] uppercase tracking-[0.12em] text-(--is-frost)`}>
+                <Tip label={t} tip={tip} />
+              </dt>
+              <dd className="text-[13px] text-(--is-steel)">{w}</dd>
+            </div>
+          ))}
+        </dl>
       </Panel>
 
       {/* accordion */}
@@ -950,8 +976,30 @@ export function Parts({ strands }: { strands: { s: number; a: number }[] }) {
         )}
       </Panel>
 
+      {/* emphasize by de-emphasizing */}
+      <Panel id="p-emph" code="P.11" title="Emphasize by de-emphasizing" className="md:col-span-2 lg:col-span-8" spec={{ use: "The primary action wins because everything else is quieter, not because it is louder.", tokens: "One Fiber Green per view · secondary hairline · tertiary Steel text" }}>
+        <div className="grid flex-1 grid-cols-1 gap-3 min-[400px]:grid-cols-2 lg:grid-cols-[1fr_1fr_minmax(0,0.9fr)]">
+          <div className="flex flex-col gap-2 rounded-[2px] border border-dashed border-(--is-line) p-3" inert>
+            <p className={`${LABEL} text-(--is-steel)`}>✕ Before</p>
+            <span className={`${BTN.primary} min-h-8 px-2 text-[10px]`}>Explore</span>
+            <span className={`${BTN.primary} min-h-8 px-2 text-[10px]`}>Paper</span>
+            <span className={`${BTN.primary} min-h-8 px-2 text-[10px]`}>BibTeX</span>
+          </div>
+          <div className="flex flex-col gap-2 rounded-[2px] border border-(--is-line) p-3" inert>
+            <p className={`${LABEL} text-(--is-frost)`}>✓ After</p>
+            <span className={`${BTN.primary} min-h-8 px-2 text-[10px]`}>Explore →</span>
+            <span className={`${BTN.secondary} min-h-8 px-2 text-[10px]`}>[ Paper ]</span>
+            <span className={`${BTN.ghost} min-h-8 px-2 text-[10px]`}>BibTeX</span>
+          </div>
+          <div className="flex flex-col justify-end gap-2 min-[400px]:col-span-2 lg:col-span-1 lg:pl-2">
+            <p className="text-[18px] font-semibold leading-tight tracking-[-0.01em] text-(--is-frost)">One loud thing per view.</p>
+            <p className="text-[13px] leading-snug text-(--is-steel)">Before, three greens compete. After, one green, one hairline and one gray read in order: explore first, the paper second, the citation last.</p>
+          </div>
+        </div>
+      </Panel>
+
       {/* focus ring */}
-      <Panel id="p-focus" code="P.09" title="Keyboard focus ring" className="lg:col-span-4" spec={{ use: "Every control shows the same ring on keyboard focus only (focus-visible), never removed.", tokens: "2px Frost outline, 2px offset (1px inside segmented and fields)" }}>
+      <Panel id="p-focus" code="P.09" title="Keyboard focus ring" className="lg:col-span-6" spec={{ use: "Every control shows the same ring on keyboard focus only (focus-visible), never removed.", tokens: "2px Frost outline, 2px offset (1px inside segmented and fields)" }}>
         <p className="text-[14px] leading-snug text-(--is-steel)">Press Tab here: the ring walks through four different controls and looks identical on each.</p>
         <div className="flex flex-wrap items-center gap-3">
           <Button variant="primary">Primary</Button>
@@ -961,10 +1009,21 @@ export function Parts({ strands }: { strands: { s: number; a: number }[] }) {
             Link
           </a>
         </div>
+        <div className="mt-auto grid grid-cols-2 gap-3 border-t border-(--is-line) pt-4" inert>
+          {[
+            ["Rest", ""],
+            ["Focus-visible · forced", "outline-2 outline-offset-2 outline-(--is-frost)"],
+          ].map(([t, ring]) => (
+            <div key={t} className="flex flex-col items-start gap-3">
+              <p className={`${MONO} text-[10px] uppercase tracking-[0.14em] text-(--is-steel)`}>{t}</p>
+              <span className={`${BTN.secondary} ${ring}`}>[ Read the paper ]</span>
+            </div>
+          ))}
+        </div>
       </Panel>
 
       {/* color alone */}
-      <Panel id="p-color" code="P.10" title="Don’t use color alone" className="lg:col-span-4" spec={{ use: "Every status pairs color with a glyph and a word, so it reads in grayscale and for color-blind readers.", tokens: "■ fault · □ rare event · ○ nominal · ● live · ◆ best" }}>
+      <Panel id="p-color" code="P.10" title="Don’t use color alone" className="lg:col-span-6" spec={{ use: "Every status pairs color with a glyph and a word, so it reads in grayscale and for color-blind readers.", tokens: "■ fault · □ rare event · ○ nominal · ● live · ◆ best" }}>
         <ul className="flex flex-col divide-y divide-(--is-line) border-y border-(--is-line)">
           {[
             ["2009-05-25", "Longest M1 anomaly · 967 h", "fault"],
@@ -982,24 +1041,6 @@ export function Parts({ strands }: { strands: { s: number; a: number }[] }) {
         </ul>
       </Panel>
 
-      {/* emphasize by de-emphasizing */}
-      <Panel id="p-emph" code="P.11" title="Emphasize by de-emphasizing" className="md:col-span-2 lg:col-span-4" spec={{ use: "The primary action wins because everything else is quieter, not because it is louder.", tokens: "One Fiber Green per view · secondary hairline · tertiary Steel text" }}>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col gap-2 rounded-[2px] border border-dashed border-(--is-line) p-3" inert>
-            <p className={`${LABEL} text-(--is-fault)`}>■ Before</p>
-            <span className={`${BTN.primary} min-h-8 px-2 text-[10px]`}>Explore</span>
-            <span className={`${BTN.primary} min-h-8 px-2 text-[10px]`}>Paper</span>
-            <span className={`${BTN.primary} min-h-8 px-2 text-[10px]`}>BibTeX</span>
-          </div>
-          <div className="flex flex-col gap-2 rounded-[2px] border border-(--is-line) p-3" inert>
-            <p className={`${LABEL} text-(--is-frost)`}>✓ After</p>
-            <span className={`${BTN.primary} min-h-8 px-2 text-[10px]`}>Explore →</span>
-            <span className={`${BTN.secondary} min-h-8 px-2 text-[10px]`}>[ Paper ]</span>
-            <span className={`${BTN.ghost} min-h-8 px-2 text-[10px]`}>BibTeX</span>
-          </div>
-        </div>
-        <p className="text-[13px] leading-snug text-(--is-steel)">Three greens compete; one green, one hairline and one gray read in order.</p>
-      </Panel>
     </div>
   );
 }

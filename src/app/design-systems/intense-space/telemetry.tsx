@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Bic, Curves, Events, Missions, Row, Timelines } from "./data";
+import type { Bic, Curve, Curves, Events, Missions, Row, Timelines } from "./data";
 import { MethodDetail } from "./standard";
 import { Button, Check, Chip, DOT, FR, LABEL, MONO, Modal, Panel, Range, Segmented, Select, Status, TRANS, useToast } from "./ui";
 
@@ -57,6 +57,10 @@ const at = (x: number, y: number, cls: string, txt: React.ReactNode, align: "l" 
   </span>
 );
 
+/* where a curve's number comes from: Table 1 is the source of truth; a saved-score curve that doesn't reproduce it says so */
+const prov = (c: Curve) =>
+  c.match === "exact" ? `AP ${c.prAuc.toFixed(3)} · matches Table 1` : c.t1Pr !== null ? `AP ${c.prAuc.toFixed(3)} recomputed from saved scores · Table 1: ${c.t1Pr.toFixed(3)}` : `AP ${c.prAuc.toFixed(3)} · saved run, not in Table 1`;
+
 /* ===================== T1 · threshold → precision / recall ===================== */
 export function TThreshold({ curves }: { curves: Curves }) {
   const [m, setM] = useState<M>(2);
@@ -83,7 +87,7 @@ export function TThreshold({ curves }: { curves: Curves }) {
       id="t-threshold"
       code="T.01"
       title="Alarm threshold"
-      className="lg:col-span-8"
+      className="md:col-span-2 lg:col-span-8"
       spec={{
         use: "Pick an operating point on a real PR curve; precision, recall, F1 and the alarm load recompute from the test-set counts.",
         tokens: "Frost curve · Teal cursor + crosshair · Doto for P and R · counts from nTest × positive rate",
@@ -102,6 +106,10 @@ export function TThreshold({ curves }: { curves: Curves }) {
         <div className="min-w-[220px] flex-1 sm:max-w-[320px]">
           <Select id="isd-t1-run" value={run.id} onChange={setId} options={runs.map((r) => ({ v: r.id, t: `${short(r.method)} · ${r.scoring}` }))} />
         </div>
+        <p className={`${MONO} text-[10px] uppercase tracking-[0.1em] ${run.match === "exact" ? "text-(--is-steel)" : "text-(--is-frost)"}`} aria-live="polite">
+          <span aria-hidden>{run.match === "exact" ? "✓ " : "△ "}</span>
+          {prov(run)}
+        </p>
       </div>
       <div className="grid gap-5 md:grid-cols-[1.25fr_1fr]">
         <Frame
@@ -179,7 +187,7 @@ export function TMission({ missions }: { missions: Missions }) {
             ["Channels", d.channels],
             ["Test steps", `${(d.test / 1e6).toFixed(2)}M`],
             ["Sample rate", `${d.hz} Hz`],
-            ["Test span", `${(days / 365).toFixed(1)} yr`],
+            ["Test span", `≈ ${(days / 365).toFixed(1)} yr`],
             ["Fault rate", `${(d.anomalyRate * 100).toFixed(1)}%`],
             ["Events", d.events],
             ["Subsys → groups", `${d.subsystems} → ${d.groups}`],
@@ -192,6 +200,30 @@ export function TMission({ missions }: { missions: Missions }) {
           ))}
         </dl>
         <p className="text-[13px] leading-snug text-(--is-steel)">Labels: {d.labels}.</p>
+      </div>
+      <div key={`mix-${m}`} className="mt-auto border-t border-(--is-line) pt-4">
+        <p className={`${LABEL} mb-2 flex justify-between gap-3 text-(--is-steel)`}>
+          <span>Label mix · {d.events} events</span>
+          <span>anomaly_types.csv</span>
+        </p>
+        <div className="flex h-2 gap-px overflow-hidden rounded-[1px]" aria-hidden>
+          {Object.entries(d.mix).map(([k, v]) => (
+            <span key={k} className={`${TRANS} ${k === "Anomaly" ? "bg-(--is-fault)" : k === "Rare Event" ? "bg-(--is-frost)" : "bg-(--is-steel)"}`} style={{ flexGrow: v }} />
+          ))}
+        </div>
+        <ul className={`${MONO} mt-2 flex flex-col gap-1 text-[11px] uppercase tracking-[0.08em]`}>
+          {Object.entries(d.mix).map(([k, v]) => (
+            <li key={k} className="flex justify-between gap-3">
+              <span className={k === "Anomaly" ? "text-(--is-fault)" : k === "Rare Event" ? "text-(--is-frost)" : "text-(--is-steel)"}>
+                <span aria-hidden>{k === "Anomaly" ? "■ " : k === "Rare Event" ? "□ " : "○ "}</span>
+                {k}
+              </span>
+              <span className="text-(--is-frost)">
+                {v} <span className="text-(--is-steel)">· {((v / d.events) * 100).toFixed(0)}%</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </Panel>
   );
@@ -304,7 +336,7 @@ export function TPr({ curves }: { curves: Curves }) {
   const shown = runs.filter((r) => on.includes(r.id));
   const focus = hi ?? [...shown].sort((a, b) => b.prAuc - a.prAuc)[0]?.id;
   return (
-    <Panel id="t-pr" code="T.04" title="PR-curve viewer" className="lg:col-span-7" spec={{ use: "Compare saved runs; hover or focus a chip to lift its curve. The teal box is a Planet-style AOI: does a run hold precision ≥ 0.6 anywhere between recall 0.15 and 0.5?", tokens: "Highlighted run Teal 2px · others Frost 1px · context runs Frost 15% · AOI Teal 1px" }}>
+    <Panel id="t-pr" code="T.04" title="PR-curve viewer" className="md:col-span-2 lg:col-span-7" spec={{ use: "Compare saved runs; hover or focus a chip to lift its curve. The teal box is a Planet-style AOI: does a run hold precision ≥ 0.6 anywhere between recall 0.15 and 0.5?", tokens: "Highlighted run Teal 2px · others Frost 1px · context runs Frost 15% · AOI Teal 1px" }}>
       <div className="flex flex-wrap items-center gap-3">
         <Segmented label="Mission" value={m} onChange={setM} options={MS} />
         <Check checked={ctx} onChange={setCtx} label="Context: all saved runs" />
@@ -343,12 +375,13 @@ export function TPr({ curves }: { curves: Curves }) {
       <ul className={`${MONO} flex flex-col gap-1.5 text-[11px] uppercase tracking-[0.08em]`} aria-live="polite">
         {shown.length ? (
           shown.map((r) => (
-            <li key={r.id} className="flex items-center justify-between gap-3">
-              <span className={r.id === focus ? "text-(--is-teal)" : "text-(--is-frost)"}>
+            <li key={r.id} className="flex flex-wrap items-center gap-x-3 gap-y-0.5 border-b border-(--is-line) pb-1.5 last:border-b-0">
+              <span className={`min-w-0 flex-1 sm:flex-none ${r.id === focus ? "text-(--is-teal)" : "text-(--is-frost)"}`}>
                 <span aria-hidden>{r.id === focus ? "━ " : "─ "}</span>
                 {short(r.method)} · {r.scoring}
               </span>
-              <span className={inAoi(r) ? "text-(--is-teal)" : "text-(--is-steel)"}>{inAoi(r) ? "◆ In AOI" : "○ Below AOI"}</span>
+              <span className="order-3 w-full text-[10px] text-(--is-steel) sm:order-none sm:ml-auto sm:w-auto sm:text-right">{prov(r)}</span>
+              <span className={`shrink-0 ${inAoi(r) ? "text-(--is-teal)" : "text-(--is-steel)"}`}>{inAoi(r) ? "◆ In AOI" : "○ Below AOI"}</span>
             </li>
           ))
         ) : (
@@ -384,7 +417,7 @@ export function TTimeline({ tl }: { tl: Timelines }) {
   };
   const X = (k: number) => (k / (n - 1)) * 100;
   return (
-    <Panel id="t-timeline" code="T.05" title="Mission timeline scrubber" className="lg:col-span-12" spec={{ use: "Scrub the whole test set (NASA's Eyes time scrubber): the trace is the anomaly score, magenta bands are labelled faults. Play / pause, jump to the next fault, or drag.", tokens: "240 bins · Frost trace 1.2px · Magenta bands at fault share · Teal playhead · ←/→ step one bin" }}>
+    <Panel id="t-timeline" code="T.05" title="Mission timeline scrubber" className="md:col-span-2 lg:col-span-12" spec={{ use: "Scrub the whole test set (NASA's Eyes time scrubber): the trace is the anomaly score, magenta bands are labelled faults. Play / pause, jump to the next fault, or drag.", tokens: "240 bins · Frost trace 1.2px · Magenta bands at fault share · Teal playhead · ←/→ step one bin" }}>
       <div className="flex flex-wrap items-center gap-3">
         <Segmented
           label="Mission"
@@ -455,7 +488,7 @@ export function TBic({ bic }: { bic: Bic }) {
   const delta = p.bic - d.points.find((x) => x.k === d.selectedK)!.bic;
   const zone = k <= d.subsystems + 0.5 ? "subsystem" : k >= 18 && k <= 29 ? "group" : "between";
   return (
-    <Panel id="t-bic" code="T.06" title="BIC-vs-K picker" className="lg:col-span-7" spec={{ use: "Move K and read the model-selection cost. The minimum sits at the operational-group scale, not the subsystem scale.", tokens: "Frost trace · Steel band = subsystems 4–5 · Teal band = groups 18–29 · Doto K · ΔBIC in millions" }}>
+    <Panel id="t-bic" code="T.06" title="BIC-vs-K picker" className="md:col-span-2 lg:col-span-7" spec={{ use: "Move K and read the model-selection cost. The minimum sits at the operational-group scale, not the subsystem scale.", tokens: "Frost trace · Steel band = subsystems 4–5 · Teal band = groups 18–29 · Doto K · ΔBIC in millions" }}>
       <div className="flex flex-wrap items-center gap-3">
         <Segmented
           label="Mission"
@@ -503,7 +536,7 @@ export function TBic({ bic }: { bic: Bic }) {
       </div>
       <p className="text-[13px] text-(--is-steel)">
         {zone === "subsystem"
-          ? `At the subsystem scale (${d.subsystems}), BIC is still ${(delta / 1e6).toFixed(2)}M worse than K*.`
+          ? `K = ${k} is at or below the subsystem scale (${d.subsystems}): BIC is ${(delta / 1e6).toFixed(2)}M worse than K* = ${d.selectedK}.`
           : zone === "group"
             ? "Inside the operational-group band, where BIC bottoms out."
             : "Between scales: BIC keeps falling toward the group band."}
@@ -523,7 +556,7 @@ export function TEvents({ ev }: { ev: Events }) {
   const glyph = (k: string) => (k === "Anomaly" ? "■" : k === "Rare Event" ? "□" : "○");
   const fill = (k: string) => (k === "Anomaly" ? "bg-(--is-fault)" : k === "Rare Event" ? "bg-(--is-frost)" : "bg-(--is-steel)");
   return (
-    <Panel id="t-events" code="T.07" title="Anomaly event catalogue" className="lg:col-span-5" spec={{ use: "The labelled events per mission by category; pick one for its duration profile. Shows why M2 labels are mostly rare events, not faults.", tokens: "Stacked bar: ■ Magenta anomaly · □ Frost rare event · ○ Steel comms gap · durations in hours" }}>
+    <Panel id="t-events" code="T.07" title="Anomaly event catalogue" className="md:col-span-2 lg:col-span-5" spec={{ use: "The labelled events per mission by category; pick one for its duration profile. Shows why M2 labels are mostly rare events, not faults.", tokens: "Stacked bar: ■ Magenta anomaly · □ Frost rare event · ○ Steel comms gap · durations in hours" }}>
       <Segmented
         label="Mission"
         value={m}
@@ -539,7 +572,10 @@ export function TEvents({ ev }: { ev: Events }) {
             <span key={k} className={`${fill(k)} ${TRANS} ${k === c ? "opacity-100" : "opacity-45"}`} style={{ flexGrow: v }} />
           ))}
         </div>
-        <p className={`${LABEL} mt-2 text-(--is-steel)`}>{d.n} labelled events · Mission {m}</p>
+        <p className={`${LABEL} mt-2 flex flex-wrap justify-between gap-x-3 gap-y-1 text-(--is-steel)`}>
+          <span className="text-(--is-frost)">{d.n} labelled events · Mission {m}</span>
+          <span>Source: ESA-ADB anomaly_types.csv</span>
+        </p>
       </div>
       <div role="radiogroup" aria-label="Event category" className="flex flex-col">
         {cats.map(([k, v]) => (
@@ -639,7 +675,7 @@ export function TTable({ rows }: { rows: Row[] }) {
   ];
   const sortBy = (k: Key) => (k === key ? setAsc((a) => !a) : (setKey(k), setAsc(k === "label" || k === "family")));
   return (
-    <Panel id="t-table" code="T.08" title="Table 1 · sortable results" className="lg:col-span-12" spec={{ use: "All 13 Table 1 rows. Click a header to sort (again to reverse); click a row for its detail.", tokens: "Mono 11 headers with ↑/↓ + aria-sort · Host Grotesk 14 cells · ◆ Teal = highest PR-AUC per mission · hairline rows 48px" }}>
+    <Panel id="t-table" code="T.08" title="Table 1 · sortable results" className="md:col-span-2 lg:col-span-12" spec={{ use: "All 13 Table 1 rows. Click a header to sort (again to reverse); click a row for its detail.", tokens: "Mono 11 headers with ↑/↓ + aria-sort · Host Grotesk 14 cells · ◆ Teal = highest PR-AUC per mission · hairline rows 48px" }}>
       <div className="flex flex-wrap items-center gap-3">
         <Segmented label="Mission filter" value={mis} onChange={setMis} options={[{ v: "all", t: "All" }, { v: "1", t: "M1" }, { v: "2", t: "M2" }]} />
         <p className={`${LABEL} text-(--is-steel)`} aria-live="polite">

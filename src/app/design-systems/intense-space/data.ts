@@ -55,6 +55,7 @@ export function missions() {
       k: h.gmm.bicSelectedK["1"],
       labels: m["1"].labelType,
       events: catalogue.m1.nEvents,
+      mix: m["1"].anomalyEvents as Record<string, number>,
       best: { method: "GMM", prAuc: 0.384, rocAuc: 0.692 },
     },
     2: {
@@ -67,6 +68,7 @@ export function missions() {
       k: h.gmm.bicSelectedK["2"],
       labels: m["2"].labelType,
       events: catalogue.m2.nEvents,
+      mix: m["2"].anomalyEvents as Record<string, number>,
       best: { method: "TransformerVAE", prAuc: 0.438, rocAuc: 0.749 },
     },
   };
@@ -82,6 +84,9 @@ export type Curve = {
   prAuc: number;
   rocAuc: number;
   table1: string | null;
+  /** Table 1's printed PR-AUC for this row, and whether the saved-score curve reproduces it exactly */
+  t1Pr: number | null;
+  match: "exact" | "partial" | null;
   points: [number, number][];
 };
 
@@ -100,6 +105,8 @@ export function curves(): { list: Curve[]; nTest: Record<1 | 2, number>; pos: Re
       prAuc: r3(c.prAuc),
       rocAuc: r3(c.rocAuc),
       table1: c.table1 ? c.table1.row : null,
+      t1Pr: c.table1 ? (results.table1.rows.find((r) => r.label === c.table1!.row)?.prAuc ?? null) : null,
+      match: c.table1 ? (c.table1.match as "exact" | "partial") : null,
       points: thinCurve(c.points as number[][], c.table1 ? 120 : 40),
     }));
   return {

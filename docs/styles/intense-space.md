@@ -78,3 +78,11 @@ Built from this board: same fonts (Host Grotesk 300–600, Fragment Mono, Doto 6
 - **Charts:** marks in SVG with non-scaling strokes; every label is HTML (never under 10px), axis names sit under the frame.
 - **Motion:** 200ms controls, 300ms reveals/accordion/toast, 260ms dialog rise, 4.2s toast life with a draining hairline,
   5s per step in the mechanism explainer (Pause + Skip), all off or static under reduced motion.
+- **Provenance:** Table 1 is the source of truth. A PR curve drawn from saved scores carries its own AP and says where it stands:
+  `✓ AP 0.390 · matches Table 1`, or `△ AP 0.452 recomputed from saved scores · Table 1: 0.438` (HVAE and TVAE on M2).
+  Event counts name their source (`ESA-ADB anomaly_types.csv`: M1 118 + 78 + 4 = 200, M2 613 + 31 = 644).
+- **Layout:** panels in a row share a height, so each panel anchors its last group to the bottom (`mt-auto`) and fills
+  the space with real content, never padding. Novel and Telemetry go 2-up at md (768) for the narrow panels
+  (readout + blur, tags + mechanism, mission switcher + method card); charts stay full width.
+- **Fiber canvases:** the hero and N.01 each run a FiberField, but it pauses whenever off-screen (IntersectionObserver),
+  so only one animates at a time.

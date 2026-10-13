@@ -487,7 +487,7 @@ export default function IntenseSpaceSystem() {
               b="components"
               intro={<>Ten pieces lifted from the board&apos;s reference sites (iCOMAT, Helion, Planet, NASA&apos;s Eyes), each rebuilt around our data. Every card names its source and what changed.</>}
             />
-            <div className="grid gap-3 lg:grid-cols-12">
+            <div className="grid gap-3 md:grid-flow-dense md:grid-cols-2 lg:grid-flow-row lg:grid-cols-12">
               <NovelFiber m1={s1} m2={s2} />
               <NovelDoto />
               <NovelWords />
@@ -510,7 +510,7 @@ export default function IntenseSpaceSystem() {
               b="components"
               intro={<>Eight components built only for this project, all running on the exported data: Table 1, 33 saved PR curves, score timelines, BIC sweeps, the channel hierarchy and the anomaly catalogue.</>}
             />
-            <div className="grid gap-3 lg:grid-cols-12">
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-12">
               <TThreshold curves={cv} />
               <TMission missions={ms} />
               <TMethod rows={rows} />

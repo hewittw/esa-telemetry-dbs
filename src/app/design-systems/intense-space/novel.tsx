@@ -19,7 +19,7 @@ export function NovelFiber({ m1, m2 }: { m1: Strand[]; m2: Strand[] }) {
       code="N.01"
       title="Fiber field"
       novel="iCOMAT"
-      className="lg:col-span-8"
+      className="md:col-span-2 lg:col-span-8"
       spec={{
         use: "Borrowed iCOMAT's steered-fiber hero; transformed so each strand is one slice of the test set (brightness = GMM score vs its local baseline, magenta = a labelled fault). Pause control from NASA's Eyes.",
         tokens: "Canvas on Charcoal · Green rgba(55,253,8,.1–1) · Magenta faults · shear amplitude ∝ score · paused when off-screen or reduced motion",
@@ -40,10 +40,10 @@ export function NovelFiber({ m1, m2 }: { m1: Strand[]; m2: Strand[] }) {
 
 /* ---------- N2 · Doto readout (iCOMAT dot-matrix callout) ---------- */
 const READOUTS = [
-  { id: "m2", t: "Best PR-AUC · M2", v: 0.438, d: 3, note: "Transformer VAE, Neg. ELBO" },
-  { id: "m1", t: "Best PR-AUC · M1", v: 0.384, d: 3, note: "GMM, K = 21, neg. log-lik." },
-  { id: "ts", t: "Test timesteps · M1", v: 7364161, d: 0, note: "one reading per ~30 s" },
-  { id: "ev", t: "Labelled events · M2", v: 644, d: 0, note: "613 rare events · 31 anomalies" },
+  { id: "m2", t: "Best PR-AUC · M2", v: 0.438, d: 3, note: "Transformer VAE, Neg. ELBO · Table 1" },
+  { id: "m1", t: "Best PR-AUC · M1", v: 0.384, d: 3, note: "GMM, K = 21, neg. log-lik. · Table 1" },
+  { id: "ts", t: "Test timesteps · M1", v: 7364161, d: 0, note: "one reading per ~30 s · results.json" },
+  { id: "ev", t: "Labelled events · M2", v: 644, d: 0, note: "613 rare events + 31 anomalies · ESA-ADB anomaly_types.csv" },
 ];
 function useTween(target: number, ms = 700) {
   const [v, setV] = useState(target);
@@ -88,27 +88,41 @@ export function NovelDoto() {
         tokens: "Doto 600 · lit Frost, unlit Hairline #2E3135 · 700ms ease-out cubic · for ≤ 3 numbers per view",
       }}
     >
-      <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Readout">
+      <div className="relative" aria-live="polite" aria-label={`${r.t}: ${r.d ? r.v.toFixed(r.d) : r.v.toLocaleString("en-US")}`}>
+        <p aria-hidden className={`${DOT} text-[clamp(60px,6.4vw,120px)] font-semibold leading-[0.85] text-(--is-line)`}>{ghost}</p>
+        <p aria-hidden className={`${DOT} absolute inset-0 text-[clamp(60px,6.4vw,120px)] font-semibold leading-[0.85] text-(--is-frost)`}>{s}</p>
+      </div>
+      <p className={`${LABEL} text-(--is-steel)`}>
+        [ {r.t} ] {r.note}
+      </p>
+      <div
+        className="mt-auto flex flex-col border-t border-(--is-line)"
+        role="radiogroup"
+        aria-label="Readout"
+        onKeyDown={(e) => {
+          const d = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0;
+          if (!d) return;
+          e.preventDefault();
+          const k = (READOUTS.findIndex((x) => x.id === id) + d + READOUTS.length) % READOUTS.length;
+          setId(READOUTS[k].id);
+          (e.currentTarget.children[k] as HTMLElement).focus();
+        }}
+      >
         {READOUTS.map((x) => (
           <button
             key={x.id}
             type="button"
             role="radio"
             aria-checked={x.id === id}
+            tabIndex={x.id === id ? 0 : -1}
             onClick={() => setId(x.id)}
-            className={`${MONO} ${TRANS} min-h-8 rounded-[2px] border border-(--is-line) px-2 text-[10px] uppercase tracking-[0.1em] text-(--is-steel) hover:border-(--is-frost) hover:text-(--is-frost) active:bg-(--is-charcoal) aria-checked:border-(--is-frost) aria-checked:text-(--is-frost) ${FR}`}
+            className={`${MONO} ${TRANS} flex min-h-10 items-center justify-between gap-3 rounded-[2px] border-b border-(--is-line) px-2 text-left text-[11px] uppercase tracking-[0.1em] text-(--is-steel) hover:bg-(--is-void) hover:text-(--is-frost) active:bg-(--is-charcoal) aria-checked:bg-(--is-void) aria-checked:text-(--is-frost) aria-checked:shadow-[inset_2px_0_0_var(--is-frost)] ${FR} focus-visible:outline-offset-0`}
           >
-            {x.t}
+            <span>{x.t}</span>
+            <span className="text-(--is-frost)">{x.d ? x.v.toFixed(x.d) : x.v.toLocaleString("en-US")}</span>
           </button>
         ))}
       </div>
-      <div className="relative mt-auto" aria-live="polite" aria-label={`${r.t}: ${r.d ? r.v.toFixed(r.d) : r.v.toLocaleString("en-US")}`}>
-        <p aria-hidden className={`${DOT} text-[clamp(60px,7vw,128px)] font-semibold leading-[0.85] text-(--is-line)`}>{ghost}</p>
-        <p aria-hidden className={`${DOT} absolute inset-0 text-[clamp(60px,7vw,128px)] font-semibold leading-[0.85] text-(--is-frost)`}>{s}</p>
-      </div>
-      <p className={`${LABEL} text-(--is-steel)`}>
-        [ {r.t} ] {r.note}
-      </p>
     </Panel>
   );
 }
@@ -161,7 +175,7 @@ export function NovelWords() {
       code="N.03"
       title="Word-by-word reveal"
       novel="iCOMAT"
-      className="lg:col-span-7"
+      className="md:col-span-2 lg:col-span-7"
       spec={{
         use: "Borrowed iCOMAT's statement paragraph that brightens as you scroll; transformed so a word, once lit, stays lit (a fast scroller never sees a dimmed finding), plus a Replay.",
         tokens: "Host Grotesk 500 clamp(22–34px) / 1.08 · unread Frost @ 42% · 300ms per word · off under reduced motion",
@@ -258,7 +272,7 @@ export function NovelCompare({ tree, ari }: { tree: Tree; ari: { sub: number; gr
       code="N.05"
       title="Before / after slider"
       novel="iCOMAT"
-      className="lg:col-span-12"
+      className="md:col-span-2 lg:col-span-12"
       spec={{
         use: "Borrowed iCOMAT's straight-fiber vs steered-fiber comparison; transformed into our central claim: the same 76 Mission 1 channels bundled by the 4 subsystems (before) vs the 18 operational groups (after).",
         tokens: "Drag, click or ←/→ (Shift = 10) · 1px Frost divider + 32px handle · before Steel strands, after Frost strands + Teal nodes",
@@ -366,7 +380,7 @@ export function NovelProcess() {
       code="N.06"
       title="O1–O7 process line"
       novel="iCOMAT"
-      className="lg:col-span-12"
+      className="md:col-span-2 lg:col-span-12"
       spec={{
         use: "Borrowed iCOMAT's O1–O7 operations strip; transformed into our GMM pipeline, each stop carrying its one real number. A tab list: click or ←/→.",
         tokens: "Mono O-codes · 1px Hairline rail, Frost progress to the current stop · 8px square nodes · Doto value",
@@ -535,7 +549,7 @@ export function NovelMechanism() {
           </a>
         </div>
       </div>
-      <div id="isd-mech-panel" role="tabpanel" className="grid items-center gap-5 sm:grid-cols-[1.2fr_1fr]">
+      <div id="isd-mech-panel" role="tabpanel" className="grid items-center gap-5 sm:grid-cols-[1.2fr_1fr] md:grid-cols-1 lg:grid-cols-[1.2fr_1fr]">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`Step ${i + 1}: ${STEPS[i].t}`}>
           <line x1="0" x2={W} y1={H - 14} y2={H - 14} stroke="#2E3135" />
           {modes.map(([m, s, w], k) => (
@@ -606,7 +620,7 @@ export function NovelZoom({ tree }: { tree: Tree }) {
       code="N.09"
       title="Broader · Closer · Deeper"
       novel="Planet"
-      className="lg:col-span-12"
+      className="md:col-span-2 lg:col-span-12"
       spec={{
         use: "Borrowed Planet's broader / closer / deeper zoom through imagery; transformed into a zoom through the channel hierarchy: mission → subsystem → operational group → channel. The current region gets Planet's teal outline.",
         tokens: "Blocks sized by channel count · 1px Steel ticks = channels · Teal 1px AOI outline on the region you zoomed from",
@@ -699,7 +713,7 @@ export function NovelEntries() {
       code="N.10"
       title="Numbered entry points"
       novel="NASA's Eyes"
-      className="lg:col-span-12"
+      className="md:col-span-2 lg:col-span-12"
       spec={{
         use: "Borrowed NASA's Eyes' numbered 01–05 'things to try' list; transformed into the explorer's five entry points, each a whole-row link into the Telemetry section.",
         tokens: "Mono numerals 28px Steel → Frost on hover · hairline rules · arrow slides 4px · row min-h 72",
