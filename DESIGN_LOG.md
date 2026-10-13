@@ -58,3 +58,24 @@ Append as decisions happen, newest at the bottom.
   headless checks at 1440/390/320. Each agent must check its board in the browser before reporting (the user asked).
 - Artifacts: ~28 per board, roughly half collected (public-domain NASA/ESA/Wikimedia plus research-screenshot crops,
   all credited) and half ✦ generated in code, with generative pieces drawn from our real telemetry data.
+
+## 2026-10-12 · Mood boards built, independently verified, deployed
+| Board | Mood name | Artifacts | Lead references |
+|---|---|---|---|
+| intense-space | Charged · Fibrous · Instrumented | 28 (14 collected, 14 ✦) | iCOMAT, Helion, Planet, NASA Eyes |
+| refined-paper | Lucid · Patient · Inked | 28 (14 collected, 14 ✦) | Ciechanowski, Apple, R2D3, Distill, Anthropic |
+| white-immersion | Whiteout · Crystalline · Instrumented | 28 (14 collected, 14 ✦) | Igloo, Skyviewer |
+- Every ✦ data artifact is drawn from our real telemetry (GMM score timelines, BIC sweeps, PR curves, GMM
+  components, channel hierarchy), not decoration. Collected images are public-domain NASA, ESA, and Wikimedia
+  (credited), plus credited research-screenshot crops.
+- **The user asked for all screen sizes, phones included.** Added `scripts/matrix.mjs` (11 viewports). It caught
+  what 390/1440 checks missed: on iPad and phone landscape the intense-space notes were **overlaid on the
+  artifacts**. Fixed to sit in flow below them; every board now keeps notes off the artifacts on touch.
+- **Separate verifier agents found real bugs:** white-immersion's HUD buttons had *no* hover/focus/pressed
+  states (CSS selector `button.circle` never matched `.wi-circle`); refined-paper figures appeared half-drawn
+  on load; a Planet crop cut words mid-word; chart labels rendered under 10px; refined-paper's phone page was
+  19.6k px tall (now tap-to-reveal notes, 14.5k px).
+- **Honesty:** PR-curve captions say which curves are the exact Table 1 runs vs. earlier saved runs.
+- Rejected: CSS Modules (this Turbopack setup routes all .css through Tailwind), so we use page-scoped
+  prefixed classes instead.
+- Deployed from a clean git worktree of HEAD so in-progress design-system files never ship half-built.
