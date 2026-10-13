@@ -133,6 +133,16 @@ export default function Hub() {
           Fifteen reference studies →
         </Link>
       </section>
+
+      <section className="mt-20">
+        <SectionHead n="04" title="Design & Decisions" note="Every choice, what we rejected, and why" />
+        <Link
+          href="/decisions"
+          className={`mt-6 inline-flex rounded-full border border-neutral-900 px-5 py-2 text-sm transition-colors hover:bg-neutral-900 hover:text-white active:scale-[0.97] ${ring}`}
+        >
+          Read the decision log →
+        </Link>
+      </section>
       <section className="mt-20" aria-labelledby="about">
         <SectionHead n="—" title="About this site" note="Authorship" />
         <div id="about" className="mt-6 grid gap-6 text-[15px] leading-relaxed text-neutral-700 md:grid-cols-2">
