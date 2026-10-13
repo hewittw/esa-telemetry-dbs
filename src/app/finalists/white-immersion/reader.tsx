@@ -127,7 +127,7 @@ export function Reader({ page, setPage, onClose }: { page: number; setPage: (p: 
       const r = st.getBoundingClientRect();
       if (pts.size === 2) { const [a, b] = [...pts.values()]; zoomAt((a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top, z0 * (Math.hypot(a.x - b.x, a.y - b.y) / (pinch0 || 1))); return; }
       if (!moved && Math.hypot(e.clientX - start.x, e.clientY - start.y) < 6) return;
-      if (!moved) { moved = true; st.setPointerCapture(e.pointerId); st.dataset.drag = "true"; }
+      if (!moved) { moved = true; try { st.setPointerCapture(e.pointerId); } catch {} st.dataset.drag = "true"; }
       const c = cam.current;
       cam.current = clamp({ ...c, x: c.x - (e.clientX - prev.x) / c.z, y: atFit() ? c.y : c.y - (e.clientY - prev.y) / c.z });
       prev = { x: e.clientX, y: e.clientY };

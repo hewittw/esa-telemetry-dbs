@@ -19,11 +19,10 @@ export type Hier = { subsystem: string; groups: { group: number; channels: { nam
 export type Strip = { method: string; scoring: string; nominal: number; peak: number; late: number; threshold?: number; lo: number; hi: number; v: [number, number][] }; // log10 [median, max]
 export type SiteData = {
   rows: Row[];
-  missions: Record<"1" | "2", { channels: number; subsystems: number; groups: number; test: number; testRate: number; hz: number; labels: string; k: number; sec: number }>;
+  missions: Record<"1" | "2", { train: string; channels: number; subsystems: number; groups: number; test: number; testRate: number; hz: number; labels: string; k: number; sec: number }>;
   pr: Record<"1" | "2", { pos: number; n: number; curves: Curve[] }>;
   bic: Record<"1" | "2", { k: number; bic: number }[]>;
   hier: Record<"1" | "2", Hier>;
-  deep: { n: number; v: [number, number][]; segs: [number, number][] };
   longest: { timesteps: number; hours: number; start: string; a: number; b: number; winStart: number; winLen: number; strips: Strip[] };
   field: number[][];
   fieldAnom: number[][];
@@ -38,11 +37,6 @@ function down<T>(arr: T[], n: number): T[] {
   if (arr.length <= n) return arr;
   const step = (arr.length - 1) / (n - 1);
   return Array.from({ length: n }, (_, i) => arr[Math.round(i * step)]);
-}
-function scale(vals: number[]) {
-  const s = [...vals].sort((a, b) => a - b);
-  const lo = s[Math.floor(s.length * 0.01)], hi = s[Math.floor(s.length * 0.99)];
-  return vals.map((v) => Math.min(1, Math.max(0, (v - lo) / (hi - lo || 1))));
 }
 const median = (a: number[]) => { const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
 const clean = (m: string) => m.replace(" (K=8, raw features)", " K=8");
@@ -77,7 +71,7 @@ export function loadSite(): SiteData {
   const mission = (id: 1 | 2) => {
     const m = hm[String(id)];
     return {
-      channels: m.channels as number, subsystems: m.subsystems as number, groups: m.groups as number,
+      train: m.trainingTimesteps as string, channels: m.channels as number, subsystems: m.subsystems as number, groups: m.groups as number,
       test: m.testTimestepsExact as number, testRate: m.testAnomalyRate as number, hz: m.sampleRateHz as number,
       labels: m.labelType as string, k: bicRaw.final[id === 1 ? "m1" : "m2"].selectedK, sec: id === 1 ? 30 : 1 / 0.056,
     };
@@ -93,16 +87,6 @@ export function loadSite(): SiteData {
     subsystem: s.subsystem.replace("subsystem_", "Subsystem "),
     groups: s.groups.map((g) => ({ group: g.group, channels: g.channels.map((c) => ({ name: c.channel.replace("channel_", "ch "), target: c.target })) })),
   }));
-
-  // deep field: the whole M1 test set, GMM score, 1,500 bins
-  const tl = read<{ nTest: number; anomalySegments: [number, number][]; series: { method: string; bins: Bin[] }[] }>("figures-data/score-timelines-m1.json");
-  const g = tl.series.find((x) => x.method.startsWith("GMM")) ?? tl.series[0];
-  const dMed = scale(g.bins.map((x) => x[1])), dMax = scale(g.bins.map((x) => x[2]));
-  const deep = {
-    n: tl.nTest,
-    v: g.bins.map((_, i) => [r3(dMed[i]), r3(dMax[i])] as [number, number]),
-    segs: tl.anomalySegments.map(([a, b]) => [r4(a / tl.nTest), r4(b / tl.nTest)] as [number, number]),
-  };
 
   // the longest anomaly (report Fig. 3 segment), saved scores, log10
   const L = read<{ segmentStart: number; segmentEnd: number; windowStart: number; windowEnd: number; series: { method: string; scoring: string; bins: Bin[] }[] }>("figures-data/longest-anomaly-m1.json");
@@ -132,7 +116,6 @@ export function loadSite(): SiteData {
     pr: { "1": pr(1), "2": pr(2) },
     bic: { "1": bicRaw.final.m1.sweep.map((p) => ({ k: p.k, bic: p.bic })), "2": bicRaw.final.m2.sweep.map((p) => ({ k: p.k, bic: p.bic })) },
     hier: { "1": hier("m1"), "2": hier("m2") },
-    deep,
     longest: {
       ...lg, a: r4((L.segmentStart - L.windowStart) / winLen), b: r4((L.segmentEnd - L.windowStart) / winLen),
       winStart: L.windowStart, winLen, strips,
