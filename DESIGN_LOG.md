@@ -113,3 +113,19 @@ Append as decisions happen, newest at the bottom.
   real deep zoom) rather than a full pan/zoom canvas. A UI library has to be linkable, keyboard-usable, and readable at 320px.
 - **User request:** "Designed & built by Hewitt Watkins" plus an About section on the hub; the paper keeps its accurate
   two-author citation. The final report PDF is added for an in-site viewer and download.
+
+## 2026-10-13 · Three site versions → the pick
+| Version | Hierarchy | Fit to the user's direction | Length (1440) | Main weakness |
+|---|---|---|---|---|
+| intense-space | Strongest: 112px finding, one green action | Closest to "SpaceX/Apple with incredible animation": live data-driven fiber hero | 6.7k px | Green fiber art dilutes "accent = primary action" |
+| refined-paper | Strong: one serif sentence, colour-keyed words | Calm, literate; least spectacle | 11.8k px | Long; empty right third in the hero |
+| white-immersion | Weakest: finding in 24px mono, numerals louder, 4 equal buttons | Most unique | n/a (a world) | Scroll-to-travel breaks convention; no text selection; tour pill overlaps on phones |
+- **Picked: intense-space (Charged · Fibrous · Instrumented).** Why it fits the people who'd use it: an ML recruiter
+  gets the finding in one look and the "instrument" feel says engineering rigor; peers get every number on real data
+  with page-level provenance. It's also the most distinct of the three in a class of ~28.
+- **Rejected for the final:** white-immersion's world-as-site (affordances and hierarchy cost too much for a 2-minute
+  reader) and refined-paper's long-form essay (strong, but it fails Simplicity at 12k px).
+- **Carried into the final:** monochrome fiber art (frost/steel, with magenta faults) so green appears *only* on
+  the primary action; one global M1/M2 switch; colour-keyed words and footnote page chips from refined-paper; a short
+  guided tour from white-immersion; figures that draw in on scroll; empty panels at 1440 filled.
+- All three versions stay linked from the hub as the candidates, so the process is visible.
