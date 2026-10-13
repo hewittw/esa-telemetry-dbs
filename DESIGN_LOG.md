@@ -45,3 +45,16 @@ Append as decisions happen, newest at the bottom.
   (recaptured with a 12s wait). Planet and Stoke screenshots still show cookie banners; kept, and their captions say so.
 - Playwright MCP is configured for the system Chrome channel, which isn't at the default path. Verified via a script
   with Playwright's bundled Chromium instead (headless, logged out).
+
+## 2026-10-12 · Three mood-board directions (the user's call)
+- **1 · intense-space:** "intense space". Planet + NASA Eyes + **heavily iCOMAT** + Helion. Dark, charged,
+  generative fiber lines, dot-matrix callouts, bracket instrument tags.
+- **2 · refined-paper:** modern minimalist, lighter, more traditional but refined. Ciechanowski GPS + Apple +
+  R2D3 + Distill, with the user also drawn to Distill and Anthropic's transformer-circuits pages.
+- **3 · white-immersion:** intensely unique, a full immersive experience. Igloo merged with Skyviewer;
+  **white**, interactive, immersive.
+- **How:** three parallel agents, each owning only its route, public folder, and `docs/styles/<slug>.md`.
+  A shared `MoodBoardMeta` contract feeds the hub previews; one shared dev server; `scripts/shot.mjs` for
+  headless checks at 1440/390/320. Each agent must check its board in the browser before reporting (the user asked).
+- Artifacts: ~28 per board, roughly half collected (public-domain NASA/ESA/Wikimedia plus research-screenshot crops,
+  all credited) and half ✦ generated in code, with generative pieces drawn from our real telemetry data.
