@@ -10,7 +10,7 @@ import {
   FOCUS, IconArrow, IconCheck, IconCross, IconWarn, MONO, SANS, SERIF, btnPrimary, btnSecondary, caption, chip, chipCheck, field, link, seg,
   segTrack, switchKnob, switchTrack, tab,
 } from "./kit";
-import { ToastProvider } from "./ui";
+import { ToastProvider, XScroll } from "./ui";
 import {
   AccordionDemo, BadgeDemo, BannerDemo, ButtonsDemo, CardModalDemo, CheckboxDemo, ChipsListDemo, ColorAloneDemo, EmphasisDemo, EmptyState,
   FocusDemo, HeroSpecimen, InputDemo, LinkDemo, MenusDemo, MotionDemo, RadioDemo, SegmentedDemo, SelectDemo, SkeletonDemo, SliderDemo, SwitchDemo,
@@ -31,16 +31,19 @@ export const metadata: Metadata = {
   description: "The refined-paper design system for our ESA telemetry findings: warm paper, Newsreader and IBM Plex, ink-blue plot lines keyed to prose, one vermilion action.",
 };
 
+/** Spec anchors: an explicit id, or one derived from the spec number ("4.10" → "s-4-10"). */
+const sid = (n: string, id?: string) => id ?? `s-${n.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+const sub = (list: [string, string, string?][]) => list.map(([n, t, id]) => ({ id: sid(n, id), n, t }));
 const INDEX: IndexItem[] = [
   { id: "color", n: "1", t: "Color roles", tier: 1 },
   { id: "type", n: "2", t: "Type roles", tier: 1 },
   { id: "space", n: "3", t: "Spacing & shape", tier: 1 },
-  { id: "components", n: "4", t: "Components", tier: 1 },
+  { id: "components", n: "4", t: "Components", tier: 1, subs: sub([["4.1–4.2", "Buttons"], ["4.3", "Link"], ["4.4", "Text input"], ["4.5", "Select"], ["4.6", "Checkbox"], ["4.7", "Radio"], ["4.8", "Switch"], ["4.9", "Tabs"], ["4.10", "Segmented"], ["4.11", "Slider"], ["4.12", "Chips, list, detail", "cmp-list"], ["4.15", "Card + modal", "s-4-15-4-16"], ["4.17", "Badge"]]) },
   { id: "states", n: "5", t: "Control states", tier: 1 },
   { id: "ui-states", n: "6", t: "UI states", tier: 1 },
-  { id: "parts", n: "P", t: "Parts of an interface", tier: 2 },
-  { id: "novel", n: "N", t: "Novel", tier: 2 },
-  { id: "telemetry", n: "T", t: "Telemetry", tier: 2 },
+  { id: "parts", n: "P", t: "Parts of an interface", tier: 2, subs: sub([["P1", "Hero", "p-hero"], ["P4", "Menus", "p-menus"], ["P9", "Toast", "p-toast"], ["P10", "Banner", "p-banner"], ["P13", "Tooltip", "p-tooltip"], ["P15", "Accordion", "p-accordion"], ["P12", "Skeleton", "p-skeleton"], ["P16", "Empty state", "p-empty"], ["P17", "Focus ring", "p-focus"], ["P18", "Colour alone", "p-color"], ["P19", "De-emphasis", "p-emphasis"]]) },
+  { id: "novel", n: "N", t: "Novel", tier: 2, subs: sub([["N1", "Keyed drag"], ["N2", "Twin scrubber", "nv-twin"], ["N3", "Scrollytelling", "nv-scrolly"], ["N4", "Step player", "nv-bic"], ["N5", "Small multiples"], ["N6", "Citations"], ["N7", "Sticky contents"], ["N8", "Findings grid"], ["N9", "Node diagram"], ["N10", "Giant stat"]]) },
+  { id: "telemetry", n: "T", t: "Telemetry", tier: 2, subs: sub([["T1", "Alert budget", "tm-alert"], ["T2", "Mission switcher"], ["T3", "Spec card"], ["T4", "PR curves", "tm-pr"], ["T5", "Timeline", "tm-timeline"], ["T6", "Subsystems vs groups"], ["T7", "Event card"], ["T8", "Results table", "tm-table"]]) },
 ];
 
 /* ------------------------------------------------------------------ layout helpers */
@@ -57,7 +60,7 @@ function Section({ id, n, title, lead, children }: { id: string; n: string; titl
 
 function Spec({ id, n, name, use, tokens, children, tag, borrowed, className = "" }: { id?: string; n: string; name: string; use: string; tokens: string; children: ReactNode; tag?: ReactNode; borrowed?: string; className?: string }) {
   return (
-    <article id={id} className={`min-w-0 border-t border-[var(--rule)] pt-4 ${className}`}>
+    <article id={sid(n, id)} className={`min-w-0 border-t border-[var(--rule)] pt-4 ${className}`}>
       <header className="mb-6">
         {tag}
         <h3 className={`${SANS} flex items-baseline gap-2.5 text-[15px] font-semibold text-[var(--ink)]`}>
@@ -170,8 +173,8 @@ export default function RefinedPaperSystem() {
             <div className="pt-20 pb-16 md:pt-32 md:pb-24">
               <p className={`${MONO} text-[12px] uppercase tracking-[0.08em] text-[var(--muted)]`}>Design system · refined paper</p>
               <h1 className={`${SERIF} mt-4 text-[clamp(2.75rem,7.6vw,7.5rem)] leading-[0.94] font-light tracking-[-0.03em] text-[var(--ink)]`}>
-                <span className="whitespace-nowrap">Lucid <span aria-hidden className="text-[var(--rule-strong)]">·</span></span>{" "}
-                <span className="whitespace-nowrap">Patient <span aria-hidden className="text-[var(--rule-strong)]">·</span></span>{" "}
+                <span className="whitespace-nowrap">Lucid <span aria-hidden className="text-[var(--graphite)]">·</span></span>{" "}
+                <span className="whitespace-nowrap">Patient <span aria-hidden className="text-[var(--graphite)]">·</span></span>{" "}
                 <span className="whitespace-nowrap">Inked</span>
                 <span className="sr-only"> · </span>
                 <i className="mt-1 block font-normal whitespace-nowrap">Design System</i>
@@ -230,11 +233,11 @@ export default function RefinedPaperSystem() {
                   })}
                 </ul>
                 <h3 className={`${SANS} mt-14 text-[15px] font-semibold`}>Every text pairing in use, measured</h3>
-                <div className="rpd-scroll mt-4 overflow-x-auto">
+                <XScroll label="Text pairings and their contrast ratios" className="mt-4">
                   <table className="w-full min-w-[520px] border-collapse">
                     <thead className="border-y border-[var(--ink)]">
                       <tr className={`${SANS} text-left text-[12.5px] text-[var(--muted)]`}>
-                        <th scope="col" className="py-2 font-medium">Pairing</th><th scope="col" className="py-2 font-medium">Specimen</th><th scope="col" className="py-2 text-right font-medium">Ratio</th><th scope="col" className="py-2 pl-4 font-medium">WCAG</th>
+                        <th scope="col" className="sticky left-0 z-[1] bg-[var(--paper)] py-2 pr-4 font-medium">Pairing</th><th scope="col" className="py-2 font-medium">Specimen</th><th scope="col" className="py-2 text-right font-medium">Ratio</th><th scope="col" className="py-2 pl-4 font-medium">WCAG</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -242,7 +245,7 @@ export default function RefinedPaperSystem() {
                         const r = contrast(fg, bg);
                         return (
                           <tr key={n} className="border-b border-[var(--rule)]">
-                            <th scope="row" className={`${SANS} py-2 pr-4 text-left text-[13px] font-medium`}>{n}</th>
+                            <th scope="row" className={`${SANS} sticky left-0 z-[1] bg-[var(--paper)] py-2 pr-4 text-left text-[13px] font-medium`}>{n}</th>
                             <td className="py-1.5 pr-4"><span className={`${f} inline-block rounded-[2px] px-2 py-1 text-[14px]`} style={{ color: fg, background: bg }}>PR-AUC 0.384</span></td>
                             <td className={`${MONO} py-2 text-right text-[13px]`}>{r.toFixed(2)}:1</td>
                             <td className={`${SANS} py-2 pl-4 text-[12.5px]`}><span className="inline-flex items-center gap-1.5">{r >= 4.5 ? <IconCheck size={11} className="text-[var(--sage)]" /> : <IconWarn size={11} />}{grade(r)}</span></td>
@@ -251,7 +254,7 @@ export default function RefinedPaperSystem() {
                       })}
                     </tbody>
                   </table>
-                </div>
+                </XScroll>
               </Section>
 
               {/* ============================================================ 2 type */}
@@ -381,7 +384,7 @@ export default function RefinedPaperSystem() {
 
               {/* ============================================================ 5 control states */}
               <Section id="states" n="05" title="Control states" lead={<>Rest, hover, focus, pressed, selected and disabled, side by side. Each specimen is the live component’s own class string with the state forced, so this table cannot drift from the controls above.</>}>
-                <div className="rpd-scroll overflow-x-auto pb-2">
+                <XScroll label="Control state matrix">
                   <table className="w-full min-w-[820px] border-collapse" aria-describedby="states-note">
                     <thead className="border-y border-[var(--ink)]">
                       <tr>
@@ -407,7 +410,7 @@ export default function RefinedPaperSystem() {
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </XScroll>
                 <p id="states-note" className={`${caption} mt-3 max-w-[70ch]`}>Hover darkens or fills with parchment; focus is always a 2px ink ring at 2px offset; pressed sinks 1px and fills with rule; selected is parchment with an ink edge (chips add a tick); disabled turns its edge dashed. Buttons have no selected state.</p>
               </Section>
 

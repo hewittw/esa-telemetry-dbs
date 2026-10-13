@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FOCUS, IconMenu, MONO, SANS } from "./kit";
 
-export type IndexItem = { id: string; n: string; t: string; tier: 1 | 2 };
+export type IndexItem = { id: string; n: string; t: string; tier: 1 | 2; subs?: { id: string; n: string; t: string }[] };
 
 function useSpy(ids: string[]) {
   const [cur, setCur] = useState(ids[0]);
@@ -42,7 +42,8 @@ export function SectionIndex({ items }: { items: IndexItem[] }) {
     return () => { document.removeEventListener("pointerdown", down); document.removeEventListener("keydown", key); };
   }, [open]);
   const curItem = items.find((i) => i.id === cur)!;
-  const List = ({ onPick }: { onPick?: () => void }) => (
+  // In the phone menu the current section also lists its components, so a 40k-px page is two taps deep at most.
+  const List = ({ onPick, subs }: { onPick?: () => void; subs?: boolean }) => (
     <ol className="space-y-0.5">
       {items.map((it, k) => (
         <li key={it.id} className={it.tier === 2 && items[k - 1]?.tier === 1 ? "mt-3 border-t border-[var(--rule)] pt-3" : ""}>
@@ -50,6 +51,18 @@ export function SectionIndex({ items }: { items: IndexItem[] }) {
             <span className={`${MONO} w-5 shrink-0 text-[11px] font-normal text-[var(--muted)]`}>{it.n}</span>
             {it.t}
           </a>
+          {subs && cur === it.id && it.subs && (
+            <ol aria-label={`In ${it.t}`} className="mt-1 mb-2 ml-[2.1rem] grid grid-cols-2 gap-x-3 border-l border-[var(--rule)] pl-2">
+              {it.subs.map((s) => (
+                <li key={s.id}>
+                  <a href={`#${s.id}`} onClick={onPick} className={`${SANS} ${FOCUS} flex min-h-9 items-center gap-1.5 rounded-[2px] px-1.5 text-[12.5px] text-[var(--ink-soft)] transition-colors duration-200 hover:bg-[var(--parchment)] hover:text-[var(--ink)] active:bg-[var(--rule)]`}>
+                    <span className={`${MONO} text-[10.5px] text-[var(--muted)]`}>{s.n}</span>
+                    <span className="min-w-0 truncate">{s.t}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          )}
         </li>
       ))}
     </ol>
@@ -69,7 +82,7 @@ export function SectionIndex({ items }: { items: IndexItem[] }) {
         </div>
         {open && (
           <nav id="rpd-index-menu" aria-label="Sections" className="rpd-rise absolute inset-x-5 top-full mt-1 max-h-[70dvh] overflow-y-auto rounded-[3px] border border-[var(--ink)] bg-[var(--mount)] py-3 pr-3 shadow-[var(--lift)] md:inset-x-10 md:max-w-[22rem]">
-            <List onPick={() => setOpen(false)} />
+            <List subs onPick={() => setOpen(false)} />
           </nav>
         )}
       </div>

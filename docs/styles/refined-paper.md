@@ -69,3 +69,11 @@ Built from this board's tokens, unchanged; files in `src/app/design-systems/refi
 - Switch is a 40×22 paper-cut rectangle (3px), not a pill; round only for transport, thumbs, radios.
 - Every state in the section-5 matrix renders from the live control's own class string with `data-s` forcing the state.
 - Measured: lowest text pairing in use is Graphite on Paper 4.79:1; Pencil on Parchment 4.83:1; body 14.73:1.
+- Sideways scrollers (the pairing table, the state matrix): only when the content overflows, a mono hint line
+  ("Swipe sideways for more →", then "← Swipe back · End") above, and a 3px ink hairline under it that tracks the
+  scroll position. The first column stays pinned. The region is focusable, so arrow keys scroll it too.
+- Phone/tablet index: the sticky ≡ Contents menu also lists the current section's components (4.1…, N1…, T1…),
+  so any component on a ~40k-px phone page is two taps away.
+- Title ornaments: the "·" between the three mood words are Graphite (4.79:1), not Rule-strong (1.94:1).
+- Data honesty: an AP taken from an earlier saved run is shown as "saved AP" or with an asterisk, and the
+  Table 1 number sits beside it.

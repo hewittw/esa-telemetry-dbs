@@ -190,7 +190,7 @@ export function PrViewer({ sets }: { sets: PrSet[] }) {
             <button key={c.key} type="button" aria-pressed={!off[c.key]} onClick={() => setOff((o) => ({ ...o, [c.key]: !o[c.key] }))} onMouseEnter={() => setHl(c.key)} onMouseLeave={() => setHl(null)} onFocus={() => setHl(c.key)} onBlur={() => setHl(null)} className={chip}>
               <span aria-hidden className="inline-block h-[2px] w-4" style={{ background: off[c.key] ? "var(--rule-strong)" : INKS[i] }} />
               {c.label}
-              <span className={`${MONO} text-[11px] text-[var(--muted)]`}>{c.ap.toFixed(3)}</span>
+              <span className={`${MONO} text-[11px] text-[var(--muted)]`}>{c.ap.toFixed(3)}{!c.exact && <><span aria-hidden>*</span><span className="sr-only"> (earlier saved run)</span></>}</span>
             </button>
           ))}
         </div>
@@ -209,7 +209,7 @@ export function PrViewer({ sets }: { sets: PrSet[] }) {
           <text x={x(1)} y={y(0)} dy="2.8em" textAnchor="end" className={MONO} fill="var(--muted)">recall</text>
         </Svg>
         {shown.length === 0 && <p className={`${SANS} -mt-[45%] mb-[38%] text-center text-[14px] text-[var(--muted)]`}>Every curve is off. Turn one back on above.</p>}
-        <figcaption className={`${caption} mt-2`}>Curves from saved test-set scores. {set.curves.filter((c) => !c.exact).map((c) => `${c.label} is an earlier run (Table 1 ${c.reportAp?.toFixed(3)})`).join("; ")}.</figcaption>
+        <figcaption className={`${caption} mt-2`}>Curves and APs from saved test-set scores. * Earlier saved run, not the Table 1 run: {set.curves.filter((c) => !c.exact).map((c) => `${c.label} (${c.scoring}; Table 1 ${c.reportAp?.toFixed(3)})`).join(", ")}.</figcaption>
       </figure>
     </div>
   );
@@ -306,7 +306,7 @@ export function SubVsGroup({ gmm }: { gmm: Gmm }) {
           );
         })}
       </ol>
-      <p className={`${caption} mt-3`}>Bars: each component’s Mission 1 training timesteps, prussian = its dominant {view === "sub" ? "subsystem" : "group"}. Fewer categories make bars look purer, so read the ARI, which corrects for chance: components agree with groups about twice as well ({gmm.ariGrp.toFixed(3)} against {gmm.ariSub.toFixed(3)}).</p>
+      <p className={`${caption} mt-3`}>Bars: each component’s Mission 1 training timesteps, prussian = its dominant {view === "sub" ? "subsystem" : "group"}. Fewer categories make bars look purer, so read the ARI, which corrects for chance: components agree with groups about twice as well ({gmm.ariGrp.toFixed(3)} against {gmm.ariSub.toFixed(3)}). Group 2 is never a sampled timestep’s dominant group, so 17 of the 18 groups appear.</p>
     </div>
   );
 }
@@ -331,7 +331,7 @@ export function EventCard({ cats }: { cats: Catalogue[] }) {
             panel: (
               <article className="rounded-[3px] border border-[var(--rule)] bg-[var(--mount)] p-5">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
-                  <h4 className={`${SERIF} text-[24px] leading-tight font-[450]`}>{k.n} {k.name.toLowerCase()}{k.n === 1 ? "" : "s"}</h4>
+                  <h4 className={`${SERIF} text-[24px] leading-tight font-[450]`}>{k.n} {k.n === 1 ? k.name.toLowerCase() : k.name === "Anomaly" ? "anomalies" : `${k.name.toLowerCase()}s`}</h4>
                   <span className={`${SANS} inline-flex items-center gap-1.5 rounded-[2px] border px-2 py-0.5 text-[12.5px] font-medium`} style={{ color: st.color, borderColor: st.color }}><st.Icon size={11} />{k.name}</span>
                 </div>
                 <p className={`${SERIF} mt-2 text-[16px] leading-[1.55]`}>{KIND[k.name].what}</p>

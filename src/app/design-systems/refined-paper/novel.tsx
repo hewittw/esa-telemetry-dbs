@@ -112,7 +112,7 @@ export function TwinScrubber({ twin }: { twin: Twin }) {
     const d = pts.map((p, j) => `${j ? "L" : "M"}${x(j).toFixed(1)},${y(p[1]).toFixed(1)}`).join("");
     return (
       <figure className="min-w-0">
-        <figcaption className="flex items-baseline justify-between gap-2 border-b border-[var(--rule)] pb-1.5">
+        <figcaption className="flex flex-col gap-0.5 border-b border-[var(--rule)] pb-1.5 min-[560px]:flex-row min-[560px]:items-baseline min-[560px]:justify-between min-[560px]:gap-2">
           <span className={`${SERIF} text-[17px]`} style={{ color }}>{name}</span>
           <span className={`${MONO} text-[12px] text-[var(--ink)]`}>{pts[i][1] >= 1e4 ? pts[i][1].toExponential(1) : pts[i][1].toFixed(1)} <span className="text-[var(--muted)]">{unit}</span></span>
         </figcaption>
@@ -307,14 +307,14 @@ export function LinkedMultiples({ set }: { set: PrSet }) {
   };
   return (
     <div>
-      <div className="grid grid-cols-1 gap-x-6 gap-y-7 min-[460px]:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:gap-x-6 sm:gap-y-7 xl:grid-cols-4">
         {set.curves.map((c, k) => {
           const p = at(c.points, r);
           return (
             <figure key={c.key} className="min-w-0">
-              <figcaption className="flex items-baseline justify-between gap-2 border-b border-[var(--rule)] pb-1.5">
+              <figcaption className="flex flex-col gap-0.5 border-b border-[var(--rule)] pb-1.5 min-[560px]:flex-row min-[560px]:items-baseline min-[560px]:justify-between min-[560px]:gap-2">
                 <span className={`${SERIF} min-w-0 truncate text-[17px]`}>{c.label}</span>
-                <span className={`${MONO} shrink-0 text-[12px] text-[var(--muted)]`}>AP {c.ap.toFixed(3)}</span>
+                <span className={`${MONO} shrink-0 text-[12px] text-[var(--muted)]`}>{c.exact ? "AP" : "saved AP"} {c.ap.toFixed(3)}</span>
               </figcaption>
               <Svg vw={W} vh={H} className="mt-2 cursor-crosshair touch-pan-y" onPointerMove={move} onPointerDown={move} role="img" aria-label={`${c.label} precision–recall, Mission ${set.mission}. At recall ${r.toFixed(2)}, precision ${p.toFixed(2)}.`}>
                 {[0.25, 0.5, 0.75].map((g) => <line key={g} x1={x(0)} x2={x(1)} y1={y(g)} y2={y(g)} stroke="var(--rule)" strokeWidth="0.5" />)}
@@ -470,7 +470,7 @@ export function FindingsGrid() {
       {FINDINGS.map((f) => (
         <li key={f.t}>
           <a href={f.href} className={`${FOCUS} group flex h-full flex-col rounded-[3px] border border-[var(--rule)] bg-[var(--mount)] transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-[var(--ink)] active:translate-y-0`}>
-            <span className="block border-b border-[var(--rule)] px-5 pt-4 pb-3"><MiniNodes labels={f.nodes} hot={f.hot} /></span>
+            <span className="block border-b border-[var(--rule)] px-4 pt-3 pb-2 sm:px-5 sm:pt-4 sm:pb-3"><span className="mx-auto block max-w-[250px]"><MiniNodes labels={f.nodes} hot={f.hot} /></span></span>
             <span className="flex flex-1 flex-col px-5 py-4">
               <span className={`${SANS} text-[14px] font-semibold text-[var(--ink)]`}>{f.t}</span>
               <span className={`${SANS} mt-1 text-[13px] leading-[1.45] text-[var(--muted)]`}>{f.d}</span>

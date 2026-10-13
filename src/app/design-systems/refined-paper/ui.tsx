@@ -191,11 +191,25 @@ export function MenuButton({ label, icon, panel, buttonClass = btnIcon, children
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const id = useId();
+  const btn = useRef<HTMLButtonElement>(null);
   const close = useCallback(() => setOpen(false), []);
   useDismiss(open, close, box);
+  const items = () => Array.from(box.current?.querySelectorAll<HTMLElement>(`[id="${id}"] a, [id="${id}"] button`) ?? []);
+  // Opening by keyboard puts focus on the first link; ↑/↓ move, Home/End jump, Esc closes and returns focus.
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && open) { e.stopPropagation(); setOpen(false); btn.current?.focus(); return; }
+    if (e.key === "ArrowDown" && !open && e.target === btn.current) { e.preventDefault(); setOpen(true); requestAnimationFrame(() => items()[0]?.focus()); return; }
+    if (!open || !["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) return;
+    const els = items(); if (!els.length) return;
+    e.preventDefault();
+    const i = els.indexOf(document.activeElement as HTMLElement);
+    const n = e.key === "Home" ? 0 : e.key === "End" ? els.length - 1 : e.key === "ArrowDown" ? (i + 1) % els.length : (i - 1 + els.length) % els.length;
+    els[n].focus();
+  };
   return (
-    <div ref={box} className="relative">
-      <button type="button" aria-label={children ? undefined : label} aria-expanded={open} aria-controls={id} onClick={() => setOpen((o) => !o)} className={buttonClass}>
+    <div ref={box} className="relative" onKeyDown={onKey}>
+      <button ref={btn} type="button" aria-label={children ? undefined : label} aria-expanded={open} aria-controls={id}
+        onClick={(e) => { const kb = e.detail === 0; setOpen((o) => !o); if (kb && !open) requestAnimationFrame(() => items()[0]?.focus()); }} className={buttonClass}>
         {icon}
         {children}
       </button>
@@ -388,4 +402,39 @@ export function CountBadge({ n, label }: { n: number; label: string }) {
 
 export function Dot({ color, ring }: { color: string; ring?: boolean }) {
   return <span aria-hidden className={`inline-block size-2 shrink-0 rounded-full ${ring ? "ring-2 ring-[var(--paper)]" : ""}`} style={{ background: color }} />;
+}
+
+/* ================================================================== sideways scroller with a visible affordance */
+/** A contained horizontal scroller. When its content overflows it shows a hint line ("Swipe sideways")
+ *  and an ink hairline that tracks the scroll position, so a cropped table never looks broken. */
+export function XScroll({ label, children, className = "" }: { label: string; children: ReactNode; className?: string }) {
+  const box = useRef<HTMLDivElement>(null);
+  const [m, setM] = useState({ over: false, w: 1, x: 0 });
+  useEffect(() => {
+    const el = box.current; if (!el) return;
+    const read = () => setM({ over: el.scrollWidth > el.clientWidth + 1, w: el.clientWidth / el.scrollWidth, x: el.scrollLeft / el.scrollWidth });
+    read();
+    const ro = new ResizeObserver(read); ro.observe(el);
+    el.addEventListener("scroll", read, { passive: true });
+    return () => { ro.disconnect(); el.removeEventListener("scroll", read); };
+  }, []);
+  const atEnd = m.x + m.w > 0.995;
+  return (
+    <div className={className}>
+      {m.over && (
+        <p className={`${MONO} mb-2 flex items-center justify-between text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]`} aria-hidden>
+          <span>{atEnd ? "← Swipe back" : "Swipe sideways for more"}</span>
+          <span className="text-[var(--ink)]">{atEnd ? "End" : "→"}</span>
+        </p>
+      )}
+      <div ref={box} role="region" aria-label={label} tabIndex={m.over ? 0 : undefined} className={`rpd-scroll ${FOCUS} overflow-x-auto overscroll-x-contain rounded-[2px]`}>
+        {children}
+      </div>
+      {m.over && (
+        <div className="relative mt-2 h-px bg-[var(--rule)]" aria-hidden>
+          <span className="absolute -top-px h-[3px] rounded-[1px] bg-[var(--ink)]" style={{ width: `${m.w * 100}%`, left: `${m.x * 100}%` }} />
+        </div>
+      )}
+    </div>
+  );
 }
