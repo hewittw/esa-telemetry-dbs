@@ -46,7 +46,9 @@ for (const [name, w, h, touch] of SIZES) {
     const offenders = [...document.querySelectorAll("body *")].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.right > vw + 1 && getComputedStyle(e).position !== "fixed"; })
       .slice(0, 5).map((e) => e.tagName.toLowerCase() + (e.className && typeof e.className === "string" ? "." + e.className.split(" ")[0] : ""));
     const broken = [...document.images].filter((i) => !(i.complete && i.naturalWidth > 0)).length;
-    const tiny = [...document.querySelectorAll("body *")].filter((e) => [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) && parseFloat(getComputedStyle(e).fontSize) < 10 && e.getBoundingClientRect().width > 0).length;
+    // rendered size: SVG text is scaled by the SVG's screen transform, so multiply by it
+    const rendered = (e) => { let f = parseFloat(getComputedStyle(e).fontSize); if (e instanceof SVGGraphicsElement && e.getScreenCTM) { const m = e.getScreenCTM(); if (m) f *= Math.hypot(m.a, m.b); } return f; };
+    const tiny = [...document.querySelectorAll("body *")].filter((e) => [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) && e.getBoundingClientRect().width > 0 && rendered(e) < 10).length;
     return { overflow, offenders, broken, tiny };
   });
   const file = `${prefix}-${name}.jpeg`;
