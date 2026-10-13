@@ -98,7 +98,6 @@ function Detail({ r, rows }: { r: MethodRow; rows: MethodRow[] }) {
         <dt className="text-[var(--muted)]">Scoring</dt><dd>{r.scoring}</dd>
         <dt className="text-[var(--muted)]">Trend</dt><dd><Trend row={r} long /></dd>
         <dt className="text-[var(--muted)]">Provenance</dt><dd className="inline-flex items-start gap-1.5 font-medium" style={{ color: v.color }}><v.Icon size={11} className="mt-[3px] shrink-0" />{v.word}</dd>
-        <dt className="text-[var(--muted)]">Implemented by</dt><dd>{FAMILY[r.family].by}</dd>
         <dt className="text-[var(--muted)]">In the paper</dt><dd className="-ml-1 flex flex-wrap gap-x-1"><PageRef p={5}>Table 1</PageRef><PageRef p={pg}>{sec}</PageRef></dd>
       </dl>
     </div>

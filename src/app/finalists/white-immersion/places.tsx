@@ -193,11 +193,11 @@ function Background({ d, seen }: P) {
 /* 02 · what we did: five progressively richer methods                      */
 /* ====================================================================== */
 const LADDER = [
-  { n: "K-Means", a: "One set of global clusters", s: "Centroid distance", by: "Rhea" },
-  { n: "PCA", a: "A linear subspace", s: "Reconstruction error", by: "Rhea" },
-  { n: "Nystroem-KPCA", a: "A non-linear kernel boundary", s: "Centroid dist. · recon.", by: "Rhea" },
-  { n: "GMM · K by BIC", a: "K local modes, each its own normal", s: "Neg. log-likelihood", by: "Hewitt" },
-  { n: "VAEs · Capacity, Hierarchical, Transformer", a: "A learned latent space", s: "ELBO · recon. · GMM-OOD", by: "Hewitt" },
+  { n: "K-Means", a: "One set of global clusters", s: "Centroid distance" },
+  { n: "PCA", a: "A linear subspace", s: "Reconstruction error" },
+  { n: "Nystroem-KPCA", a: "A non-linear kernel boundary", s: "Centroid dist. · recon." },
+  { n: "GMM · K by BIC", a: "K local modes, each its own normal", s: "Neg. log-likelihood" },
+  { n: "VAEs · Capacity, Hierarchical, Transformer", a: "A learned latent space", s: "ELBO · recon. · GMM-OOD" },
 ];
 function Methods({ d }: P) {
   return (
@@ -683,7 +683,7 @@ function About() {
         <div className="border-t border-[var(--ink)] pt-2"><dt className="wiv-label">The paper</dt>
           <dd>Rhea Madhogarhia &amp; Hewitt Watkins. <i>Uncovering Latent Structure in ESA Satellite Telemetry.</i> TTIC 31220, Unsupervised Learning and Data Analysis, Spring 2026.</dd></div>
         <div className="border-t border-[var(--rime)] pt-2"><dt className="wiv-label">Who did what</dt>
-          <dd>Rhea implemented the K-Means, PCA and Nystroem-KPCA baselines; Hewitt implemented the GMM and the three VAEs.</dd></div>
+          <dd></dd></div>
         <div className="border-t border-[var(--rime)] pt-2"><dt className="wiv-label">Data</dt>
           <dd>ESA Anomaly Dataset (Kotowski et al., 2024), Missions 1 and 2. Numbers are Table 1 as printed.</dd></div>
       </dl>

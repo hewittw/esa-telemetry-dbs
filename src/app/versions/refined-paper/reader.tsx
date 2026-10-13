@@ -15,7 +15,7 @@ const RATIO = 1600 / 2071;
 /** What each page holds, and where on the site it is argued. */
 export const PAGE_NOTES: Record<number, { t: string; back?: { href: string; label: string } }[]> = {
   1: [{ t: "Title, authors and the abstract: the whole finding in one paragraph.", back: { href: "#top", label: "The finding" } }],
-  2: [{ t: "Division of labour: Rhea built the baselines, Hewitt the GMM and VAEs.", back: { href: "#credits", label: "Credits" } }, { t: "§2 Dataset: 76 and 100 channels, 4 and 5 subsystems, 18 and 29 groups.", back: { href: "#structure", label: "§2 Structure" } }],
+  2: [{ t: "Authors and §1 overview.", back: { href: "#credits", label: "Credits" } }, { t: "§2 Dataset: 76 and 100 channels, 4 and 5 subsystems, 18 and 29 groups.", back: { href: "#structure", label: "§2 Structure" } }],
   3: [{ t: "Figure 1a: the K-Means precision–recall curve at the 0.322 plateau.", back: { href: "#evidence", label: "§4 Evidence" } }, { t: "§4 GMM: full covariance on PCA-30, K by BIC.", back: { href: "#bic", label: "BIC step player" } }],
   4: [{ t: "§5 The three VAEs: capacity, hierarchical and transformer.", back: { href: "#methods", label: "§3 Methods" } }],
   5: [{ t: "Table 1: every method, both missions.", back: { href: "#methods", label: "§3 Methods" } }, { t: "§6 Structure at the group level, not the subsystem level.", back: { href: "#structure", label: "§2 Structure" } }],

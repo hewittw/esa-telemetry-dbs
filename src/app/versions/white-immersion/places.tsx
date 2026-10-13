@@ -771,7 +771,7 @@ function Credits() {
         <div className="border-t border-[var(--ink)] pt-2"><dt className="wiv-label">The paper</dt>
           <dd><i>Uncovering Latent Structure in ESA Satellite Telemetry.</i> Rhea Madhogarhia &amp; Hewitt Watkins. TTIC 31220 Unsupervised Learning and Data Analysis, The University of Chicago / TTIC, Spring 2026.</dd></div>
         <div className="border-t border-[var(--rime)] pt-2"><dt className="wiv-label">Who did what</dt>
-          <dd>Rhea implemented the K-Means, PCA and Nystroem-KPCA baselines. Hewitt implemented the GMM and the three VAEs. Both wrote the paper.</dd></div>
+          <dd></dd></div>
         <div className="border-t border-[var(--rime)] pt-2"><dt className="wiv-label">Data</dt>
           <dd>ESA Anomaly Dataset (Kotowski et al., 2024; Andrzejewski et al., 2024), Missions 1 and 2. Numbers are Table 1 as printed; recomputed curves are labelled as such.</dd></div>
       </dl>

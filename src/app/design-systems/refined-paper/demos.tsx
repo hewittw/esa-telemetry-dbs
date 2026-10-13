@@ -11,10 +11,10 @@ import {
 import { Accordion, Check, CountBadge, Dialog, Dot, MenuButton, MoreMenu, RadioGroup, Segmented, Switch, Tabs, Tooltip, useToast } from "./ui";
 import { Svg } from "./fig";
 
-export const FAMILY: Record<MethodRow["family"], { name: string; by: string; what: string }> = {
-  baseline: { name: "Baseline", by: "Rhea Madhogarhia", what: "Global clustering and linear or kernel compression, fit on an 80/20 temporal split." },
-  parametric: { name: "Parametric", by: "Hewitt Watkins", what: "Full-covariance Gaussian mixture on PCA-30, K chosen by BIC on an 800K-row sample." },
-  generative: { name: "Generative", by: "Hewitt Watkins", what: "VAEs on 32-step windows of pure-nominal telemetry, scored by MSE, ELBO or GMM-OOD." },
+export const FAMILY: Record<MethodRow["family"], { name: string; what: string }> = {
+  baseline: { name: "Baseline", what: "Global clustering and linear or kernel compression, fit on an 80/20 temporal split." },
+  parametric: { name: "Parametric", what: "Full-covariance Gaussian mixture on PCA-30, K chosen by BIC on an 800K-row sample." },
+  generative: { name: "Generative", what: "VAEs on 32-step windows of pure-nominal telemetry, scored by MSE, ELBO or GMM-OOD." },
 };
 const POS = { 1: 0.111, 2: 0.0468 } as const;
 
@@ -76,7 +76,6 @@ export function MethodDetail({ row, compact }: { row: MethodRow; compact?: boole
       <dl className={`${SANS} mt-4 grid grid-cols-[7rem_1fr] gap-y-1.5 text-[13px]`}>
         <dt className="text-[var(--muted)]">Scoring</dt><dd className="text-[var(--ink)]">{row.scoring}</dd>
         <dt className="text-[var(--muted)]">Trend</dt><dd><Trend row={row} /></dd>
-        <dt className="text-[var(--muted)]">Implemented by</dt><dd className="text-[var(--ink)]">{f.by}</dd>
       </dl>
     </div>
   );
@@ -338,7 +337,7 @@ export function MethodCard({ row, onOpen }: { row: MethodRow; onOpen?: () => voi
         <p className={`${caption} mt-2`}>ROC-AUC <span className={`${MONO} text-[var(--ink)]`}>{row.rocAuc.toFixed(3)}</span> · {row.scoring}</p>
       </div>
       <div className="mt-auto flex items-center justify-between gap-3 border-t border-[var(--rule)] px-5 py-3">
-        <span className={`${SANS} text-[12px] text-[var(--muted)]`}>{FAMILY[row.family].by}</span>
+        <span />
         {onOpen && <button type="button" onClick={onOpen} className={`${btnSecondary} min-h-8 px-3 text-[13px]`}>Details</button>}
       </div>
     </article>
@@ -508,7 +507,7 @@ export function TooltipDemo() {
         </Tooltip>{" "}
         is 0.384 for the GMM.
       </p>
-      <Tooltip tip="Rhea Madhogarhia built the baselines; Hewitt Watkins the GMM and VAEs." side="bottom">
+      <Tooltip tip="Rhea Madhogarhia & Hewitt Watkins · TTIC 31220, Spring 2026." side="bottom">
         {(p) => <button type="button" {...p} aria-label="About the authors" className={`${btnIcon} border border-[var(--rule)]`}><IconInfo size={15} /></button>}
       </Tooltip>
     </div>

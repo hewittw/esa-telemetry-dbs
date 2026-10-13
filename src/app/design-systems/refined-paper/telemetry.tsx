@@ -163,7 +163,7 @@ export function SpecCard({ rows }: { rows: MethodRow[] }) {
         <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--rule)] px-5 py-3">
           <Trend row={r} />
           <span className={`${SANS} inline-flex items-center gap-1.5 text-[12.5px] font-medium`} style={{ color: st.color }}><st.Icon size={11} />{v[1]}</span>
-          <span className={`${SANS} text-[12px] text-[var(--muted)]`}>{FAMILY[r.family].by}</span>
+          <span />
         </footer>
       </article>
     </div>

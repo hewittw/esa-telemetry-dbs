@@ -589,7 +589,7 @@ export default function RefinedPaperSystem() {
             <div className="grid gap-6 md:grid-cols-[1fr_2fr]">
               <p className={`${SERIF} text-[22px] leading-tight`}>Lucid · Patient · Inked</p>
               <div className={`${SANS} space-y-2 text-[13px] leading-[1.55] text-[var(--muted)]`}>
-                <p>Data and findings: Rhea Madhogarhia &amp; Hewitt Watkins, “Uncovering Latent Structure in ESA Satellite Telemetry”, TTIC 31220, 2026. Rhea built the K-Means, PCA and KPCA baselines; Hewitt the GMM and VAEs.</p>
+                <p>Data and findings: Rhea Madhogarhia &amp; Hewitt Watkins, “Uncovering Latent Structure in ESA Satellite Telemetry”, TTIC 31220, 2026.</p>
                 <p>Type: Newsreader (Production Type), IBM Plex Sans and Mono (IBM), SIL Open Font License. After Ciechanowski, R2D3, Distill, transformer-circuits and Apple.</p>
                 <p className="flex gap-5 pt-1"><Link href="/" className={link}>← Hub</Link><Link href="/mood-boards/refined-paper" className={link}>Mood board →</Link></p>
               </div>

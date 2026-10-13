@@ -378,7 +378,6 @@ const ABOUT: Record<string, string> = {
   HierarchicalVAE: "A 16-D global code for the operating mode plus a 16-D local code for how the window deviates from it.",
   TransformerVAE: "Three layers of 4-head self-attention over 32-step windows (≈ 16 min); the [CLS] token maps to the latent.",
 };
-const BY = (r: Row) => (r.family === "baseline" ? "Rhea Madhogarhia" : "Hewitt Watkins");
 const FAM: Record<string, string> = { baseline: "Baseline", parametric: "Parametric", generative: "Generative" };
 
 function topSet(rows: Row[]) {
@@ -640,8 +639,6 @@ export function MethodModal({ row, rows, onClose, onSwitch }: { row: Row | null;
           <dl className={`${MONO} grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 border-t border-(--is-line) pt-3 text-[11px] uppercase tracking-[0.08em]`}>
             <dt className="text-(--is-steel)">Scoring</dt>
             <dd className="text-(--is-frost)">{row.scoring}</dd>
-            <dt className="text-(--is-steel)">Implemented by</dt>
-            <dd className="text-(--is-frost)">{BY(row)}</dd>
             <dt className="text-(--is-steel)">Table 1 row</dt>
             <dd className="text-(--is-frost)">{row.label}</dd>
           </dl>

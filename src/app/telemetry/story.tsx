@@ -93,7 +93,6 @@ export function MethodLine({ rows, m, onOpen }: { rows: Row[]; m: M; onOpen: (r:
   const s = LINE[i];
   const here = best(rows, s.methods, m);
   const card = here ?? best(rows, s.methods, 1);
-  const by = i < 3 ? "Rhea Madhogarhia" : "Hewitt Watkins";
   return (
     <Panel id="method-line" code="M.01" title="Five families, simpler → richer" page={s.page} pageLabel={i < 3 ? "Baselines" : i === 3 ? "GMM" : "VAEs"} className="lg:col-span-8" caption="Each method's failure mode motivates the next.">
       <div role="tablist" aria-label="Method families, simpler to richer" className="relative grid md:grid-cols-5">
@@ -147,7 +146,6 @@ export function MethodLine({ rows, m, onOpen }: { rows: Row[]; m: M; onOpen: (r:
             O{i + 1} · {s.n} · {s.g}
           </p>
           <p className="mt-2 max-w-[52ch] text-[16px] leading-[1.45] text-(--is-frost)">{s.d}</p>
-          <p className={`${LABEL} mt-2 text-(--is-steel)`}>Implemented by {by}</p>
         </div>
         <div className="md:col-span-3 md:justify-self-end">
           {card ? (

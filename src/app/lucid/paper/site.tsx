@@ -385,11 +385,8 @@ function PaperSection() {
             </a>
           </div>
           <dl id="credits" tabIndex={-1} className={`${SANS} mt-10 grid gap-4 border-t border-[var(--rule)] pt-4 text-[13.5px] leading-[1.5] outline-none`}>
-            <div><dt className="text-[var(--muted)]">Rhea Madhogarhia</dt><dd>K-Means, PCA and Nyström-KPCA baselines; the abstract and §1–3, 6, 7.</dd></div>
-            <div><dt className="text-[var(--muted)]">Hewitt Watkins</dt><dd>The GMM and the three VAEs; §2, 4–7.</dd></div>
             <div><dt className="text-[var(--muted)]">Data</dt><dd>ESA Anomaly Dataset, Missions 1 and 2 (Kotowski et al., 2024; Andrzejewski et al., 2024).</dd></div>
           </dl>
-          <p className="mt-3"><PageRef p={1}>Division of labour</PageRef></p>
         </div>
         <ol className="grid grid-cols-4 gap-x-2.5 gap-y-4 sm:grid-cols-6 sm:gap-x-3 sm:gap-y-5 xl:col-span-8" aria-label="Pages of the paper">
           {Array.from({ length: PAGES }, (_, k) => k + 1).map((p) => (
@@ -531,7 +528,7 @@ function Footer() {
         <div>
           <p className={`${SERIF} text-[22px] leading-tight`}>Designed &amp; built by Hewitt Watkins.</p>
           <p className={`${SANS} mt-2 max-w-[62ch] text-[13px] leading-[1.55] text-[var(--muted)]`}>
-            This site is Hewitt’s project. The paper is joint work: Rhea Madhogarhia &amp; Hewitt Watkins, TTIC 31220, Spring 2026. Rhea built the baselines; Hewitt built the GMM and the VAEs. Figures are redrawn from the saved runs.
+            This site is Hewitt’s project. The paper is joint work: Rhea Madhogarhia &amp; Hewitt Watkins, TTIC 31220, Spring 2026. Figures are redrawn from the saved runs.
           </p>
         </div>
         <Link href="/" className={`${SANS} ${link} justify-self-start text-[13px] font-medium whitespace-nowrap`}>← Hub</Link>

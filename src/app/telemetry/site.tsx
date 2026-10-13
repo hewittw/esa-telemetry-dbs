@@ -436,8 +436,7 @@ function Footer() {
           <p className="mt-3 text-[16px] leading-[1.45] text-(--is-frost)">
             Rhea Madhogarhia &amp; Hewitt Watkins. <span className="italic">Uncovering Latent Structure in ESA Satellite Telemetry.</span> TTIC 31220, Unsupervised Learning and Data Analysis, Spring 2026.
           </p>
-          <p className="mt-3 text-[16px] leading-[1.45] text-(--is-steel)">
-            Rhea implemented the K-Means, PCA and Nystroem-KPCA baselines; Hewitt implemented the GMM and the three VAEs. Data: the ESA Anomaly Dataset (Kotowski et al., 2024).
+          <p className="mt-3 text-[16px] leading-[1.45] text-(--is-steel)"> Data: the ESA Anomaly Dataset (Kotowski et al., 2024).
           </p>
         </div>
       </div>

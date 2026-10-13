@@ -419,7 +419,7 @@ export function Ladder() {
             <h3 className={`${SERIF} mt-0.5 text-[22px] leading-[1.15] font-[450]`}>{s.n}</h3>
             <p className={`${SANS} mt-1.5 text-[13.5px] leading-[1.45] text-[var(--ink-soft)]`}>{s.d}</p>
             <p className="mt-auto flex items-center justify-between gap-2 pt-3">
-              <span className={`${SANS} text-[12px] text-[var(--muted)]`}>{s.by ? "Hewitt Watkins" : "Rhea Madhogarhia"}</span>
+              <span />
               <PageRef p={s.p}>{s.sec}</PageRef>
             </p>
           </li>

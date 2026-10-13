@@ -109,7 +109,6 @@ function Detail({ r, rows, prov }: { r: MethodRow; rows: MethodRow[]; prov: Prov
         <dt className="text-[var(--muted)]">Scoring</dt><dd>{r.scoring}</dd>
         <dt className="text-[var(--muted)]">Trend</dt><dd><Trend row={r} long /></dd>
         <dt className="text-[var(--muted)]">Provenance</dt><dd><ProvTag p={prov} /><span className="block text-[12px] leading-[1.4] text-[var(--muted)]">{prov.note}</span></dd>
-        <dt className="text-[var(--muted)]">Implemented by</dt><dd>{FAMILY[r.family].by}</dd>
         <dt className="text-[var(--muted)]">In the paper</dt><dd className="-ml-1 flex flex-wrap gap-x-1"><PageRef p={5}>Table 1</PageRef><PageRef p={pg}>{sec}</PageRef></dd>
       </dl>
     </div>

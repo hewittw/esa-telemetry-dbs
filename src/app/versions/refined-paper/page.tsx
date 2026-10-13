@@ -161,8 +161,7 @@ export default function RefinedPaperSite() {
                   </div>
                   <div>
                     <p className={eyebrow}>Who did what</p>
-                    <p className={`${SERIF} mt-3 text-[18px] leading-[1.55]`}>
-                      Rhea Madhogarhia implemented the K-Means, PCA and Nyström-KPCA baselines. Hewitt Watkins implemented the Gaussian mixture and the three VAEs. <PageRef p={2}>Credits</PageRef>
+                    <p className={`${SERIF} mt-3 text-[18px] leading-[1.55]`}> <PageRef p={2}>Credits</PageRef>
                     </p>
                   </div>
                 </div>

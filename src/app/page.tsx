@@ -226,8 +226,7 @@ export default function Hub() {
           </p>
           <p className="text-neutral-600">
             The paper it presents was written for TTIC 31220 (Spring 2026) by Rhea Madhogarhia and Hewitt
-            Watkins. Hewitt implemented the GMM and VAE experiments; Rhea implemented the K-Means, PCA, and
-            Kernel PCA baselines.
+            Watkins.
           </p>
         </div>
       </section>

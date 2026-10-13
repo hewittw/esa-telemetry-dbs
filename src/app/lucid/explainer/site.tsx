@@ -418,11 +418,8 @@ function PaperSection() {
             </a>
           </div>
           <dl id="credits" tabIndex={-1} className={`${SANS} mt-10 grid gap-4 border-t border-[var(--rule)] pt-4 text-[13.5px] leading-[1.5] outline-none`}>
-            <div><dt className="text-[var(--muted)]">Rhea Madhogarhia</dt><dd>K-Means, PCA and Nyström-KPCA baselines.</dd></div>
-            <div><dt className="text-[var(--muted)]">Hewitt Watkins</dt><dd>The GMM and the three VAEs.</dd></div>
             <div><dt className="text-[var(--muted)]">Data</dt><dd>ESA Anomaly Dataset, Missions 1 and 2 (Kotowski et al., 2024).</dd></div>
           </dl>
-          <p className="mt-3"><PageRef p={2}>Division of labour</PageRef></p>
         </div>
         <ol className="grid grid-cols-4 gap-x-2.5 gap-y-4 sm:gap-x-3 sm:gap-y-5 lg:col-span-8 lg:grid-cols-6" aria-label="Pages of the paper">
           {Array.from({ length: PAGES }, (_, k) => k + 1).map((p) => (

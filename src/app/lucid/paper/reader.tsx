@@ -15,7 +15,7 @@ const RATIO = 1600 / 2071;
 /** What each page holds, and where on the site it is argued. */
 export const PAGE_NOTES: Record<number, { t: string; back?: { href: string; label: string } }[]> = {
   1: [{ t: "Title, abstract, §1 Introduction: the questions Q1 and Q2.", back: { href: "#introduction", label: "1 Introduction" } }],
-  2: [{ t: "Division of labour. §2 Dataset: channels, subsystems, groups, labels.", back: { href: "#dataset", label: "2 Dataset" } }, { t: "§3 Baselines: K-Means and PCA.", back: { href: "#baselines", label: "3 Baselines" } }],
+  2: [{ t: "§2 Dataset: channels, subsystems, groups, labels.", back: { href: "#dataset", label: "2 Dataset" } }, { t: "§3 Baselines: K-Means and PCA.", back: { href: "#baselines", label: "3 Baselines" } }],
   3: [{ t: "§3 Nyström-KPCA. Figure 1: K-Means PR curve, t-SNE.", back: { href: "#baselines-kpca", label: "3.3 Nyström-KPCA" } }, { t: "§4 GMM: PCA-30, K by BIC.", back: { href: "#gmm", label: "4 GMM" } }],
   4: [{ t: "§5 The three VAEs. §6 begins: Q1, yes.", back: { href: "#vae", label: "5 VAEs" } }],
   5: [{ t: "Table 1: every method, both missions.", back: { href: "#table", label: "Table 1" } }, { t: "§6 Results. §7 Conclusions.", back: { href: "#conclusions", label: "7 Conclusions" } }],
