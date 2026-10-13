@@ -109,6 +109,12 @@ export default function RefinedPaperBoard() {
 
   const A: Item[] = [
     {
+      title: "Where the palette started: my water bottle", kind: "Color", source: "Hewitt’s photo",
+      img: { src: `${IMG}/water-bottle.jpg`, w: 1200, h: 1600, alt: "Hewitt’s water bottle on a white table: a pale, warm cream body, a sand-coloured handle and collar, and a bone-white lid." },
+      note: { take: "Soft, warm neutrals that sit together quietly: a pale cream body, a sand handle and collar, a bone-white lid. These colours really inspired the site.", use: "The Paper and Parchment grounds, the sand-toned hairline rules, and the warm ink instead of black.", leave: "The faint green cast of the body and the logo; the paper stays a neutral cream." },
+      credit: { text: "Photo by Hewitt Watkins, the site’s designer, of Hewitt’s own water bottle." },
+    },
+    {
       title: "One plate, four figures", kind: "Photo", source: "Phil. Trans., 1805",
       img: { src: `${IMG}/herschel-plate-vii.jpg`, w: 1600, h: 1278, alt: "Engraved journal plate from 1805: the same thin-line diagram drawn four times side by side, each labelled Fig. 1 to Fig. 4 in small italic script." },
       note: { take: "The same drawing repeated at one scale, so the eye compares the differences and nothing else.", use: "The method-comparison strip: one panel per method on shared axes.", leave: "The copperplate script and the double-ruled border." },

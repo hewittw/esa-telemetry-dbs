@@ -87,7 +87,7 @@ export default function Hub() {
       </div>
 
       <section className="mt-20" aria-labelledby="mb">
-        <SectionHead n="01" title="Mood Boards" note="Three directions, 28 artifacts each" />
+        <SectionHead n="01" title="Mood Boards" note="Three directions, 28–29 artifacts each" />
         <span id="mb" className="sr-only">Mood Boards</span>
         <ol className="mt-8 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {boards.map((b, i) => (

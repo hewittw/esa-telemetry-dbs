@@ -13,7 +13,7 @@ export const board: MoodBoardMeta = {
     { hex: "#2D5B88", name: "Prussian" },
     { hex: "#B0401C", name: "Vermilion" },
   ],
-  artifactCount: 28,
+  artifactCount: 29,
   generatedCount: 14,
   preview: "/mood-boards/refined-paper/preview.jpg",
   references: ["ciechanowski", "r2d3", "activation-atlas", "distill-tsne", "anthropic-biology"],
